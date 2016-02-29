@@ -6,7 +6,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.basecode.connectN.ConnectNMove;
 
 
 public class AtaxxMove extends GameMove {
@@ -78,7 +77,7 @@ public class AtaxxMove extends GameMove {
 	@Override
 	public void execute(Board board, List<Piece> pieces) {
 		Piece p = getPiece();
-
+		//REVISAR
 		if (board.getPieceCount(p) <= 0) {
 			throw new GameError("There are no pieces of type " + p + " available");
 		} else if (board.getPosition(row, col) != null) {
