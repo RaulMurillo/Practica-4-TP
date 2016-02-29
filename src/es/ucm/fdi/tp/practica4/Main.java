@@ -1,8 +1,11 @@
 package es.ucm.fdi.tp.practica4;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -41,6 +44,8 @@ import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
  * .
  */
 public class Main {
+
+	final private static Logger log = Logger.getLogger("Main");
 
 	/**
 	 * The possible views.
@@ -139,7 +144,7 @@ public class Main {
 	 * <p>
 	 * Juego por defecto.
 	 */
-	final private static GameInfo DEFAULT_GAME = GameInfo.CONNECTN;
+	final private static GameInfo DEFAULT_GAME = GameInfo.AdvancedTicTacToe;
 
 	/**
 	 * default view to use.
@@ -242,8 +247,8 @@ public class Main {
 	private static AIAlgorithm aiPlayerAlg;
 
 	/**
-	 * Processes the command-line arguments and modify the fields of this
-	 * class with corresponding values. E.g., the factory, the pieces, etc.
+	 * Processes the command-line arguments and modify the fields of this class
+	 * with corresponding values. E.g., the factory, the pieces, etc.
 	 *
 	 * <p>
 	 * Procesa la linea de ordenes del programa y crea los objetos necesarios
@@ -271,8 +276,9 @@ public class Main {
 																// --multiviews
 		cmdLineOptions.addOption(constructPlayersOption()); // -p or --players
 		cmdLineOptions.addOption(constructDimensionOption()); // -d or --dim
-		cmdLineOptions.addOption(constructObstaclesOption()); // -o or --obstacles
-		
+		cmdLineOptions.addOption(constructObstaclesOption()); // -o or
+																// --obstacles
+
 		// parse the command line as provided in args
 		//
 		CommandLineParser parser = new DefaultParser();
@@ -298,7 +304,7 @@ public class Main {
 
 		} catch (ParseException | GameError e) {
 			// new Piece(...) might throw GameError exception
-			System.err.println(e.getLocalizedMessage());
+			log.log(Level.SEVERE, "Error leyendo args", e);
 			System.exit(1);
 		}
 
@@ -605,8 +611,7 @@ public class Main {
 	 *         Objeto {@link Option} de esta opcion.
 	 */
 	private static Option constructObstaclesOption() {
-		return new Option("o", "obstacles", true,"The obstacles in board "
-				+ "(if allowed by the selected game).");
+		return new Option("o", "obstacles", true, "The obstacles in board " + "(if allowed by the selected game).");
 	}
 
 	/**
@@ -699,6 +704,9 @@ public class Main {
 							"Something went wrong! This program point should be unreachable!");
 				}
 			}
+			log.log(Level.INFO, "Jugando a {0} con {1} y {2} como jugadores",
+					new Object[] { gameFactory.getClass(), Arrays.toString(players.toArray()) });
+
 			c = new ConsoleCtrl(g, pieces, players, new Scanner(System.in));
 			break;
 		case WINDOW:
@@ -756,6 +764,11 @@ public class Main {
 		c.start();
 	}
 
+	///
+	public static void logInfo(String text, Object ... args){
+		log.log(Level.INFO, text, args);
+	}
+	
 	/**
 	 * The main method. It calls {@link #parseArgs(String[])} and then
 	 * {@link #startGame()}.
