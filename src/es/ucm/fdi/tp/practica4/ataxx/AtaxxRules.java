@@ -7,7 +7,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.FiniteRectBoard;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
-import es.ucm.fdi.tp.basecode.connectN.ConnectNMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Pair;
@@ -87,16 +86,17 @@ public class AtaxxRules implements GameRules {
 					high1 = board.getPieceCount(pieces.get(i));
 					winner = i;
 				}
-				//Se evalua si el juego termina en caso de empate
-				else if(board.getPieceCount(pieces.get(i)) == high1){
+				// Se evalua si el juego termina en caso de empate
+				else if (board.getPieceCount(pieces.get(i)) == high1) {
 					high2 = high1;
 				}
 			}
-			if(high1 == high2)return new Pair<State, Piece>(State.Draw, null);
+			if (high1 == high2)
+				return new Pair<State, Piece>(State.Draw, null);
 			else {
 				return new Pair<State, Piece>(State.Won, pieces.get(winner));
-				}
 			}
+		}
 		return gameInPlayResult;
 	}
 
@@ -170,14 +170,10 @@ public class AtaxxRules implements GameRules {
 	private List<GameMove> pieceMoves(Board board, List<Piece> playersPieces, Piece turn, int row, int col) {
 		List<GameMove> moves = new ArrayList<GameMove>();
 		int a = row - 2, b = col - 2;
-		if (a+1 < 0)
+		if (a < 0)
 			a = 0;
-		else if(a < 0)
-			a++;
-		if (b+1 < 0)
+		if (b < 0)
 			b = 0;
-		else if(b < 0)
-			b++;
 		for (int i = a; (i < board.getRows()) || (i < row + 2); i++) {
 			for (int j = b; (j < board.getCols()) || (j < col + 2); j++) {
 				if (board.getPosition(i, j) == null) {
