@@ -81,15 +81,22 @@ public class AtaxxRules implements GameRules {
 		// TODO Auto-generated method stub
 		// Revisar si validMoves se usa correctamente
 		if (board.isFull() || validMoves(board, pieces, turn).equals(null)) {
-			int winner = 0, high = 0;
+			int winner = 0, high1 = 0, high2 = 0;
 			for (int i = 0; i < pieces.size(); i++) { // Do with Iterator?
-				if (board.getPieceCount(pieces.get(i)) > high) {
-					high = board.getPieceCount(pieces.get(i));
+				if (board.getPieceCount(pieces.get(i)) > high1) {
+					high1 = board.getPieceCount(pieces.get(i));
 					winner = i;
 				}
+				//Se evalua si el juego termina en caso de empate
+				else if(board.getPieceCount(pieces.get(i)) == high1){
+					high2 = high1;
+				}
 			}
-			return new Pair<State, Piece>(State.Won, pieces.get(winner));
-		}
+			if(high1 == high2)return new Pair<State, Piece>(State.Draw, null);
+			else {
+				return new Pair<State, Piece>(State.Won, pieces.get(winner));
+				}
+			}
 		return gameInPlayResult;
 	}
 
@@ -163,14 +170,18 @@ public class AtaxxRules implements GameRules {
 	private List<GameMove> pieceMoves(Board board, List<Piece> playersPieces, Piece turn, int row, int col) {
 		List<GameMove> moves = new ArrayList<GameMove>();
 		int a = row - 2, b = col - 2;
-		if (a < 0)
+		if (a+1 < 0)
 			a = 0;
-		if (b < 0)
+		else if(a < 0)
+			a++;
+		if (b+1 < 0)
 			b = 0;
+		else if(b < 0)
+			b++;
 		for (int i = a; (i < board.getRows()) || (i < row + 2); i++) {
 			for (int j = b; (j < board.getCols()) || (j < col + 2); j++) {
 				if (board.getPosition(i, j) == null) {
-					moves.add(new ConnectNMove(i, j, turn));
+					moves.add(new AtaxxMove(row, col, i, j, turn));
 				}
 			}
 		}

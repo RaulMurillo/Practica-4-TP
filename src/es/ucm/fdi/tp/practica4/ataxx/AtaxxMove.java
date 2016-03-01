@@ -6,7 +6,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-
+import es.ucm.fdi.tp.practica4.UtilsPr4;;
 
 public class AtaxxMove extends GameMove {
 
@@ -14,6 +14,16 @@ public class AtaxxMove extends GameMove {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Fila en la que se encuentra la pieza inicialmente antes del movimiento
+	 */
+	protected int iniRow;
+
+	/**
+	 * Columna en la que se encuentra la pieza inicialmente antes del
+	 * movimiento.
+	 */
+	protected int iniCol;
 
 	/**
 	 * The row where to place the piece return by {@link GameMove#getPiece()}.
@@ -31,7 +41,7 @@ public class AtaxxMove extends GameMove {
 	 * {@link GameMove#getPiece()}.
 	 */
 	protected int col;
-		
+
 	/**
 	 * This constructor should be used ONLY to get an instance of
 	 * {@link AtaxxMove} to generate game moves from strings by calling
@@ -39,8 +49,8 @@ public class AtaxxMove extends GameMove {
 	 * 
 	 * <p>
 	 * Solo se debe usar este constructor para obtener objetos de
-	 * {@link AtaxxMove} para generar movimientos a partir de strings usando
-	 * el metodo {@link #fromString(String)}
+	 * {@link AtaxxMove} para generar movimientos a partir de strings usando el
+	 * metodo {@link #fromString(String)}
 	 * 
 	 */
 
@@ -68,37 +78,72 @@ public class AtaxxMove extends GameMove {
 	 *            <p>
 	 *            Ficha a colocar en ({@code row},{@code col}).
 	 */
-	public AtaxxMove(int row, int col, Piece p) {
+	public AtaxxMove(int iniRow, int iniCol, int row, int col, Piece p) {
 		super(p);
 		this.row = row;
 		this.col = col;
+		this.iniRow = iniRow;
+		this.iniCol = iniCol;
 	}
-	
+
 	@Override
 	public void execute(Board board, List<Piece> pieces) {
 		Piece p = getPiece();
-		//REVISAR
+		// REVISAR
 		if (board.getPieceCount(p) <= 0) {
 			throw new GameError("There are no pieces of type " + p + " available");
 		} else if (board.getPosition(row, col) != null) {
 			throw new GameError("Position (" + row + "," + col + ") is already occupied");
 		} else {
+			int cont = 1;
 			board.setPosition(row, col, p);
-			board.setPieceCount(p, board.getPieceCount(p) - 1);
+			//Se elimina la pieza de origen si la distancia del movimiento es dos
+			if (UtilsPr4.distancia(iniRow, iniCol, row, col) == 2){
+				board.setPosition(iniRow, iniCol, null);
+				cont--; //La pieza no se duplica
+			}
+			// Se cambian las piezas circundantes de color
+			int a = row - 1, b = col - 1;
+			if (a < 0)
+				a++;
+			if (b < 0)
+				b++;
+			for (int i = a; (i < board.getRows()) || (i < row + 2); i++) {
+				for (int j = b; (j < board.getCols()) || (j < col + 2); j++) {
+					if (board.getPosition(i, j) != null && board.getPosition(i, j) != p) {
+						board.setPosition(i, j, p);
+						cont++;
+					}
+				}
+			}
+			//REVISAR REASIGNACION DEL CONTADOR DE PIEZAS
+			board.setPieceCount(p, board.getPieceCount(p) + cont);
 		}
-		
+
 	}
 
 	@Override
 	public GameMove fromString(Piece p, String str) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] words = str.split(" ");
+		if (words.length != 4) {
+			return null;
+		}
+		try {
+			int row, col, iniRow, iniCol;
+			iniRow = Integer.parseInt(words[0]);
+			iniCol = Integer.parseInt(words[1]);
+			row = Integer.parseInt(words[2]);
+			col = Integer.parseInt(words[3]);
+			return new AtaxxMove(iniRow, iniCol, row, col, p);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public String help() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'row column', to place a piece at the corresponding position.";
 	}
 
 }
