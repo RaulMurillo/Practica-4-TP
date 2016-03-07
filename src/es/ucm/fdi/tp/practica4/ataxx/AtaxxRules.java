@@ -141,7 +141,7 @@ public class AtaxxRules implements GameRules {
 		// Generar movimientos validos;
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
-				if (board.getPosition(i, j).equals(turn)) {
+				if (turn.equals(board.getPosition(i, j))) {
 					//
 					moves.addAll(pieceMoves(board, playersPieces, turn, i, j));
 				}

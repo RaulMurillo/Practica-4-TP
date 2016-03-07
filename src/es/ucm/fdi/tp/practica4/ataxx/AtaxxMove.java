@@ -120,8 +120,8 @@ public class AtaxxMove extends GameMove {
 					a++;
 				if (b < 0)
 					b++;
-				for (int i = a; (i < board.getRows()) && (i <= destRow + 2); i++) {
-					for (int j = b; (j < board.getCols()) && (j <= destCol + 2); j++) {
+				for (int i = a; (i < board.getRows()) && (i <= destRow + 1); i++) {
+					for (int j = b; (j < board.getCols()) && (j <= destCol + 1); j++) {
 						Piece aux = board.getPosition(i, j);
 						if (aux != null && aux != p) {
 							// OJO con los obstaculos
