@@ -144,7 +144,7 @@ public class Main {
 	 * <p>
 	 * Juego por defecto.
 	 */
-	final private static GameInfo DEFAULT_GAME = GameInfo.AdvancedTicTacToe;
+	final private static GameInfo DEFAULT_GAME = GameInfo.Ataxx;
 
 	/**
 	 * default view to use.

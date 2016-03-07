@@ -116,29 +116,23 @@ public class AtaxxMove extends GameMove {
 				}
 				// Se cambian las piezas circundantes de color
 				int a = destRow - 1, b = destCol - 1;
-				Map<Piece, Integer> counter = new HashMap<Piece, Integer>(pieces.size(), 0);
-				counter.put(p, cont);
-				cont = 0;
 				if (a < 0)
 					a++;
 				if (b < 0)
 					b++;
-				for (int i = a; (i < board.getRows()) || (i < destRow + 2); i++) {
-					for (int j = b; (j < board.getCols()) || (j < destCol + 2); j++) {
-						if (board.getPosition(i, j) != null && board.getPosition(i, j) != p) {
+				for (int i = a; (i < board.getRows()) && (i <= destRow + 2); i++) {
+					for (int j = b; (j < board.getCols()) && (j <= destCol + 2); j++) {
+						Piece aux = board.getPosition(i, j);
+						if (aux != null && aux != p) {
 							// OJO con los obstaculos
 							// NO se tienen en cuenta en este algoritmo.
-							cont = counter.get(board.getPosition(i, j));
-							counter.put(board.getPosition(i, j), cont - 1);
+							board.setPieceCount(aux, board.getPieceCount(aux) - 1);
 							board.setPosition(i, j, p);
 							cont++;
 						}
 					}
 				}
-				// REVISAR REASIGNACION DEL CONTADOR DE PIEZAS
-				for (int i = 0; i < pieces.size(); i++) {
-					board.setPieceCount(pieces.get(i), board.getPieceCount(pieces.get(i)) + counter.get(pieces.get(i)));
-				}
+				board.setPieceCount(p, board.getPieceCount(p) + cont);
 			}
 		}
 	}
@@ -164,6 +158,16 @@ public class AtaxxMove extends GameMove {
 	@Override
 	public String help() {
 		return "Row and column for origin and for destination, separated by spaces (four numbers).";
+	}
+
+	@Override
+	public String toString() {
+		if (getPiece() == null) {
+			return help();
+		} else {
+			return "Move piece '" + getPiece() + "' from (" + iniRow + "," + iniCol + ")"
+		+ " at (" + destRow + "," + destCol + ")";
+		}
 	}
 
 }

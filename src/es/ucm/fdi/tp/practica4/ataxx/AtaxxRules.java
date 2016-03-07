@@ -57,12 +57,35 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public Board createBoard(List<Piece> pieces) {
-		return new FiniteRectBoard(dim, dim);
+		Board b = new FiniteRectBoard(dim, dim);
+		switch (pieces.size()) {
+		case 4: {
+			b.setPosition(dim / 2, 0, pieces.get(3));
+			b.setPosition(dim / 2, dim - 1, pieces.get(3));
+			b.setPieceCount(pieces.get(3), 2);
+		}
+		case 3: {
+			b.setPosition(0, dim / 2, pieces.get(2));
+			b.setPosition(dim - 1, dim / 2, pieces.get(2));
+			b.setPieceCount(pieces.get(2), 2);
+		}
+		case 2: {
+			// Player 1
+			b.setPosition(0, 0, pieces.get(0));
+			b.setPosition(dim - 1, dim - 1, pieces.get(0));
+			b.setPieceCount(pieces.get(0), 2);
+			// Player 2
+			b.setPosition(0, dim - 1, pieces.get(1));
+			b.setPosition(dim - 1, 0, pieces.get(1));
+			b.setPieceCount(pieces.get(1), 2);
+		}
+		}
+		return b;
 	}
 
 	@Override
 	public Piece initialPlayer(Board board, List<Piece> pieces) {
-		return pieces.get(0);
+		return pieces.get(0);///////////
 	}
 
 	@Override
@@ -116,12 +139,11 @@ public class AtaxxRules implements GameRules {
 	public List<GameMove> validMoves(Board board, List<Piece> playersPieces, Piece turn) {
 		List<GameMove> moves = new ArrayList<GameMove>();
 		// Generar movimientos validos;
-		Piece nextTurn = nextPlayer(board, playersPieces, turn);
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
-				if (board.getPosition(i, j) == nextTurn) {
+				if (board.getPosition(i, j).equals(turn)) {
 					//
-					moves.addAll(pieceMoves(board, playersPieces, nextTurn, i, j));
+					moves.addAll(pieceMoves(board, playersPieces, turn, i, j));
 				}
 			}
 		}
@@ -174,8 +196,8 @@ public class AtaxxRules implements GameRules {
 			a = 0;
 		if (b < 0)
 			b = 0;
-		for (int i = a; (i < board.getRows()) || (i < row + 2); i++) {
-			for (int j = b; (j < board.getCols()) || (j < col + 2); j++) {
+		for (int i = a; (i < board.getRows()) && (i <= row + 2); i++) {
+			for (int j = b; (j < board.getCols()) && (j <= col + 2); j++) {
 				if (board.getPosition(i, j) == null) {
 					moves.add(new AtaxxMove(row, col, i, j, turn));
 				}

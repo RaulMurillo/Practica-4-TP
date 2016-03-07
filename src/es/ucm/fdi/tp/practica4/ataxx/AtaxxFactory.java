@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import es.ucm.fdi.tp.basecode.bgame.control.ConsolePlayer;
 import es.ucm.fdi.tp.basecode.bgame.control.ConsolePlayerFromListOfMoves;
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.DummyAIPlayer;
@@ -44,7 +45,7 @@ public class AtaxxFactory implements GameFactory {
 	public Player createConsolePlayer() {
 		ArrayList<GameMove> possibleMoves = new ArrayList<GameMove>();
 		possibleMoves.add(new AtaxxMove());
-		return new ConsolePlayerFromListOfMoves(new Scanner(System.in));
+		return new ConsolePlayer(new Scanner(System.in), possibleMoves);
 	}
 
 	@Override
