@@ -1,8 +1,6 @@
 package es.ucm.fdi.tp.practica4.ataxx;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
@@ -165,8 +163,8 @@ public class AtaxxMove extends GameMove {
 		if (getPiece() == null) {
 			return help();
 		} else {
-			return "Move piece '" + getPiece() + "' from (" + iniRow + "," + iniCol + ")"
-		+ " at (" + destRow + "," + destCol + ")";
+			return "Move piece '" + getPiece() + "' from (" + iniRow + "," + iniCol + ")" + " at (" + destRow + ","
+					+ destCol + ")";
 		}
 	}
 

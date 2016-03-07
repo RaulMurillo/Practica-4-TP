@@ -85,7 +85,7 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public Piece initialPlayer(Board board, List<Piece> pieces) {
-		return pieces.get(0);///////////
+		return pieces.get(0);
 	}
 
 	@Override
@@ -100,24 +100,32 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public Pair<State, Piece> updateState(Board board, List<Piece> pieces, Piece turn) {
-		// TODO Auto-generated method stub
-		// Revisar si validMoves se usa correctamente
-		if (board.isFull() || validMoves(board, pieces, turn).equals(null)) {
-			int winner = 0, high1 = 0, high2 = 0;
-			for (int i = 0; i < pieces.size(); i++) { // Do with Iterator?
-				if (board.getPieceCount(pieces.get(i)) > high1) {
-					high1 = board.getPieceCount(pieces.get(i));
-					winner = i;
+		if (board.isFull() || validMoves(board, pieces, nextPlayer(board, pieces, turn)).isEmpty()) {
+			int high1 = 0, high2 = 0;
+			Piece winner = null;
+			for (Piece p : pieces) {
+				if (board.getPieceCount(p) > high1) {
+					high1 = board.getPieceCount(p);
+					winner = p;
 				}
 				// Se evalua si el juego termina en caso de empate
-				else if (board.getPieceCount(pieces.get(i)) == high1) {
+				else if (board.getPieceCount(p) == high1) {
 					high2 = high1;
 				}
 			}
+			/*
+			 * for (int i = 0; i < pieces.size(); i++) { // Do with Iterator? if
+			 * (board.getPieceCount(pieces.get(i)) > high1) { high1 =
+			 * board.getPieceCount(pieces.get(i)); // i; } // Se evalua si el
+			 * juego termina en caso de empate else if
+			 * (board.getPieceCount(pieces.get(i)) == high1) { high2 = high1; }
+			 * }
+			 */
 			if (high1 == high2)
 				return new Pair<State, Piece>(State.Draw, null);
 			else {
-				return new Pair<State, Piece>(State.Won, pieces.get(winner));
+				return new Pair<State, Piece>(State.Won,
+						winner/* pieces.get(winner) */);
 			}
 		}
 		return gameInPlayResult;
