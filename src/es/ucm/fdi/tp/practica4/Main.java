@@ -158,7 +158,7 @@ public class Main {
 	 * <p>
 	 * Modo de juego por defecto.
 	 */
-	final private static PlayerMode DEFAULT_PLAYERMODE = PlayerMode.MANUAL;
+	final private static PlayerMode DEFAULT_PLAYERMODE = PlayerMode.RANDOM;
 
 	/**
 	 * This field includes a game factory that is constructed after parsing the
@@ -247,6 +247,17 @@ public class Main {
 	private static AIAlgorithm aiPlayerAlg;
 
 	/**
+	 * Number of obstacles provided with the option -o ({@code null} if not
+	 * provided).
+	 * 
+	 * <p>
+	 * Numero de obstacles proporcionadas con la opcion -o, o {@code null} si no
+	 * se incluye la opcion -o.
+	 * 
+	 */
+	private static Integer obstacles;
+
+	/**
 	 * Processes the command-line arguments and modify the fields of this class
 	 * with corresponding values. E.g., the factory, the pieces, etc.
 	 *
@@ -286,10 +297,12 @@ public class Main {
 			CommandLine line = parser.parse(cmdLineOptions, args);
 			parseHelpOption(line, cmdLineOptions);
 			parseDimOptionn(line);
+			parseObsOption(line);
 			parseGameOption(line);
 			parseViewOption(line);
 			parseMultiViewOption(line);
 			parsePlayersOptions(line);
+			
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
@@ -532,7 +545,15 @@ public class Main {
 			gameFactory = new AdvancedTTTFactory();
 			break;
 		case Ataxx:
-			gameFactory = new AtaxxFactory();
+			if (dimRows != null && dimCols != null && dimRows == dimCols) {
+				if (obstacles != null) {
+					gameFactory = new AtaxxFactory(dimRows, obstacles);
+				} else {
+					gameFactory = new AtaxxFactory(dimRows, 0);
+				}
+			} else {
+				gameFactory = new AtaxxFactory();
+			}
 			break;
 		case CONNECTN:
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
@@ -629,9 +650,18 @@ public class Main {
 	 *             Si se proporciona un valor invalido.
 	 */
 	private static void parseObsOption(CommandLine line) throws ParseException {
-
 		String obstaclesVal = line.getOptionValue("o");
-		/* Metodo a construir */
+		if (obstaclesVal != null) {
+			try {
+				obstacles = Integer.parseInt(obstaclesVal);
+				obstacles = (obstacles / 4) * 4;
+				if ((dimRows == 5 && obstacles > 12) || (obstacles > 24)) {
+					throw new GameError("Invalid number of obstacles.");
+				}
+			} catch (NumberFormatException e) {
+				throw new ParseException("Invalid obstacles: " + obstaclesVal);
+			}
+		}
 	}
 
 	/**
@@ -765,10 +795,10 @@ public class Main {
 	}
 
 	///
-	public static void logInfo(String text, Object ... args){
+	public static void logInfo(String text, Object... args) {
 		log.log(Level.INFO, text, args);
 	}
-	
+
 	/**
 	 * The main method. It calls {@link #parseArgs(String[])} and then
 	 * {@link #startGame()}.

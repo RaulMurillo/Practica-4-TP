@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import es.ucm.fdi.tp.basecode.bgame.control.ConsolePlayer;
-import es.ucm.fdi.tp.basecode.bgame.control.ConsolePlayerFromListOfMoves;
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.DummyAIPlayer;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
@@ -22,32 +21,33 @@ import es.ucm.fdi.tp.basecode.bgame.views.GenericConsoleView;
 public class AtaxxFactory implements GameFactory {
 
 	private int dim;
+	private int obstacles;
+	private static final int minDim = 5;
 
 	public AtaxxFactory() {
-		this(5);
+		this(minDim, 0);
 	}
 
-	public AtaxxFactory(int dim) {
-		if (dim < 5 && dim % 2 == 0) {
+	public AtaxxFactory(int dim, int obstacles) {
+		if (dim < minDim && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
 		} else {
 			this.dim = dim;
+			this.obstacles = obstacles;
 		}
 	}
 
 	@Override
 	public GameRules gameRules() {
-		return new AtaxxRules(dim);
+		return new AtaxxRules(dim, obstacles);
 	}
 
 	@Override
 	public Player createConsolePlayer() {
-		/*
-		 * ArrayList<GameMove> possibleMoves = new ArrayList<GameMove>();
-		 * possibleMoves.add(new AtaxxMove()); return new ConsolePlayer(new
-		 * Scanner(System.in), possibleMoves);
-		 */
-		return new AtaxxConsolePlayer(new Scanner(System.in));
+		
+		 ArrayList<GameMove> possibleMoves = new ArrayList<GameMove>();
+		 possibleMoves.add(new AtaxxMove()); return new ConsolePlayer(new
+		 Scanner(System.in), possibleMoves);
 	}
 
 	@Override
@@ -65,6 +65,10 @@ public class AtaxxFactory implements GameFactory {
 		List<Piece> pieces = new ArrayList<Piece>();
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
+		/*
+		pieces.add(new Piece("R"));
+		pieces.add(new Piece("B"));
+		*/
 		return pieces;
 	}
 

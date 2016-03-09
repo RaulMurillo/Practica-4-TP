@@ -90,8 +90,9 @@ public class AtaxxMove extends GameMove {
 	@Override
 	public void execute(Board board, List<Piece> pieces) {
 		Piece p = getPiece();
-		// REVISAR
-		if (board.getPieceCount(p) <= 0) { // Se debe saltar el turno.
+		if (board.getPieceCount(p) <= 0) { // It should not come in.
+											// Just in case, this skips turn
+											// and shows a message.
 			throw new GameError("There are no pieces of type " + p + " available.");
 		} else if (board.getPosition(iniRow, iniCol) != p) {
 			throw new GameError(
@@ -106,13 +107,12 @@ public class AtaxxMove extends GameMove {
 			} else {
 				int cont = 1;
 				board.setPosition(destRow, destCol, p);
-				// Se elimina la pieza de origen si la distancia del movimiento
-				// es dos
+				// The piece is not cloned if destiny if farther than 2
 				if (distance == 2) {
 					board.setPosition(iniRow, iniCol, null);
-					cont--; // La pieza no se duplica
+					cont--;
 				}
-				// Se cambian las piezas circundantes de color
+				// Different neighbors pieces are changed.
 				int a = destRow - 1, b = destCol - 1;
 				if (a < 0)
 					a++;
@@ -121,9 +121,7 @@ public class AtaxxMove extends GameMove {
 				for (int i = a; (i < board.getRows()) && (i <= destRow + 1); i++) {
 					for (int j = b; (j < board.getCols()) && (j <= destCol + 1); j++) {
 						Piece aux = board.getPosition(i, j);
-						if (aux != null && aux != p) {
-							// OJO con los obstaculos
-							// NO se tienen en cuenta en este algoritmo.
+						if (aux != null && !p.equals(aux) && !AtaxxRules.obstacle.equals(aux)) {
 							board.setPieceCount(aux, board.getPieceCount(aux) - 1);
 							board.setPosition(i, j, p);
 							cont++;

@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.practica4.ataxx;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.ucm.fdi.tp.basecode.bgame.Utils;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.FiniteRectBoard;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
@@ -41,12 +42,17 @@ public class AtaxxRules implements GameRules {
 	protected final Pair<State, Piece> gameInPlayResult = new Pair<State, Piece>(State.InPlay, null);
 
 	private int dim;
+	
+	protected static final Piece obstacle = new Piece ("*");
+	
+	private int numObstacles;
 
-	public AtaxxRules(int dim) {
+	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
 		} else {
 			this.dim = dim;
+			this.numObstacles = obstacles;
 		}
 	}
 
@@ -80,7 +86,23 @@ public class AtaxxRules implements GameRules {
 			b.setPieceCount(pieces.get(1), 2);
 		}
 		}
+		setObstacles(b);
 		return b;
+	}
+	
+	private void setObstacles(Board board){
+		int obs = numObstacles/4;
+		int c = dim/2;
+		for(int i =0; i<obs;i++){
+			int rnd = Utils.randomInt(c*c);
+			while (board.getPosition(rnd/c, rnd%c)!= null){
+				rnd = Utils.randomInt(c*c);
+			}
+			board.setPosition(rnd/c, rnd%c, obstacle);
+			board.setPosition(dim-1-rnd/c, rnd%c, obstacle);
+			board.setPosition(rnd/c, dim-1-rnd%c, obstacle);
+			board.setPosition(dim-1-rnd/c, dim-1-rnd%c, obstacle);
+		}
 	}
 
 	@Override
@@ -100,41 +122,77 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public Pair<State, Piece> updateState(Board board, List<Piece> pieces, Piece turn) {
-		if (board.isFull() || validMoves(board, pieces, nextPlayer(board, pieces, turn)).isEmpty()) {
-			int high1 = 0, high2 = 0;
-			Piece winner = null;
-			for (Piece p : pieces) {
-				if (board.getPieceCount(p) > high1) {
-					high1 = board.getPieceCount(p);
-					winner = p;
-				}
-				// Se evalua si el juego termina en caso de empate
-				else if (board.getPieceCount(p) == high1) {
-					high2 = high1;
-				}
+		if (board.isFull()) {
+			return comprobarFinDeJuego(board, pieces);
+		} else {
+			return comprobarTablero(board, pieces, turn);
+		}
+	}
+
+	/**
+	 * Comprueba el estado de juego en un momento dado.
+	 * 
+	 * @param board
+	 * @param pieces
+	 * @param turn
+	 * @return Un par que contiene el nuevo estado del juego y la ficha del
+	 *         ganador si el juego ha acabado, o {@null} en caso contrario.
+	 */
+	private Pair<State, Piece> comprobarTablero(Board board, List<Piece> pieces, Piece turn) {
+		boolean noMovesLeft = true;
+		int playersWithPieces = 0;
+		for (Piece p : pieces) {
+			noMovesLeft = noMovesLeft && validMoves(board, pieces, p).isEmpty();
+			if(board.getPieceCount(p)>0)playersWithPieces++;
+		}
+		if (noMovesLeft || playersWithPieces<2)
+			return comprobarFinDeJuego(board, pieces);
+		else
+			return gameInPlayResult;
+	}
+
+	/**
+	 * Comprueba el estado del juego una vez no se pueda continuar.
+	 * 
+	 * @param board
+	 * @param pieces
+	 * @return Un par que contiene el nuevo estado del juego y la ficha del
+	 *         ganador si el juego ha acabado, o {@null} en caso contrario.
+	 */
+	private Pair<State, Piece> comprobarFinDeJuego(Board board, List<Piece> pieces) {
+		int high1 = 0, high2 = 0;
+		Piece winner = null;
+		for (Piece p : pieces) {
+			if (board.getPieceCount(p) > high1) {
+				high1 = board.getPieceCount(p);
+				winner = p;
 			}
-			/*
-			 * for (int i = 0; i < pieces.size(); i++) { // Do with Iterator? if
-			 * (board.getPieceCount(pieces.get(i)) > high1) { high1 =
-			 * board.getPieceCount(pieces.get(i)); // i; } // Se evalua si el
-			 * juego termina en caso de empate else if
-			 * (board.getPieceCount(pieces.get(i)) == high1) { high2 = high1; }
-			 * }
-			 */
-			if (high1 == high2)
-				return new Pair<State, Piece>(State.Draw, null);
-			else {
-				return new Pair<State, Piece>(State.Won,
-						winner/* pieces.get(winner) */);
+			// Se evalua si el juego termina en caso de empate
+			else if (board.getPieceCount(p) == high1) {
+				high2 = high1;
 			}
 		}
-		return gameInPlayResult;
+		if (high1 == high2)
+			return new Pair<State, Piece>(State.Draw, null);
+		else {
+			return new Pair<State, Piece>(State.Won, winner);
+		}
 	}
 
 	@Override
 	public Piece nextPlayer(Board board, List<Piece> pieces, Piece turn) {
 		int i = pieces.indexOf(turn);
-		return pieces.get((i + 1) % pieces.size());
+		int j = 1;
+		Piece next = null;
+		boolean hasNext = false;
+		while (j <= pieces.size() && !hasNext) {
+			next = pieces.get((i + j) % pieces.size());
+			if (!validMoves(board, pieces, next).isEmpty()) {
+				hasNext = true;
+			}
+			j++;
+		}
+		return next;
 	}
 
 	@Override
