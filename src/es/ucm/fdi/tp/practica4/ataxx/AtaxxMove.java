@@ -105,6 +105,7 @@ public class AtaxxMove extends GameMove {
 				throw new GameError("Position (" + destRow + "," + destCol + ") is not valid for piece in (" + iniRow
 						+ "," + iniCol + ").");
 			} else {
+				//Variable that will count the amount of pieces that the turn piece will increase
 				int cont = 1;
 				board.setPosition(destRow, destCol, p);
 				// The piece is not cloned if destiny if farther than 2
@@ -118,6 +119,8 @@ public class AtaxxMove extends GameMove {
 					a++;
 				if (b < 0)
 					b++;
+				//We explore the surroundings of the piece (p) and make the pertinent changes
+				//if necessary in the surrounding pieces
 				for (int i = a; (i < board.getRows()) && (i <= destRow + 1); i++) {
 					for (int j = b; (j < board.getCols()) && (j <= destCol + 1); j++) {
 						Piece aux = board.getPosition(i, j);

@@ -22,7 +22,7 @@ public class AtaxxRandomPlayer extends Player{
 		if (board.isFull()) {
 			throw new GameError("The board is full, cannot make a random move!!");
 		}
-		
+		//We generate a list of available moves and choose one randomly
 		List<GameMove> availableMoves = rules.validMoves(board, pieces, p);
 		int rnd = Utils.randomInt(availableMoves.size());
 		return availableMoves.get(rnd);

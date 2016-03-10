@@ -47,6 +47,9 @@ public class AtaxxRules implements GameRules {
 	
 	private int numObstacles;
 
+	private final int minPlayers = 2;
+	
+	private final int maxPlayers = 4;
 	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
@@ -90,6 +93,10 @@ public class AtaxxRules implements GameRules {
 		return b;
 	}
 	
+	/**
+	 * Method that put the obstacle symmetrically in the board
+	 * @param board
+	 */
 	private void setObstacles(Board board){
 		int obs = numObstacles/4;
 		int c = dim/2;
@@ -112,12 +119,12 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public int minPlayers() {
-		return 2;
+		return minPlayers;
 	}
 
 	@Override
 	public int maxPlayers() {
-		return 4;
+		return maxPlayers;
 	}
 
 	@Override
@@ -130,12 +137,16 @@ public class AtaxxRules implements GameRules {
 	}
 
 	/**
+	 * It checks the game state.
 	 * Comprueba el estado de juego en un momento dado.
 	 * 
 	 * @param board
 	 * @param pieces
 	 * @param turn
-	 * @return Un par que contiene el nuevo estado del juego y la ficha del
+	 * @return A pair that contains the new game state and the piece of the winner
+	 * 			if the game has finished or null in other case.
+	 * 
+	 * 			Un par que contiene el nuevo estado del juego y la ficha del
 	 *         ganador si el juego ha acabado, o {@null} en caso contrario.
 	 */
 	private Pair<State, Piece> comprobarTablero(Board board, List<Piece> pieces, Piece turn) {
@@ -152,12 +163,18 @@ public class AtaxxRules implements GameRules {
 	}
 
 	/**
+	 * It checks the game state ones it is not possible to 
+	 * continue playing
+	 * 
 	 * Comprueba el estado del juego una vez no se pueda continuar.
 	 * 
 	 * @param board
 	 * @param pieces
-	 * @return Un par que contiene el nuevo estado del juego y la ficha del
-	 *         ganador si el juego ha acabado, o {@null} en caso contrario.
+	 * @return A pair that contains the new game state and the piece of the winner
+	 * 			if the game has finished or null in other case.
+	 * 
+	 * 			Un par que contiene el nuevo estado del juego y la ficha del
+	 *         ganador si el juego ha acabado, o {@null} en caso de empate.
 	 */
 	private Pair<State, Piece> comprobarFinDeJuego(Board board, List<Piece> pieces) {
 		int high1 = 0, high2 = 0;

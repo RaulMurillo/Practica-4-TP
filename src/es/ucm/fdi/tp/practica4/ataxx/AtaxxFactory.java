@@ -24,10 +24,18 @@ public class AtaxxFactory implements GameFactory {
 	private int obstacles;
 	private static final int minDim = 5;
 
+	/**
+	 * Default constructor of the class that gives a game with
+	 * no obstacles and with dimension 5.
+	 */
 	public AtaxxFactory() {
 		this(minDim, 0);
 	}
-
+/**
+ * Constructor of the class.
+ * @param dim
+ * @param obstacles
+ */
 	public AtaxxFactory(int dim, int obstacles) {
 		if (dim < minDim && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
@@ -65,10 +73,6 @@ public class AtaxxFactory implements GameFactory {
 		List<Piece> pieces = new ArrayList<Piece>();
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
-		/*
-		pieces.add(new Piece("R"));
-		pieces.add(new Piece("B"));
-		*/
 		return pieces;
 	}
 
