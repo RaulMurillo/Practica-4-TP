@@ -42,14 +42,15 @@ public class AtaxxRules implements GameRules {
 	protected final Pair<State, Piece> gameInPlayResult = new Pair<State, Piece>(State.InPlay, null);
 
 	private int dim;
-	
-	protected static final Piece obstacle = new Piece ("*");
-	
+
+	protected static final Piece obstacle = new Piece("*");
+
 	private int numObstacles;
 
 	private final int minPlayers = 2;
-	
+
 	private final int maxPlayers = 4;
+
 	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
@@ -92,23 +93,30 @@ public class AtaxxRules implements GameRules {
 		setObstacles(b);
 		return b;
 	}
-	
+
 	/**
-	 * Method that put the obstacle symmetrically in the board
+	 * Method that sets the obstacles symmetrically in the board.
+	 * <p>
+	 * Metodo que fija los obstaculos simetricamente en el tablero.
+	 * 
 	 * @param board
+	 *            The initial board of the game.
+	 *            <p>
+	 *            El tablero inicial del juego.
 	 */
-	private void setObstacles(Board board){
-		int obs = numObstacles/4;
-		int c = dim/2;
-		for(int i =0; i<obs;i++){
-			int rnd = Utils.randomInt(c*c);
-			while (board.getPosition(rnd/c, rnd%c)!= null){
-				rnd = Utils.randomInt(c*c);
+	private void setObstacles(Board board) {
+		int obs = numObstacles / 4;
+		int c = dim / 2;
+		for (int i = 0; i < obs; i++) {
+			int rnd = Utils.randomInt(c * c);
+			while (board.getPosition(rnd / c, rnd % c) != null) {
+				rnd = Utils.randomInt(c * c);
 			}
-			board.setPosition(rnd/c, rnd%c, obstacle);
-			board.setPosition(dim-1-rnd/c, rnd%c, obstacle);
-			board.setPosition(rnd/c, dim-1-rnd%c, obstacle);
-			board.setPosition(dim-1-rnd/c, dim-1-rnd%c, obstacle);
+			// The symmetry in this algorithm is axial.
+			board.setPosition(rnd / c, rnd % c, obstacle);
+			board.setPosition(dim - 1 - rnd / c, rnd % c, obstacle);
+			board.setPosition(rnd / c, dim - 1 - rnd % c, obstacle);
+			board.setPosition(dim - 1 - rnd / c, dim - 1 - rnd % c, obstacle);
 		}
 	}
 
@@ -130,53 +138,74 @@ public class AtaxxRules implements GameRules {
 	@Override
 	public Pair<State, Piece> updateState(Board board, List<Piece> pieces, Piece turn) {
 		if (board.isFull()) {
-			return comprobarFinDeJuego(board, pieces);
+			return checkGameOver(board, pieces);
 		} else {
-			return comprobarTablero(board, pieces, turn);
+			return checkBoard(board, pieces, turn);
 		}
 	}
 
 	/**
-	 * It checks the game state.
+	 * Method that checks the game state.
+	 * <p>
 	 * Comprueba el estado de juego en un momento dado.
 	 * 
 	 * @param board
+	 *            The current board of the game.
+	 *            <p>
+	 *            El tablero actual.
 	 * @param pieces
+	 *            The list of pieces involved in the game (each correspond to a
+	 *            player).
+	 *            <p>
+	 *            Lista de fichas de todos los jugadores (cada una corresponde a
+	 *            un jugador).
 	 * @param turn
-	 * @return A pair that contains the new game state and the piece of the winner
-	 * 			if the game has finished or null in other case.
+	 *            The piece that has been played last.
+	 *            <p>
+	 *            Ficha que ha jugado en el ultimo movimiento.
 	 * 
-	 * 			Un par que contiene el nuevo estado del juego y la ficha del
+	 * @return A pair that contains the new game state and the piece of the
+	 *         winner if the game has finished or null in other case.
+	 *         <p>
+	 *         Un par que contiene el nuevo estado del juego y la ficha del
 	 *         ganador si el juego ha acabado, o {@null} en caso contrario.
 	 */
-	private Pair<State, Piece> comprobarTablero(Board board, List<Piece> pieces, Piece turn) {
+	private Pair<State, Piece> checkBoard(Board board, List<Piece> pieces, Piece turn) {
 		boolean noMovesLeft = true;
 		int playersWithPieces = 0;
 		for (Piece p : pieces) {
 			noMovesLeft = noMovesLeft && validMoves(board, pieces, p).isEmpty();
-			if(board.getPieceCount(p)>0)playersWithPieces++;
+			if (board.getPieceCount(p) > 0)
+				playersWithPieces++;
 		}
-		if (noMovesLeft || playersWithPieces<2)
-			return comprobarFinDeJuego(board, pieces);
+		if (noMovesLeft || playersWithPieces < 2)
+			return checkGameOver(board, pieces);
 		else
 			return gameInPlayResult;
 	}
 
 	/**
-	 * It checks the game state ones it is not possible to 
-	 * continue playing
-	 * 
+	 * It checks the game state ones it is not possible to continue playing.
+	 * <p>
 	 * Comprueba el estado del juego una vez no se pueda continuar.
 	 * 
 	 * @param board
+	 *            The current board of the game.
+	 *            <p>
+	 *            El tablero actual.
 	 * @param pieces
-	 * @return A pair that contains the new game state and the piece of the winner
-	 * 			if the game has finished or null in other case.
+	 *            The list of pieces involved in the game (each correspond to a
+	 *            player).
+	 *            <p>
+	 *            Lista de fichas de todos los jugadores (cada una corresponde a
+	 *            un jugador).
+	 * @return A pair that contains the new game state and the piece of the
+	 *         winner if the game has finished or null in other case.
 	 * 
-	 * 			Un par que contiene el nuevo estado del juego y la ficha del
+	 *         Un par que contiene el nuevo estado del juego y la ficha del
 	 *         ganador si el juego ha acabado, o {@null} en caso de empate.
 	 */
-	private Pair<State, Piece> comprobarFinDeJuego(Board board, List<Piece> pieces) {
+	private Pair<State, Piece> checkGameOver(Board board, List<Piece> pieces) {
 		int high1 = 0, high2 = 0;
 		Piece winner = null;
 		for (Piece p : pieces) {
@@ -184,7 +213,7 @@ public class AtaxxRules implements GameRules {
 				high1 = board.getPieceCount(p);
 				winner = p;
 			}
-			// Se evalua si el juego termina en caso de empate
+			// Evaluates draw situation
 			else if (board.getPieceCount(p) == high1) {
 				high2 = high1;
 			}
@@ -230,7 +259,6 @@ public class AtaxxRules implements GameRules {
 				}
 			}
 		}
-
 		return moves;
 	}
 
@@ -275,6 +303,7 @@ public class AtaxxRules implements GameRules {
 	private List<GameMove> pieceMoves(Board board, List<Piece> playersPieces, Piece turn, int row, int col) {
 		List<GameMove> moves = new ArrayList<GameMove>();
 		int a = row - 2, b = col - 2;
+		// Adjusts the initial indexes.
 		if (a < 0)
 			a = 0;
 		if (b < 0)

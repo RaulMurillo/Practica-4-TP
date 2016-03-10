@@ -18,6 +18,13 @@ import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.bgame.views.GenericConsoleView;
 
+/**
+ * A factory for creating Ataxx games. See {@link AtaxxRules} for the
+ * description of the game.
+ * <p>
+ * Factoria para la creacion de juegos Ataxx. Vease {@link AtaxxRules} para la
+ * descripcion del juego.
+ */
 public class AtaxxFactory implements GameFactory {
 
 	private int dim;
@@ -25,17 +32,30 @@ public class AtaxxFactory implements GameFactory {
 	private static final int minDim = 5;
 
 	/**
-	 * Default constructor of the class that gives a game with
-	 * no obstacles and with dimension 5.
+	 * Default constructor of the class that gives a game with dimension 5 and
+	 * no obstacles.
+	 * <p>
+	 * Constructor predeterminado de la clase que da un juego con dimension y 5
+	 * sin obstaculos.
 	 */
 	public AtaxxFactory() {
 		this(minDim, 0);
 	}
-/**
- * Constructor of the class.
- * @param dim
- * @param obstacles
- */
+
+	/**
+	 * Class constructor with parameters.
+	 * <p>
+	 * Constructor de la clase con parametros.
+	 * 
+	 * @param dim
+	 *            Number of rows and columns of the board.
+	 *            <p>
+	 *            Numero de filas y columnas del tablero.
+	 * @param obstacles
+	 *            Number of obstacles in the board.
+	 *            <p>
+	 *            Numero de obstaculos en el tablero.
+	 */
 	public AtaxxFactory(int dim, int obstacles) {
 		if (dim < minDim && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
@@ -52,10 +72,10 @@ public class AtaxxFactory implements GameFactory {
 
 	@Override
 	public Player createConsolePlayer() {
-		
-		 ArrayList<GameMove> possibleMoves = new ArrayList<GameMove>();
-		 possibleMoves.add(new AtaxxMove()); return new ConsolePlayer(new
-		 Scanner(System.in), possibleMoves);
+
+		ArrayList<GameMove> possibleMoves = new ArrayList<GameMove>();
+		possibleMoves.add(new AtaxxMove());
+		return new ConsolePlayer(new Scanner(System.in), possibleMoves);
 	}
 
 	@Override

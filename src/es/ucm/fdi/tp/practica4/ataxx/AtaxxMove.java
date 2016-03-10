@@ -8,6 +8,12 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica4.UtilsPr4;
 
+/**
+ * A Class representing a move for Ataxx.
+ * <p>
+ * Clase para representar un movimiento del juego Ataxx.
+ * 
+ */
 public class AtaxxMove extends GameMove {
 
 	/**
@@ -16,11 +22,15 @@ public class AtaxxMove extends GameMove {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Row in which initially is the piece before movement.
+	 * <p>
 	 * Fila en la que se encuentra la pieza inicialmente antes del movimiento.
 	 */
 	protected int iniRow;
 
 	/**
+	 * Column in which initially is the piece before movement.
+	 * <p>
 	 * Columna en la que se encuentra la pieza inicialmente antes del
 	 * movimiento.
 	 */
@@ -66,16 +76,19 @@ public class AtaxxMove extends GameMove {
 	 * Construye un movimiento para colocar una ficha del tipo referenciado por
 	 * {@code p} en la posicion ({@code row},{@code col}).
 	 * 
-	 * @param row
-	 *            Number of row.
+	 * @param iniRow Number of row where the piece actually is.
 	 *            <p>
-	 *            Numero de fila.
-	 * @param destCol
-	 *            Number of column.
+	 *            Numero de fila donde se encuentra la pieza.
+	 * @param iniCol Number of column where the piece actually is.
 	 *            <p>
-	 *            Numero de columna.
-	 * @param p
-	 *            A piece to be place at ({@code row},{@code col}).
+	 *            Numero de columna donde se encuentra la pieza.
+	 * @param destRow Number of row where the piece is moving.
+	 *            <p>
+	 *            Numero de fila donde se la pieza se va a mover.
+	 * @param destCol Number of column where the piece is moving.
+	 *            <p>
+	 *            Numero de columna donde se la pieza se va a mover.
+	 * @param p  A piece to be place at ({@code row},{@code col}).
 	 *            <p>
 	 *            Ficha a colocar en ({@code row},{@code col}).
 	 */
@@ -105,7 +118,8 @@ public class AtaxxMove extends GameMove {
 				throw new GameError("Position (" + destRow + "," + destCol + ") is not valid for piece in (" + iniRow
 						+ "," + iniCol + ").");
 			} else {
-				//Variable that will count the amount of pieces that the turn piece will increase
+				// Variable that will count the amount of pieces that the turn
+				// piece will increase
 				int cont = 1;
 				board.setPosition(destRow, destCol, p);
 				// The piece is not cloned if destiny if farther than 2
@@ -119,8 +133,8 @@ public class AtaxxMove extends GameMove {
 					a++;
 				if (b < 0)
 					b++;
-				//We explore the surroundings of the piece (p) and make the pertinent changes
-				//if necessary in the surrounding pieces
+				// We explore the surroundings of the piece (p) and make the
+				// pertinent changes if necessary in the surrounding pieces
 				for (int i = a; (i < board.getRows()) && (i <= destRow + 1); i++) {
 					for (int j = b; (j < board.getCols()) && (j <= destCol + 1); j++) {
 						Piece aux = board.getPosition(i, j);

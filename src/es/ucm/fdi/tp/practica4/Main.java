@@ -34,7 +34,7 @@ import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
  * 
  * It uses the Commons-CLI library for parsing command-line arguments: the game
  * to play, the players list, etc.. More information is available at
- * {@link https://commons.apache.org/proper/commons-cli/}
+ * {@link https://commons.apache.org/proper/commons-cli/}.
  * 
  * <p>
  * Esta es la clase con el metodo main de inicio del programa. Se utiliza la
@@ -158,7 +158,7 @@ public class Main {
 	 * <p>
 	 * Modo de juego por defecto.
 	 */
-	final private static PlayerMode DEFAULT_PLAYERMODE = PlayerMode.RANDOM;
+	final private static PlayerMode DEFAULT_PLAYERMODE = PlayerMode.MANUAL;
 
 	/**
 	 * This field includes a game factory that is constructed after parsing the
@@ -247,7 +247,7 @@ public class Main {
 	private static AIAlgorithm aiPlayerAlg;
 
 	/**
-	 * Number of obstacles provided with the option -o ({@code null} if not
+	 * Number of obstacles provided with the option -o, or ({@code null} if not
 	 * provided).
 	 * 
 	 * <p>
@@ -302,7 +302,6 @@ public class Main {
 			parseViewOption(line);
 			parseMultiViewOption(line);
 			parsePlayersOptions(line);
-			
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
