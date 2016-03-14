@@ -242,7 +242,7 @@ public class AtaxxRules implements GameRules {
 	}
 
 	@Override
-	public double evaluate(Board board, List<Piece> pieces, Piece turn) {
+	public double evaluate(Board board, List<Piece> pieces, Piece turn, Piece p) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
