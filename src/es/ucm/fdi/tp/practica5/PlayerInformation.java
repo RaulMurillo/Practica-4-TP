@@ -2,9 +2,12 @@ package es.ucm.fdi.tp.practica5;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -52,24 +55,13 @@ public class PlayerInformation extends JFrame implements ActionListener {
 				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-		table = new JTable();
-		// OJO!!!
-		// Number of rows must depend on the number of players
-		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null }, { null, null, null }, },
-				new String[] { "Player", "Mode", "#Pieces" }) {
-			Class[] columnTypes = new Class[] { Object.class, Object.class, Integer.class };
+		Object[][] data = setRowData(/* pieces, board */);
+		String[] columnNames = { "Player", "Mode", "#Pieces" };
 
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
+		table = new JTable(data, columnNames); // Table cols are are editable -
+												// they shouldn't
 
-			boolean[] columnEditables = new boolean[] { false, false, false };
-
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-
+		// table.setFillsViewportHeight(true); //Rellena de blanco
 		JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setEnabled(false);
@@ -79,6 +71,20 @@ public class PlayerInformation extends JFrame implements ActionListener {
 		setSize(350, 200);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	/**
+	 * Initialize the table row data according to the number of players.
+	 * @return
+	 */
+	private Object[][] setRowData(/* List<Piece> pieces, Board board */) { // ReadOnlyBoard??
+		Object[][] data = new Object[4/* pieces.size() */][3];
+		for (int j = 0; j < 4 /* pieces.size() */; j++) {
+			data[j][0] = "Pieza " + j; // pieces.get(j);
+			data[j][1] = "Modo pieza " + j; // null; //mode
+			data[j][2] = "Num. piezas tipo " + j; // board.getPieceCount(pieces.get(0));
+		}
+		return data;
 	}
 
 	@Override
