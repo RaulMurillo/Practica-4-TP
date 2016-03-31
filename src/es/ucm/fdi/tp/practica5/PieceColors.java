@@ -68,8 +68,7 @@ public class PieceColors extends JFrame implements ActionListener {
 
 		btnChooseColor = new JButton("Choose Color");
 		btnChooseColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {				
 				System.out.println("Choose color for piece type " + comboBox.getSelectedIndex());
 				JFrame frame = new JFrame("Set Piece Color");
 				// El JDialog no es modal (debería?).

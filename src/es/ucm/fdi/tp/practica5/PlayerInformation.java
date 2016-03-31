@@ -58,7 +58,7 @@ public class PlayerInformation extends JFrame implements ActionListener {
 		Object[][] data = setRowData(/* pieces, board */);
 		String[] columnNames = { "Player", "Mode", "#Pieces" };
 
-		table = new JTable(data, columnNames); // Table cols are are editable -
+		table = new JTable(data, columnNames); // Table cols are editable -
 												// they shouldn't
 
 		// table.setFillsViewportHeight(true); //Rellena de blanco

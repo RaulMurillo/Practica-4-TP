@@ -8,7 +8,7 @@ import java.util.Locale;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class StatusMessages extends JFrame implements ActionListener {
+public class StatusMessages extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,17 +28,14 @@ public class StatusMessages extends JFrame implements ActionListener {
 		model = new String();
 		counter = 1;
 		textArea = new JTextArea(model);
+		textArea.setEditable(false);
 
 		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scroll);
 
-		JButton okButton = new JButton(new AbstractAction("Ok") {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
+		JButton okButton = new JButton("Ok");
+		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				///////
@@ -76,18 +73,15 @@ public class StatusMessages extends JFrame implements ActionListener {
 				}
 
 				model += buffer + "\n";
-				
+
 				showMessage(model);
 			}
 		});
-		okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JButton resetButton = new JButton(new AbstractAction("Reset") {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
 
+		okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JButton resetButton = new JButton("Reset");
+		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Reset Action
@@ -121,13 +115,7 @@ public class StatusMessages extends JFrame implements ActionListener {
 		});
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-	
-	public void showMessage(String message){
+	public void showMessage(String message) {
 		textArea.append(message);
 	}
 }
