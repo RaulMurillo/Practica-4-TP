@@ -90,7 +90,10 @@ public class VentanaPrincipalPrueba2 extends JFrame{
 		scroll.setViewportBorder(
 				new TitledBorder(null, "Status Messages", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.add(scroll);
-
+		
+		
+		//PlayerInformation panel_3 = new PlayerInformation(board, pieces);
+		//panel_1.add(panel_3);
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(
 				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -106,6 +109,7 @@ public class VentanaPrincipalPrueba2 extends JFrame{
 		panel_3.setLayout(new BorderLayout());
 		panel_3.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		panel_3.add(table, BorderLayout.CENTER);
+		
 		
 		
 		PieceColorChooser panel_4 = new PieceColorChooser(pieces, map);

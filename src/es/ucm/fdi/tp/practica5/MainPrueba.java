@@ -24,6 +24,7 @@ public class MainPrueba {
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
 		pieces.add(new Piece("R"));
+		pieces.add(new Piece("J"));
 		GameRules rules = new AtaxxRules(5, 0);
 		Board board = rules.createBoard(pieces);
         SwingUtilities.invokeLater(new Runnable() {

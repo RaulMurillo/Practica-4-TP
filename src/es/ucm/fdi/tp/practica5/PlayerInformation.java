@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -23,21 +24,20 @@ import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 
-public class PlayerInformation extends JFrame {
+public class PlayerInformation extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel;
 	private JTable table;
 
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -48,33 +48,23 @@ public class PlayerInformation extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public PlayerInformation() {
-		initialize();
+	public PlayerInformation(Board b, List<Piece> p) {
+		initialize(b, p);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(Board board, List<Piece> pieces) {
 		// frame = new JFrame();
-		panel = new JPanel();
-		panel.setBorder(
+		this.setBorder(
 				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		///////////////
-		List<Piece> pieces = new ArrayList<Piece>();
-		pieces.add(new Piece("X"));
-		pieces.add(new Piece("O"));
-		pieces.add(new Piece("R"));
-
-		GameRules rules = new AtaxxRules(5, 0);
-		Board board = rules.createBoard(pieces);
-		///////////////
+		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		Object[][] data = setRowData(pieces, board);
 		String[] columnNames = { "Player", "Mode", "#Pieces" };
 
@@ -88,12 +78,7 @@ public class PlayerInformation extends JFrame {
 		JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setEnabled(false);
-		panel.add(scroll);
-
-		add(panel);
-		setSize(350, 200);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(scroll);
 		// frame.setVisible(true);
 	}
 
