@@ -12,7 +12,7 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
-public class PieceColors extends JFrame implements ActionListener {
+public class PieceColors extends JFrame {
 
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class PieceColors extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JButton btnChooseColor;
 	private JColorChooser tcc;
 
@@ -52,9 +52,7 @@ public class PieceColors extends JFrame implements ActionListener {
 	 */
 	private void initialize() {
 		panel = new JPanel();
-		panel.setBorder(
-				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		// panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setBorder(new TitledBorder(null, "Piece Colors", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		JLabel banner = new JLabel("Color change here", JLabel.CENTER);
 		banner.setPreferredSize(new Dimension(200, 65));
@@ -63,23 +61,24 @@ public class PieceColors extends JFrame implements ActionListener {
 		tcc = new JColorChooser(banner.getForeground());
 
 		String[] pieceStrings = getPieceStrings(/* pieces */);
-		comboBox = new JComboBox(pieceStrings);
+		comboBox = new JComboBox<String>(pieceStrings);
 		panel.add(comboBox);
 
 		btnChooseColor = new JButton("Choose Color");
 		btnChooseColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
+			public void actionPerformed(ActionEvent e) {
 				System.out.println("Choose color for piece type " + comboBox.getSelectedIndex());
 				JFrame frame = new JFrame("Set Piece Color");
 				// El JDialog no es modal (debería?).
-				// El JDialog debería estar asociado al JFrame desde el que se activa.
+				// El JDialog debería estar asociado al JFrame desde el que se
+				// activa.
 				// Hacerlo en una clase distinta (?)
 				JDialog dialog = new JDialog(frame, "Set Piece Color");
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 				dialog.setSize(500, 500);
 				dialog.setLocationRelativeTo(null);
-				
+
 				// tcc.getSelectionModel().addChangeListener(this);
 				// tcc.setBorder(BorderFactory.createTitledBorder("Choose Text
 				// Color"));
@@ -133,12 +132,6 @@ public class PieceColors extends JFrame implements ActionListener {
 			p[i] = "Pieza " + i; // pieces.get(j);
 		}
 		return p;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

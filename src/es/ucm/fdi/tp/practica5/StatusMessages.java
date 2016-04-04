@@ -72,7 +72,7 @@ public class StatusMessages extends JFrame{
 					buffer.append("Ctrl ");
 				}
 
-				model += buffer + "\n";
+				model += buffer;
 
 				showMessage(model);
 			}
@@ -116,6 +116,6 @@ public class StatusMessages extends JFrame{
 	}
 
 	public void showMessage(String message) {
-		textArea.append(message);
+		textArea.append(message + "\n");
 	}
 }

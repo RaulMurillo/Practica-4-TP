@@ -76,19 +76,24 @@ public class AtaxxMove extends GameMove {
 	 * Construye un movimiento para colocar una ficha del tipo referenciado por
 	 * {@code p} en la posicion ({@code row},{@code col}).
 	 * 
-	 * @param iniRow Number of row where the piece actually is.
+	 * @param iniRow
+	 *            Number of row where the piece actually is.
 	 *            <p>
 	 *            Numero de fila donde se encuentra la pieza.
-	 * @param iniCol Number of column where the piece actually is.
+	 * @param iniCol
+	 *            Number of column where the piece actually is.
 	 *            <p>
 	 *            Numero de columna donde se encuentra la pieza.
-	 * @param destRow Number of row where the piece is moving.
+	 * @param destRow
+	 *            Number of row where the piece is moving.
 	 *            <p>
 	 *            Numero de fila donde se la pieza se va a mover.
-	 * @param destCol Number of column where the piece is moving.
+	 * @param destCol
+	 *            Number of column where the piece is moving.
 	 *            <p>
 	 *            Numero de columna donde se la pieza se va a mover.
-	 * @param p  A piece to be place at ({@code row},{@code col}).
+	 * @param p
+	 *            A piece to be place at ({@code row},{@code col}).
 	 *            <p>
 	 *            Ficha a colocar en ({@code row},{@code col}).
 	 */
