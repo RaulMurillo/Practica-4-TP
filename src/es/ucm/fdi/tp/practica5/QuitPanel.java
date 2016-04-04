@@ -6,21 +6,17 @@ import javax.swing.*;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 
-public class QuitPanel extends JFrame {
+public class QuitPanel extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel;
-	private JButton btnQuit;
-	// private JButton btnRestart;
-
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -31,12 +27,13 @@ public class QuitPanel extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
 	public QuitPanel() {
+		super();
 		initialize();
 	}
 
@@ -44,9 +41,8 @@ public class QuitPanel extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		panel = new JPanel();
-		/////////////////////
-		btnQuit = new JButton("Quit");
+
+		JButton btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -56,7 +52,7 @@ public class QuitPanel extends JFrame {
 		/*
 		 * if(!turn.gameMode().equals(MANUAL)){ btnQuit.setEnabled(false); }
 		 */
-		panel.add(btnQuit);
+		add(btnQuit);
 		//////////////////
 		/*
 		 * btnRestart = new JButton("Restart"); btnRestart.addActionListener(new
@@ -68,10 +64,6 @@ public class QuitPanel extends JFrame {
 		 * } }); panel.add(btnRestart);
 		 */
 		//////////////////
-		getContentPane().add(panel);
-		setSize(350, 200);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void quit() {

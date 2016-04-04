@@ -24,29 +24,12 @@ public class MainPrueba {
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
 		pieces.add(new Piece("R"));
-		ColorMap m = new ColorMap(pieces);
 		GameRules rules = new AtaxxRules(5, 0);
 		Board board = rules.createBoard(pieces);
-        BoardUI b = new BoardUI(board, pieces);
-        JPanel p = new PieceColorChooser(pieces, m);
-    	
-		JButton b1 = new JButton("update");
- 		b1.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent me) {
-            	b.update(m);
-            }
-          });
- 		JPanel principal = new JPanel(new BorderLayout());
-		JFrame jf = new JFrame();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() { 
-                jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                jf.setSize(400, 400);
-                principal.add(b, BorderLayout.CENTER);
-               jf.add(p, BorderLayout.EAST);
-               jf.add(b1, BorderLayout.WEST);
-                jf.add(principal);
-                jf.setVisible(true);
+              VentanaPrincipalPrueba2 jf = new VentanaPrincipalPrueba2(board, pieces);
+              jf.setVisible(true);
             }
         });
     }

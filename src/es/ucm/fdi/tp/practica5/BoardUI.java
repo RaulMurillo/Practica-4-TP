@@ -27,10 +27,10 @@ public class BoardUI extends JPanel {
 	private JLabel[][] squares;
 	private Board board;
 
-	public BoardUI(Board b, List<Piece> pieces) {
+	public BoardUI(Board b, ColorMap m) {
 		setBoard(b);
 		setSquares();
-		update(new ColorMap(pieces));
+		update(m);
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
 				add(squares[i][j]);
@@ -42,7 +42,7 @@ public class BoardUI extends JPanel {
 		removeAll(); // descartamos squares antiguos
 		this.board = board;
 		squares = new JLabel[board.getRows()][board.getCols()];
-		setLayout(new GridLayout(board.getRows(), board.getCols(), 2, 2));
+		setLayout(new GridLayout(board.getRows(), board.getCols(), 1, 1));
 		
 	}
 	
@@ -51,6 +51,7 @@ public class BoardUI extends JPanel {
 			for (int j = 0; j < board.getCols(); j++) {
 				squares[i][j] = new JLabel();
 				squares[i][j].setOpaque(true);
+				squares[i][j].setBorder(BorderFactory.createLineBorder(Color.white));
 				squares[i][j].addMouseListener(new MouseAdapter() {
 		            public void mouseClicked(MouseEvent me) {
 		            	//Escribir Codigo

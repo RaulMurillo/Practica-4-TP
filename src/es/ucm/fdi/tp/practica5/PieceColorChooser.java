@@ -20,7 +20,7 @@ public class PieceColorChooser extends JPanel {
 		comboBox = new JComboBox(piece.toArray());
 		setLayout(new FlowLayout());
 		add(comboBox);
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Change Color");
 		okButton.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
             	Color c = JColorChooser.showDialog(PieceColorChooser.this, "Color chooser", Color.BLACK);
