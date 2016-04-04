@@ -26,13 +26,11 @@ public class BoardUI extends JPanel {
 	
 	private JLabel[][] squares;
 	private Board board;
-	private ColorMap mapaColores;
 
 	public BoardUI(Board b, List<Piece> pieces) {
-		mapaColores = new ColorMap(pieces);
 		setBoard(b);
 		setSquares();
-		update();
+		update(new ColorMap(pieces));
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
 				add(squares[i][j]);
@@ -63,7 +61,7 @@ public class BoardUI extends JPanel {
 		
 	}
 
-	public void update() {
+	public void update(ColorMap mapaColores) {
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
 				Piece p =board.getPosition(i, j);

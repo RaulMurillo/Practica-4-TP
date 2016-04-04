@@ -99,7 +99,7 @@ public class PieceColors extends JFrame {
 							// envía el diálogo al recolector de basura de Java
 							Color newColor = tcc.getColor();
 							banner.setForeground(newColor);
-							Piece p = comboBox.getSelectedItem();
+							//Piece p = comboBox.getSelectedItem();
 							tcc = new JColorChooser(banner.getForeground());
 							dialog.dispose();
 						}
