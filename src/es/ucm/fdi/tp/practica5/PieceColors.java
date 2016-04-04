@@ -9,6 +9,9 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
+
+import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+
 import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
@@ -20,7 +23,7 @@ public class PieceColors extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel;
-	private JComboBox<String> comboBox;
+	private JComboBox<Piece> comboBox;
 	private JButton btnChooseColor;
 	private JColorChooser tcc;
 
@@ -61,7 +64,7 @@ public class PieceColors extends JFrame {
 		tcc = new JColorChooser(banner.getForeground());
 
 		String[] pieceStrings = getPieceStrings(/* pieces */);
-		comboBox = new JComboBox<String>(pieceStrings);
+		comboBox = new JComboBox<Piece>();
 		panel.add(comboBox);
 
 		btnChooseColor = new JButton("Choose Color");
@@ -74,6 +77,7 @@ public class PieceColors extends JFrame {
 				// activa.
 				// Hacerlo en una clase distinta (?)
 				JDialog dialog = new JDialog(frame, "Set Piece Color");
+				//dialog.setModal(true);
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 				dialog.setSize(500, 500);
@@ -95,6 +99,7 @@ public class PieceColors extends JFrame {
 							// envía el diálogo al recolector de basura de Java
 							Color newColor = tcc.getColor();
 							banner.setForeground(newColor);
+							Piece p = comboBox.getSelectedItem();
 							tcc = new JColorChooser(banner.getForeground());
 							dialog.dispose();
 						}
