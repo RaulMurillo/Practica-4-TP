@@ -33,22 +33,15 @@ public class PlayerInformation extends JPanel {
 
 	private JTable table;
 
-
 	/**
 	 * Launch the application.
 	 */
-/*	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PlayerInformation window = new PlayerInformation();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { SwingUtilities.invokeLater(new
+	 * Runnable() { public void run() { try { PlayerInformation window = new
+	 * PlayerInformation(); window.setVisible(true); } catch (Exception e) {
+	 * e.printStackTrace(); } } }); }
+	 */
 
 	/**
 	 * Create the application.
@@ -61,7 +54,6 @@ public class PlayerInformation extends JPanel {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(Board board, List<Piece> pieces) {
-		// frame = new JFrame();
 		this.setBorder(
 				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -73,13 +65,12 @@ public class PlayerInformation extends JPanel {
 				return false; // Table cels ARE NOT editable.
 			}
 		};
-		
+
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		table.setFillsViewportHeight(true); // Rellena de blanco
 		JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setEnabled(false);
 		this.add(scroll);
-		// frame.setVisible(true);
 	}
 
 	/**

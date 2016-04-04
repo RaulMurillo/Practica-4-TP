@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
@@ -34,4 +35,5 @@ public class MainPrueba {
             }
         });
     }
+	
 }

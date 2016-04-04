@@ -8,12 +8,15 @@ import java.util.Locale;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class StatusMessages extends JFrame{
+public class StatusMessages extends JPanel{
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea textArea;
-	private String model;
+	private String message;
 	private int counter;
 
 	StatusMessages() {
@@ -21,20 +24,19 @@ public class StatusMessages extends JFrame{
 	}
 
 	public final void initUI() {
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Status Messages", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		setBorder(new TitledBorder(null, "Status Messages", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		model = new String();
+		message = new String();
 		counter = 1;
-		textArea = new JTextArea(model);
+		textArea = new JTextArea(message);
 		textArea.setEditable(false);
 
 		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panel.add(scroll);
+		add(scroll);
 
-		JButton okButton = new JButton("Ok");
+		JButton okButton = new JButton("Write");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -43,20 +45,20 @@ public class StatusMessages extends JFrame{
 				Date date = new Date(e.getWhen());
 				String s = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
 
-				if (!model.isEmpty()) {
-					model = "-----------------------\n";
+				if (!message.isEmpty()) {
+					message = "-----------------------\n";
 
 				}
 
 				if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-					model += " Event ID: TEST MESSAGE " + counter + "\n";
+					message += " Event ID: TEST MESSAGE " + counter + "\n";
 				}
 
 				counter++;
-				model += " Time: " + s + "\n";
+				message += " Time: " + s + "\n";
 
 				String source = e.getSource().getClass().getName();
-				model += " Source: " + source + "\n";
+				message += " Source: " + source + "\n";
 
 				int mod = e.getModifiers();
 
@@ -72,9 +74,9 @@ public class StatusMessages extends JFrame{
 					buffer.append("Ctrl ");
 				}
 
-				model += buffer;
+				message += buffer;
 
-				showMessage(model);
+				showMessage(message);
 			}
 		});
 
@@ -86,23 +88,23 @@ public class StatusMessages extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// Reset Action
 				textArea.setText(null);
-				model = "";
+				message = "";
 			}
 		});
 		resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		panel.add(okButton);
-		panel.add(resetButton);
-		getContentPane().add(panel);
+		add(okButton);
+		add(resetButton);
+		/*getContentPane().add(panel);
 
 		setTitle("Event example");
 		setSize(239, 171);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);*/
 
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -113,7 +115,7 @@ public class StatusMessages extends JFrame{
 				}
 			}
 		});
-	}
+	}*/
 
 	public void showMessage(String message) {
 		textArea.append(message + "\n");
