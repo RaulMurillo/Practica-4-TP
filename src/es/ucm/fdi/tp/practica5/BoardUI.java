@@ -24,8 +24,8 @@ public class BoardUI extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JLabel[][] squares;
-	private Board board;
+	protected JLabel[][] squares;
+	protected Board board;
 
 	public BoardUI(Board b, ColorMap m) {
 		setBoard(b);
@@ -52,9 +52,11 @@ public class BoardUI extends JPanel {
 				squares[i][j] = new JLabel();
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorder(BorderFactory.createLineBorder(Color.white));
+				final int k = i;
+				final int l = j;
 				squares[i][j].addMouseListener(new MouseAdapter() {
 		            public void mouseClicked(MouseEvent me) {
-		            	//Escribir Codigo
+		            	
 		            }
 		          });
 			}
@@ -74,19 +76,9 @@ public class BoardUI extends JPanel {
 	}
 
 	public void setColors(PieceColorMap colorMap) {
-	};
+	}
 
-	/*public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BoardUI window = new BoardUI();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});*/
+
 
 
 }

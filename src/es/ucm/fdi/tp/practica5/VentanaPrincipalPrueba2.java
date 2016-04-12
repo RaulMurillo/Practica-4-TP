@@ -58,21 +58,21 @@ public class VentanaPrincipalPrueba2 extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 600, 450);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setLayout(new BorderLayout(0, 0));
+		setSize(600, 450);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_1 = new JPanel(new GridBagLayout()); // This Layout makes
+		JPanel panel_1 = new JPanel(new BorderLayout()); // This Layout makes
 															// board be in the
 															// middle
 		//this.getContentPane().add(panel_1, BorderLayout.CENTER);
 
 		BoardUI tablero = new BoardUI(board, map);
 		panel_1.add(tablero);
-		panel_1.addComponentListener(new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				resizePreview(tablero, panel_1);
+				resizePreview(tablero, VentanaPrincipalPrueba2.this);
 			}
 		});
 
@@ -124,7 +124,8 @@ public class VentanaPrincipalPrueba2 extends JFrame {
 	 * @param container
 	 *            Panel that contains the panel witch will be resized.
 	 */
-	private static void resizePreview(JPanel innerPanel, JPanel container) {
+	private static void resizePreview(JPanel innerPanel, JFrame container) {
+		System.err.println("Size changed to " + container.getSize());
 		int w = container.getWidth();
 		int h = container.getHeight();
 		int size = Math.min(w, h);
