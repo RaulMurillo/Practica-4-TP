@@ -61,7 +61,7 @@ public class VentanaPrincipalPrueba2 extends JFrame {
 		setSize(600, 450);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
-
+		
 		JPanel panel_1 = new JPanel(new BorderLayout()); // This Layout makes
 															// board be in the
 															// middle

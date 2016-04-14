@@ -13,21 +13,17 @@ public class QuitPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private JButton btnRestart;
+
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					QuitPanel window = new QuitPanel();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { SwingUtilities.invokeLater(new
+	 * Runnable() { public void run() { try { QuitPanel window = new
+	 * QuitPanel(); window.setVisible(true); } catch (Exception e) {
+	 * e.printStackTrace(); } } }); }
+	 */
 
 	/**
 	 * Create the application.
@@ -54,15 +50,7 @@ public class QuitPanel extends JPanel {
 		 */
 		add(btnQuit);
 		//////////////////
-		/*
-		 * btnRestart = new JButton("Restart"); btnRestart.addActionListener(new
-		 * ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent arg0) { // TODO
-		 * Auto-generated method stub // game.restart();
-		 * 
-		 * } }); panel.add(btnRestart);
-		 */
+
 		//////////////////
 	}
 
@@ -75,6 +63,28 @@ public class QuitPanel extends JPanel {
 			// game.stop();
 			System.exit(0);
 		}
+	}
+
+	public void setRestart() {
+		btnRestart = new JButton("Restart");
+		btnRestart.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				// game.restart();
+
+			}
+		});
+		add(btnRestart);
+	}
+
+	public void enableRestart() {
+		btnRestart.setEnabled(true);
+	}
+
+	public void disableRestart() {
+		btnRestart.setEnabled(false);
 	}
 
 }

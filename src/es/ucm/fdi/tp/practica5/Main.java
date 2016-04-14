@@ -1,5 +1,6 @@
 package es.ucm.fdi.tp.practica5;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +28,9 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.connectn.ConnectNFactory;
 import es.ucm.fdi.tp.basecode.ttt.TicTacToeFactory;
-import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
+//import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
+import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
+import es.ucm.fdi.tp.practica5.control.SwingController;
 
 /**
  * This is the class with the main method for the board games application.
@@ -543,15 +546,15 @@ public class Main {
 		case AdvancedTicTacToe:
 			gameFactory = new AdvancedTTTFactory();
 			break;
-		case Ataxx:
+		case Ataxx://////////////////////////////
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
 				if (obstacles != null) {
-					gameFactory = new AtaxxFactory(dimRows, obstacles);
+					gameFactory = new AtaxxFactoryExt(dimRows, obstacles);
 				} else {
-					gameFactory = new AtaxxFactory(dimRows, 0);
+					gameFactory = new AtaxxFactoryExt(dimRows, 0);
 				}
 			} else {
-				gameFactory = new AtaxxFactory();
+				gameFactory = new AtaxxFactoryExt();
 			}
 			break;
 		case CONNECTN:
@@ -784,8 +787,36 @@ public class Main {
 			gameFactory.createConsoleView(g, c);
 			break;
 		case WINDOW:
-			throw new UnsupportedOperationException(
-					"Swing " + (multiviews ? "Multiviews" : "Views") + " are not supported yet! ");
+			ArrayList<Player> playerss = new ArrayList<Player>();
+			ArrayList<PlayerMode> modes = new ArrayList<PlayerMode>();
+			for (int i = 0; i < pieces.size(); i++) {
+				switch (playerModes.get(i)) {				
+				case AI:
+					playerss.add(gameFactory.createAIPlayer(aiPlayerAlg));
+					break;
+				case MANUAL:
+					playerss.add(gameFactory.createConsolePlayer());
+					break;
+				case RANDOM:
+					playerss.add(gameFactory.createRandomPlayer());
+					break;
+				default:
+					throw new UnsupportedOperationException(
+							"Something went wrong! This program point should be unreachable!");
+				}
+				modes.add(playerModes.get(i));
+			}
+			
+			c = new SwingController(g, pieces, playerss);
+			if (multiviews) {
+				for (Piece p : pieces) {
+					gameFactory.createSwingView(g, c, p, gameFactory.createRandomPlayer(),
+							gameFactory.createAIPlayer(aiPlayerAlg));
+				}
+			} else
+				gameFactory.createSwingView(g, c, null, gameFactory.createRandomPlayer(),
+						gameFactory.createAIPlayer(aiPlayerAlg));
+			break;
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");
 		}

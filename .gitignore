@@ -63,3 +63,5 @@ $RECYCLE.BIN/
 *.lnk
 /bin/
 .classpath
+.classpath
+*.classpath
