@@ -16,7 +16,8 @@ public class PlayerModes extends JPanel {
 		void changeModePressed(Piece p, String mode);
 	}
 
-	public PlayerModes(List<Piece> pieces) {
+	public PlayerModes(List<Piece> pieces, PlayerModesListener controlsListener) {
+		this.controlsListener = controlsListener;
 		initialize(pieces);
 	}
 

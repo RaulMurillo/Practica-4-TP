@@ -28,16 +28,19 @@ public class BoardGUI extends JPanel {
 	protected Board board;
 	private Map<Piece, Color> colorMap;
 	final public Color DEFAULT_BORDER = Color.white;
+	final public Color OBS_COLOR = Color.getHSBColor(0, 25, 25);
 
 	private BoardGUIListener controlsListener;
 
 	public interface BoardGUIListener {
+		
 		boolean leftButtonPressed(int row, int col);
 
 		void rightButtonPressed(int row, int col);
 	}
 
-	public BoardGUI(Board b, Map<Piece, Color> color) {
+	public BoardGUI(Board b, Map<Piece, Color> color, BoardGUIListener controlsListener) {
+		this.controlsListener = controlsListener;
 		setBoard(b);
 		colorMap = color;
 		update();
@@ -80,12 +83,17 @@ public class BoardGUI extends JPanel {
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
 				Piece p = board.getPosition(i, j);
-				if (p != null)
+				//paint obstacles!!??
+				/*if (p==obstacle){
+				 * squares[i][j].setBackground(OBS_COLOR);
+				 * }
+				else */if (p != null){
 					squares[i][j].setBackground(colorMap.get(p));
+				}
+				else squares[i][j].setBackground(null);
 			}
 		}
-		repaint(); // obligas a que se repinte el tablero (ahora que
-					// pintar lo que debe)
+		repaint(); // obligas a que se repinte el tablero
 	}
 
 	public void selectSquare(int col, int row) {

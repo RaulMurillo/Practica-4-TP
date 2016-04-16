@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
@@ -18,7 +19,9 @@ public class PieceColorChooser extends JPanel {
 		void changeColorPressed(Piece p, Color c);
 	}
 
-	public PieceColorChooser(List<Piece> piece) {
+	public PieceColorChooser(List<Piece> piece, PieceColorsListener controlsListener) {
+		this.controlsListener = controlsListener;
+		setBorder(new TitledBorder(null, "Piece Colors", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		JComboBox<Piece> jcbPieces = new JComboBox(piece.toArray());
 		setLayout(new FlowLayout());
 		add(jcbPieces);

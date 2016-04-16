@@ -21,6 +21,11 @@ import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 public class SwingPlayer extends Player {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * List of moves that can be played by the player (typically include one
 	 * type of move for simple games, e.g., Tic-Tac-Toe).
 	 * 
@@ -30,10 +35,9 @@ public class SwingPlayer extends Player {
 	 */
 	private List<GameMove> availableMoves;
 
-	//private GenericSwingView view;
 	private SwingController ctrl;
 
-	public SwingPlayer(GenericSwingView view, List<GameMove> availableMoves, SwingController ctrl) {
+	public SwingPlayer(List<GameMove> availableMoves, SwingController ctrl) {
 		//this.view = view;
 		this.ctrl = ctrl;
 		this.availableMoves = new ArrayList<GameMove>(availableMoves);
@@ -51,7 +55,7 @@ public class SwingPlayer extends Player {
 			}
 		}
 
-		throw new GameError("Invalid move: ");
+		throw new GameError("Invalid move");
 	}
 
 }

@@ -10,20 +10,22 @@ import es.ucm.fdi.tp.practica5.control.SwingController;
 
 public class QuitPanel extends JPanel {
 
+	private JButton jbQuit;
 	private JButton jbRestart;
-	
+
 	private QuitPanelListener controlsListener;
 
 	public interface QuitPanelListener {
-        void quitPressed();
-        void restartPressed();
-    }
-	
+		void quitPressed();
+
+		void restartPressed();
+	}
+
 	/**
 	 * Create the panel.
 	 */
-	public QuitPanel() {
-		super();
+	public QuitPanel(QuitPanelListener controlsListener) {
+		this.controlsListener = controlsListener;
 		initialize();
 	}
 
@@ -31,31 +33,31 @@ public class QuitPanel extends JPanel {
 	 * Initialize the contents of the panel.
 	 */
 	private void initialize() {
-		JButton jbQuit = new JButton("Quit");
+		jbQuit = new JButton("Quit");
 		jbQuit.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				controlsListener.quitPressed();
-			}			
-		});	
-		add(jbQuit);		
+			}
+		});
+		add(jbQuit);
 	}
 
-	public void setRestart() {
+	public void setRestartButton() {
 		jbRestart = new JButton("Restart");
 		jbRestart.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				controlsListener.restartPressed();
-			}			
-		});	
+			}
+		});
 		add(jbRestart);
 	}
 
-	public void enableRestart() {
-		jbRestart.setEnabled(true);
-	}
-
-	public void disableRestart() {
-		jbRestart.setEnabled(false);
+	@Override
+	public void setEnabled(boolean b) {
+		jbQuit.setEnabled(b);
+		if (jbRestart != null) {
+			jbRestart.setEnabled(b);
+		}
 	}
 
 }

@@ -13,8 +13,7 @@ import javax.swing.SwingUtilities;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
-import es.ucm.fdi.tp.basecode.bgame.control.commands.Command;
-import es.ucm.fdi.tp.basecode.bgame.control.commands.CommandSet;
+import es.ucm.fdi.tp.basecode.bgame.control.commands.*;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
@@ -25,8 +24,7 @@ import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 import es.ucm.fdi.tp.practica5.views.QuitPanel;
 import es.ucm.fdi.tp.practica5.views.AutomaticMoves;
 
-public abstract class SwingController extends Controller
-		implements QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, AutomaticMoves.AutoMovesListener {
+public /* abstract */class SwingController extends Controller {
 
 	/**
 	 * A map that associates pieces with players (manual, random, etc.).
@@ -67,14 +65,24 @@ public abstract class SwingController extends Controller
 
 		// start the game
 		game.start(pieces);
+		// Bucle interno del juego
+		/*while (game.getState() == State.InPlay) {
+			// Notify help
+			Command cmd = new PlayCommand();
+			//
+			if (cmd != null) {
+				try {
+					cmd.execute(this);
+				} catch (GameError e) {
+				}
+			} else {
+				System.err.println("Uknown command");
+				System.err.flush();
+			}
+		}*/
 
-		while (game.getState() == State.InPlay) {
-
-			// Bucle interno del juego
-			// Necesario??
-			// update()??
-
-		}
+		//
+		// update()??
 
 	}
 
@@ -86,7 +94,7 @@ public abstract class SwingController extends Controller
 	 * @param fila
 	 * @return
 	 */
-	public abstract boolean firstPartMove(int col, int fila);
+	// public abstract boolean firstPartMove(int col, int fila);
 
 	/**
 	 * Ends a move
@@ -95,32 +103,9 @@ public abstract class SwingController extends Controller
 	 *            Destination column
 	 * @param fila
 	 */
-	public abstract void secondPartMove(int col, int fila);
+	// public abstract void secondPartMove(int col, int fila);
 
-	public abstract void casillaDeseleccionada(int col, int fila);
-
-	@Override
-	public void quitPressed() {
-		int response = JOptionPane.showConfirmDialog(null,
-				"Are sure you want to quit the game?\n (You will lose the game)", "Quit confirm",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (response == JOptionPane.YES_OPTION) {
-			System.out.println("Yes button clicked");
-			game.stop();
-			System.exit(0);
-		}
-	}
-
-	@Override
-	public void restartPressed() {
-		int response = JOptionPane.showConfirmDialog(null,
-				"Are sure you want to restart the game?\n (You will lose the game)", "Restart confirm",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (response == JOptionPane.YES_OPTION) {
-			System.out.println("Yes button clicked");
-			game.restart();
-		}
-	}
+	// public abstract void casillaDeseleccionada(int col, int fila);
 
 	public Player getPiecePlayer(Piece p) {
 		return players.get(p);
@@ -140,29 +125,16 @@ public abstract class SwingController extends Controller
 	 *            Normalmente es {@code null} pues se ignora.
 	 */
 	@Override
-	public void makeMove(Player p) {
-		game.makeMove(players.get(game.getTurn()));
+	public void makeMove(Player player) {
+		if (game != null && player != null) {
+			game.makeMove(player);
+		}
 	}
 
 	public GameMove getUserMove() {
 		return move;
 	}
 
-	public abstract String help();
-
-	@Override
-	public void changeModePressed(Piece p, String mode) {
-
-	}
-
-	@Override
-	public void randomPressed() {
-
-	}
-
-	@Override
-	public void aiPressed() {
-
-	}
+	// public abstract String help();
 
 }

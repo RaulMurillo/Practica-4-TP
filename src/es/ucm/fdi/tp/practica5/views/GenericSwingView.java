@@ -2,6 +2,10 @@ package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,22 +23,27 @@ import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica5.VentanaPrincipalPrueba2;
 import es.ucm.fdi.tp.practica5.control.SwingController;
 
 public class GenericSwingView extends JFrame
-		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, GameObserver {
+		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
+		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
 
 	/**
 	 * The list of pieces involved in the game. It is stored when the game
 	 * starts and used when the state is printed.
 	 */
 	private List<Piece> pieces;
-
-	private SwingController controller;
-
+	private Controller controller;
 	private Map<Piece, Color> colorMap;
-
 	private Map<Piece, Player> players;
+	private Piece viewPiece;
+	private Player randomPlayer;
+	private Player aiPlayer;
+	private BoardGUI boardUI;
+	private SettingsPanel settings;
+	private boolean doubleClick;
 
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		{
@@ -45,17 +54,7 @@ public class GenericSwingView extends JFrame
 		}
 	};
 
-	private Piece viewPiece;
-	private Player randomPlayer;
-	private Player aiPlayer;
-
-	private BoardGUI boardUI;
-
-	private SettingsPanel settings;
-
-	private boolean doubleClick;
-
-	public GenericSwingView(Observable<GameObserver> g, SwingController c, Piece p, Player random, Player ai) {
+	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		controller = c;
 		viewPiece = p;
 		randomPlayer = random;
@@ -72,7 +71,7 @@ public class GenericSwingView extends JFrame
 		setColorMap(DEFAULT_COLORS);
 
 		// Creates a new window
-		setSize(600, 450);
+		setSize(650, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -80,13 +79,22 @@ public class GenericSwingView extends JFrame
 			view = "(" + viewPiece + ")";
 		this.setTitle("Board Games: " + gameDesc + " " + view);
 
-		JPanel jpBoard = new JPanel(new BorderLayout());
-		boardUI = new BoardGUI(board, colorMap);
+		JPanel jpBoard = new JPanel(new GridBagLayout());
+		boardUI = new BoardGUI(board, colorMap, this);
 		jpBoard.add(boardUI);
 		add(jpBoard, BorderLayout.CENTER);
 
-		settings = new SettingsPanel(pieces, colorMap, board);
+		settings = new SettingsPanel(pieces, colorMap, board, this, viewPiece);
+		settings.configAutoMoves(randomPlayer != null, aiPlayer != null);
 		add(settings, BorderLayout.EAST);
+
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				resizePreview(boardUI, jpBoard);
+			}
+		});
+
 		visible();
 
 		// Set GameStart comments
@@ -100,24 +108,25 @@ public class GenericSwingView extends JFrame
 
 	@Override
 	public void onGameOver(Board board, State state, Piece winner) {
-		settings.write("\n Game Over!!\n \n");
+		settings.write("\n Game Over!!");
 		settings.write("Game Status: " + state);
 		if (state == State.Won) {
 			settings.write("Winner: " + winner);
 		}
+		boardUI.setEnabled(false);
+		settings.setEnabled(false, true);
 	}
 
 	@Override
 	public void onMoveStart(Board board, Piece turn) {
-		enableButtons();
-		if (players.get(turn) != randomPlayer && players.get(turn) != aiPlayer) {
-			settings.write(controller.help());
-		}
+		disablePanels();
 	}
 
 	@Override
 	public void onMoveEnd(Board board, Piece turn, boolean success) {
-		disablePanels();
+		enablePanels();
+		boardUI.update();
+		settings.updateTablePieces();
 	}
 
 	@Override
@@ -157,33 +166,29 @@ public class GenericSwingView extends JFrame
 
 	public boolean casillaSeleccionada(int col, int fila) {
 		if (!doubleClick) {
-			return controller.firstPartMove(col, fila);
+			// return controller.firstPartMove(col, fila);
 		} else {
-			controller.secondPartMove(col, fila);
+			// controller.secondPartMove(col, fila);
 			return false;
 		}
+		return doubleClick;
 	}
 
 	public void casillaDeseleccionada(int col, int fila) {
 		if (doubleClick) {
-			controller.casillaDeseleccionada(col, fila);
+			// controller.casillaDeseleccionada(col, fila);
 		}
 	}
 
-	private void enableButtons() {
+	private void enablePanels() {
 		boardUI.setEnabled(true);
-		settings.setEnabled(true);
+		settings.setEnabled(true, true);
 	}
 
 	private void disablePanels() {
 		boardUI.setEnabled(false);
-		settings.setEnabled(false);
+		settings.setEnabled(false, false);
 	}
-
-	/*
-	 * public void selectedColor(Piece p, Color c) { colorMap.put(p, c);
-	 * boardUI.update(); settings.updateTableColor(colorMap); }
-	 */
 
 	@Override
 	public void changeColorPressed(Piece p, Color c) {
@@ -195,13 +200,87 @@ public class GenericSwingView extends JFrame
 	@Override
 	public boolean leftButtonPressed(int row, int col) {
 		// TODO Auto-generated method stub
-		return doubleClick;
+		return true;
 	}
 
 	@Override
 	public void rightButtonPressed(int row, int col) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void randomPressed() {
+		//if(viewPiece==null || viewPiece.equals(turn))
+		controller.makeMove(randomPlayer);
+	}
+
+	@Override
+	public void aiPressed() {
+		controller.makeMove(aiPlayer);
+	}
+
+	@Override
+	public void changeModePressed(Piece p, String mode) {
+		if (viewPiece == null || viewPiece.equals(p)) {
+			switch (mode) {
+			case "Manual":
+				// players.add(gameFactory.createConsolePlayer());
+				break;
+			case "Intelligent":
+				// players.put(p, gameFactory.createAIPlayer(aiPlayerAlg));
+				break;
+			case "Random":
+				// players.add(gameFactory.createRandomPlayer());
+				break;
+			default:
+				throw new UnsupportedOperationException(
+						"Something went wrong! This program point should be unreachable!");
+			}
+			settings.updateTableMode(p, mode);
+		}
+	}
+
+	@Override
+	public void quitPressed() {
+		int response = JOptionPane.showConfirmDialog(null,
+				"Are sure you want to quit the game?\n (You will lose the game)", "Quit confirm",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (response == JOptionPane.YES_OPTION) {
+			System.out.println("Yes button clicked");
+			controller.stop();
+			System.exit(0);
+		}
+	}
+
+	public void restartPressed() {
+		int response = JOptionPane.showConfirmDialog(null,
+				"Are sure you want to restart the game?\n (You will lose the game)", "Restart confirm",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (response == JOptionPane.YES_OPTION) {
+			System.out.println("Yes button clicked");
+			// BUGS!
+			controller.restart();
+
+			boardUI.update();
+		}
+	}
+
+	/**
+	 * Resizes a panel to a square form.
+	 * 
+	 * @param innerPanel
+	 *            Panel to resize.
+	 * @param container
+	 *            Panel that contains the panel witch will be resized.
+	 */
+	private static void resizePreview(JPanel innerPanel, JPanel container) {
+		// System.err.println("Size changed to " + container.getSize());
+		int w = container.getWidth();
+		int h = container.getHeight();
+		int size = Math.min(w, h);
+		innerPanel.setPreferredSize(new Dimension(size, size));
+		container.revalidate();
 	}
 
 }

@@ -13,11 +13,6 @@ import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class AtaxxFactoryExt extends AtaxxFactory {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public AtaxxFactoryExt() {
 		super();
 	}
@@ -29,7 +24,7 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 	@Override
 	public void createSwingView(final Observable<GameObserver> game, final Controller ctrl, final Piece viewPiece,
 			Player randPlayer, Player aiPlayer) {		
-		new GenericSwingView(game, (SwingController) ctrl, viewPiece, randPlayer, aiPlayer);
+		new GenericSwingView(game, ctrl, viewPiece, randPlayer, aiPlayer);
 	}
 
 }

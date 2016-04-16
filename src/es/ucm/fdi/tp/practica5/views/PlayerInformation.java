@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.practica5.views;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,19 +28,20 @@ public class PlayerInformation extends JPanel {
 	/**
 	 * Create the application.
 	 */
-	public PlayerInformation(Board b, List<Piece> p, Map<Piece, Color> map) {
-		initialize(p);
+	public PlayerInformation(Board b, List<Piece> p, Map<Piece, Color> map, Piece viewPiece) {
+		initializeTable(p);
 		updateColors(map);
 		updateNumPieces(p, b);
 		for (int i = 0; i < p.size(); i++) {
-			updateModes(p.get(i), "Manual");
+			if (viewPiece==null || viewPiece.equals(p.get(i)))
+				updateMode(i, "Manual");
 		}
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(List<Piece> pieces) {
+	private void initializeTable(List<Piece> pieces) {
 		this.setBorder(
 				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -55,7 +55,8 @@ public class PlayerInformation extends JPanel {
 		};
 
 		jtTable.setPreferredScrollableViewportSize(jtTable.getPreferredSize());
-		jtTable.setFillsViewportHeight(true); // Fills the empty space with white
+		jtTable.setFillsViewportHeight(true); // Fills the empty space with
+												// white
 		JScrollPane jspScroll = new JScrollPane(jtTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.add(jspScroll);
@@ -74,16 +75,20 @@ public class PlayerInformation extends JPanel {
 
 	public void updateColors(Map<Piece, Color> map) {
 
+		repaint();
 	}
 
-	public void updateModes(Piece p, String mode) {
-
+	public void updateMode(int p, String mode) {
+		data[p][1] = mode;
+		repaint();
 	}
 
 	public void updateNumPieces(List<Piece> pieces, Board board) {
 		for (int j = 0; j < pieces.size(); j++) {
-			data[j][2] = board.getPieceCount(pieces.get(j));
+			if (board.getPieceCount(pieces.get(j)) != null)
+				data[j][2] = board.getPieceCount(pieces.get(j));
 		}
+		repaint();
 	}
-
+	
 }
