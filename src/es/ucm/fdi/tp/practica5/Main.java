@@ -763,10 +763,10 @@ public class Main {
 	public static void startGame() {
 		Game g = new Game(gameFactory.gameRules());
 		Controller c = null;
+		ArrayList<Player> players = new ArrayList<Player>();
 
 		switch (view) {
 		case CONSOLE:
-			ArrayList<Player> players = new ArrayList<Player>();
 			for (int i = 0; i < pieces.size(); i++) {
 				switch (playerModes.get(i)) {
 				case AI:
@@ -787,27 +787,23 @@ public class Main {
 			gameFactory.createConsoleView(g, c);
 			break;
 		case WINDOW:
-			ArrayList<Player> playerss = new ArrayList<Player>();
-			ArrayList<PlayerMode> modes = new ArrayList<PlayerMode>();
 			for (int i = 0; i < pieces.size(); i++) {
 				switch (playerModes.get(i)) {				
 				case AI:
-					playerss.add(gameFactory.createAIPlayer(aiPlayerAlg));
+					players.add(gameFactory.createAIPlayer(aiPlayerAlg));
 					break;
 				case MANUAL:
-					playerss.add(gameFactory.createConsolePlayer());
+					players.add(gameFactory.createConsolePlayer());
 					break;
 				case RANDOM:
-					playerss.add(gameFactory.createRandomPlayer());
+					players.add(gameFactory.createRandomPlayer());
 					break;
 				default:
 					throw new UnsupportedOperationException(
 							"Something went wrong! This program point should be unreachable!");
 				}
-				modes.add(playerModes.get(i));
-			}
-			
-			c = new SwingController(g, pieces, playerss);
+			}			
+			c = new SwingController(g, pieces, players);
 			if (multiviews) {
 				for (Piece p : pieces) {
 					gameFactory.createSwingView(g, c, p, gameFactory.createRandomPlayer(),

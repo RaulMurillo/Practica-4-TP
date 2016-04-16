@@ -23,7 +23,8 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 	
 	@Override
 	public void createSwingView(final Observable<GameObserver> game, final Controller ctrl, final Piece viewPiece,
-			Player randPlayer, Player aiPlayer) {		
+			Player randPlayer, Player aiPlayer) {
+		//SwingController sCtrl = new AtaxxSwingController(ctrl);
 		new GenericSwingView(game, ctrl, viewPiece, randPlayer, aiPlayer);
 	}
 

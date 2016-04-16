@@ -37,13 +37,14 @@ public class GenericSwingView extends JFrame
 	private List<Piece> pieces;
 	private Controller controller;
 	private Map<Piece, Color> colorMap;
-	private Map<Piece, Player> players;
+	//private Map<Piece, Player> players;
 	private Piece viewPiece;
 	private Player randomPlayer;
 	private Player aiPlayer;
 	private BoardGUI boardUI;
 	private SettingsPanel settings;
 	private boolean doubleClick;
+	private GSVListener listener;
 
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		{
@@ -53,9 +54,14 @@ public class GenericSwingView extends JFrame
 			add(Color.yellow);
 		}
 	};
+	
+	public interface GSVListener{
+		
+	}
 
 	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		controller = c;
+		//listener = c;
 		viewPiece = p;
 		randomPlayer = random;
 		aiPlayer = ai;
@@ -249,7 +255,7 @@ public class GenericSwingView extends JFrame
 		if (response == JOptionPane.YES_OPTION) {
 			System.out.println("Yes button clicked");
 			controller.stop();
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 
