@@ -23,13 +23,15 @@ import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.VentanaPrincipalPrueba2;
-import es.ucm.fdi.tp.practica5.control.SwingController;
 
 public class GenericSwingView extends JFrame
 		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
 		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The list of pieces involved in the game. It is stored when the game
 	 * starts and used when the state is printed.
@@ -37,16 +39,21 @@ public class GenericSwingView extends JFrame
 	private List<Piece> pieces;
 	private Controller controller;
 	private Map<Piece, Color> colorMap;
-	//private Map<Piece, Player> players;
+	// private Map<Piece, Player> players;
 	private Piece viewPiece;
 	private Player randomPlayer;
 	private Player aiPlayer;
 	private BoardGUI boardUI;
 	private SettingsPanel settings;
 	private boolean doubleClick;
-	private GSVListener listener;
+	//private GSVListener listener;
 
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		{
 			add(Color.red);
 			add(Color.green);
@@ -54,20 +61,20 @@ public class GenericSwingView extends JFrame
 			add(Color.yellow);
 		}
 	};
-	
-	public interface GSVListener{
-		
+
+	public interface GSVListener {
+
 	}
 
 	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		controller = c;
-		//listener = c;
+		// listener = c;
 		viewPiece = p;
 		randomPlayer = random;
 		aiPlayer = ai;
 		doubleClick = false;
 		g.addObserver(this); // register as an observer
-
+		//System.err.println(g.toString());
 	}
 
 	@Override
@@ -217,7 +224,7 @@ public class GenericSwingView extends JFrame
 
 	@Override
 	public void randomPressed() {
-		//if(viewPiece==null || viewPiece.equals(turn))
+		// if(viewPiece==null || viewPiece.equals(turn))
 		controller.makeMove(randomPlayer);
 	}
 
@@ -255,7 +262,7 @@ public class GenericSwingView extends JFrame
 		if (response == JOptionPane.YES_OPTION) {
 			System.out.println("Yes button clicked");
 			controller.stop();
-			//System.exit(0);
+			// System.exit(0);
 		}
 	}
 

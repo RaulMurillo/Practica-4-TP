@@ -100,9 +100,9 @@ public class SettingsPanel extends JPanel {
 			autoMovPane.setVisible(false);
 		} else {
 			if (rand)
-				autoMovPane.enableRandomButton();
+				autoMovPane.addRandomButton();
 			if (ai)
-				autoMovPane.enableIntelligentButton();
+				autoMovPane.addIntelligentButton();
 		}
 	}
 }

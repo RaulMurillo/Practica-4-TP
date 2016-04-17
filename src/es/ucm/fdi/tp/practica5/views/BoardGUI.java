@@ -1,33 +1,29 @@
 package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
-import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica4.ataxx.AtaxxRules;
-import es.ucm.fdi.tp.practica5.control.SwingController;
-import es.ucm.fdi.tp.practica5.views.PieceColorChooser.PieceColorsListener;
 
 public class BoardGUI extends JPanel {
 
-	protected JLabel[][] squares;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected Square[][] squares;
 	protected Board board;
 	private Map<Piece, Color> colorMap;
-	final public Color DEFAULT_BORDER = Color.white;
+	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.white);
+	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();// createLineBorder(Color.red)
 	final public Color OBS_COLOR = Color.getHSBColor(25, 25, 0);
 
 	private BoardGUIListener controlsListener;
@@ -39,11 +35,29 @@ public class BoardGUI extends JPanel {
 		void rightButtonPressed(int row, int col);
 	}
 
+	public class Square extends JLabel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		private int row, col;
+
+		public Square(int row, int col) {
+			this.row = row;
+			this.col = col;
+			addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					squareWasClicked(Square.this.row, Square.this.col, e);
+				}
+			});
+		}
+	}
+
 	public BoardGUI(Board b, Map<Piece, Color> color, BoardGUIListener controlsListener) {
 		this.controlsListener = controlsListener;
-		setBoard(b);
 		colorMap = color;
-		update();
+		setBoard(b);
 	}
 
 	public void setBoard(Board board) {
@@ -51,29 +65,27 @@ public class BoardGUI extends JPanel {
 		this.board = board;
 		setLayout(new GridLayout(board.getRows(), board.getCols(), 1, 1));
 		initSquares();
+		update();
 	}
 
 	public void initSquares() {
-		squares = new JLabel[board.getRows()][board.getCols()];
+		squares = new Square[board.getRows()][board.getCols()];
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
-				squares[i][j] = new JLabel();
+				squares[i][j] = new Square(i, j);
 				squares[i][j].setOpaque(true);
-				squares[i][j].setBorder(BorderFactory.createLineBorder(DEFAULT_BORDER));
-				final int col = i;
-				final int row = j;
-				squares[i][j].addMouseListener(new MouseAdapter() {
-					public void mouseClicked(MouseEvent me) {
-						if (me.getButton() == MouseEvent.BUTTON1) {
-							if (controlsListener.leftButtonPressed(col, row)) {
-								selectSquare(col, row);
-							}
-						} else if (me.getButton() == MouseEvent.BUTTON3) {
-							controlsListener.rightButtonPressed(col, row);
-							deselectSquare(col, row);
-						}
-					}
-				});
+				squares[i][j].setBorder(DEFAULT_BORDER);
+				/*
+				 * final int col = i; final int row = j;
+				 * squares[i][j].addMouseListener(new MouseAdapter() { public
+				 * void mouseClicked(MouseEvent me) { if (me.getButton() ==
+				 * MouseEvent.BUTTON1) { if
+				 * (controlsListener.leftButtonPressed(col, row)) {
+				 * selectSquare(col, row); } } else if (me.getButton() ==
+				 * MouseEvent.BUTTON3) {
+				 * controlsListener.rightButtonPressed(col, row);
+				 * deselectSquare(col, row); } } });
+				 */
 				add(squares[i][j]);
 			}
 		}
@@ -85,9 +97,9 @@ public class BoardGUI extends JPanel {
 				Piece p = board.getPosition(i, j);
 				if (p == null) {
 					squares[i][j].setBackground(null);
-				} else if(colorMap.containsKey(p)){
+				} else if (colorMap.containsKey(p)) {
 					squares[i][j].setBackground(colorMap.get(p));
-				}else{ // paint obstacles
+				} else { // paint obstacles
 					squares[i][j].setBackground(OBS_COLOR);
 				}
 			}
@@ -95,12 +107,17 @@ public class BoardGUI extends JPanel {
 		repaint(); // obligas a que se repinte el tablero
 	}
 
-	public void selectSquare(int col, int row) {
-		squares[col][row].setBorder(BorderFactory.createLineBorder(Color.red));
+	public void selectSquare(int row, int col) {
+		squares[row][col].setBorder(SELECTED_BORDER);
 	}
 
-	public void deselectSquare(int col, int row) {
-		squares[col][row].setBorder(BorderFactory.createLineBorder(DEFAULT_BORDER));
+	public void deselectSquare(int row, int col) {
+		squares[row][col].setBorder(DEFAULT_BORDER);
+	}
+
+	private void squareWasClicked(int row, int col, MouseEvent e) {
+		// gestiona un click en una celda
+		selectSquare(row, col);
 	}
 
 }
