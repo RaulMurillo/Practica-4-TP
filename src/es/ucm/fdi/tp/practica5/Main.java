@@ -27,10 +27,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.AIAlgorithm;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.basecode.connectn.ConnectNFactory;
+import es.ucm.fdi.tp.practica5.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica5.ttt.TicTacToeFactoryExt;
 import es.ucm.fdi.tp.basecode.ttt.TicTacToeFactory;
-//import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
 import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
+import es.ucm.fdi.tp.practica5.attt.AdvancedTTTFactoryExt;
 
 
 /**
@@ -545,9 +546,9 @@ public class Main {
 
 		switch (selectedGame) {
 		case AdvancedTicTacToe:
-			gameFactory = new AdvancedTTTFactory();
+			gameFactory = new AdvancedTTTFactoryExt();
 			break;
-		case Ataxx://////////////////////////////
+		case Ataxx:
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
 				if (obstacles != null) {
 					gameFactory = new AtaxxFactoryExt(dimRows, obstacles);
@@ -560,13 +561,13 @@ public class Main {
 			break;
 		case CONNECTN:
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
-				gameFactory = new ConnectNFactory(dimRows);
+				gameFactory = new ConnectNFactoryExt(dimRows);
 			} else {
-				gameFactory = new ConnectNFactory();
+				gameFactory = new ConnectNFactoryExt();
 			}
 			break;
 		case TicTacToe:
-			gameFactory = new TicTacToeFactory();
+			gameFactory = new TicTacToeFactoryExt();
 			break;
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");

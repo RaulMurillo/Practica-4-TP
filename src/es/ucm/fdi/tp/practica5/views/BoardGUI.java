@@ -40,7 +40,7 @@ public class BoardGUI extends JPanel {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		private int row, col;
 
 		public Square(int row, int col) {
@@ -116,12 +116,21 @@ public class BoardGUI extends JPanel {
 	}
 
 	private void squareWasClicked(int row, int col, MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1){
+		if (e.getButton() == MouseEvent.BUTTON1) {
 			controlsListener.leftButtonPressed(row, col);
-		}
-		else if(e.getButton() == MouseEvent.BUTTON3){
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			controlsListener.rightButtonPressed(row, col);
 		}
+	}
+
+	@Override
+	public void setEnabled(boolean b) {
+		for (int i = 0; i < board.getRows(); i++) {
+			for (int j = 0; j < board.getCols(); j++) {
+				squares[i][j].setEnabled(b);
+			}
+		}
+		//this.setEnabled(b);
 	}
 
 }

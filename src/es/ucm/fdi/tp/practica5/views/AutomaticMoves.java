@@ -89,6 +89,7 @@ public class AutomaticMoves extends JPanel {
 	public void setEnabled(boolean b) {
 		jbIntelligent.setEnabled(b);
 		jbRandom.setEnabled(b);
+		//this.setEnabled(b);
 	}
 
 }

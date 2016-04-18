@@ -57,6 +57,7 @@ public class QuitPanel extends JPanel {
 		if (jbRestart != null) {
 			jbRestart.setEnabled(b);
 		}
+		//this.setEnabled(b);
 	}
 
 }

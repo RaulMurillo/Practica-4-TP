@@ -69,6 +69,7 @@ public class SettingsPanel extends JPanel {
 
 	public void setEnabled(boolean moves, boolean quit) {
 		autoMovPane.setEnabled(moves);
+
 		quitPanel.setEnabled(quit);
 	}
 

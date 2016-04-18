@@ -128,6 +128,9 @@ public abstract class GenericSwingView extends JFrame
 			pieceTurn += " (You)";
 		settings.write("Turn for " + pieceTurn);
 		setLastState(board, turn);
+		if(viewPiece !=null && !viewPiece.equals(turn)){
+			disablePanels();
+		}
 	}
 
 	@Override
@@ -165,6 +168,9 @@ public abstract class GenericSwingView extends JFrame
 			controller.makeMove(aiPlayer);
 		}
 		setLastState(board, turn);
+		if(!viewPiece.equals(turn)){
+			disablePanels();
+		} else enablePanels();
 	}
 
 	@Override
