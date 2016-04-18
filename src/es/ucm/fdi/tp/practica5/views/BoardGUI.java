@@ -75,17 +75,6 @@ public class BoardGUI extends JPanel {
 				squares[i][j] = new Square(i, j);
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorder(DEFAULT_BORDER);
-				/*
-				 * final int col = i; final int row = j;
-				 * squares[i][j].addMouseListener(new MouseAdapter() { public
-				 * void mouseClicked(MouseEvent me) { if (me.getButton() ==
-				 * MouseEvent.BUTTON1) { if
-				 * (controlsListener.leftButtonPressed(col, row)) {
-				 * selectSquare(col, row); } } else if (me.getButton() ==
-				 * MouseEvent.BUTTON3) {
-				 * controlsListener.rightButtonPressed(col, row);
-				 * deselectSquare(col, row); } } });
-				 */
 				add(squares[i][j]);
 			}
 		}
@@ -122,15 +111,4 @@ public class BoardGUI extends JPanel {
 			controlsListener.rightButtonPressed(row, col);
 		}
 	}
-
-	@Override
-	public void setEnabled(boolean b) {
-		for (int i = 0; i < board.getRows(); i++) {
-			for (int j = 0; j < board.getCols(); j++) {
-				squares[i][j].setEnabled(b);
-			}
-		}
-		//this.setEnabled(b);
-	}
-
 }

@@ -39,7 +39,6 @@ public class SwingPlayer extends Player {
 	private GenericSwingView view;
 
 	public SwingPlayer(List<GameMove> availableMoves, GenericSwingView view) {
-		// this.view = view;
 		this.view = view;
 		this.availableMoves = new ArrayList<GameMove>(availableMoves);
 	}

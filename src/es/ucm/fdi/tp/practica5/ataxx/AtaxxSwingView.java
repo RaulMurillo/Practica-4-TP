@@ -14,7 +14,7 @@ public class AtaxxSwingView extends GenericSwingView {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private int iniCol;
 	private int iniRow;
 
@@ -25,25 +25,27 @@ public class AtaxxSwingView extends GenericSwingView {
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		if (iniCol == -1) {
-			if (lastTurn.equals(lastBoard.getPosition(row, col))) {
-				iniCol = col;
-				iniRow = row;
-				setMove(row, col);
-				boardUI.selectSquare(row, col);
-			}
-		} else {
-			boardUI.deselectSquare(iniRow, iniCol);
-			if (lastTurn.equals(lastBoard.getPosition(row, col))) {
-				iniCol = col;
-				iniRow = row;
-				resetMove();
-				setMove(row, col);
-				boardUI.selectSquare(row, col);
+		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+			if (iniCol == -1) {
+				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
+					iniCol = col;
+					iniRow = row;
+					setMove(row, col);
+					boardUI.selectSquare(row, col);
+				}
 			} else {
-				setMove(row, col);
-				controller.makeMove(players.get(lastTurn));
-				resetMove();
+				boardUI.deselectSquare(iniRow, iniCol);
+				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
+					resetMove();
+					iniCol = col;
+					iniRow = row;
+					setMove(row, col);
+					boardUI.selectSquare(row, col);
+				} else {
+					setMove(row, col);
+					controller.makeMove(players.get(lastTurn));
+					resetMove();
+				}
 			}
 		}
 	}

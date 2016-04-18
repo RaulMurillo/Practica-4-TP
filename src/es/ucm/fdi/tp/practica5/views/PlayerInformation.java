@@ -1,7 +1,5 @@
 package es.ucm.fdi.tp.practica5.views;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,28 +7,29 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
+import es.ucm.fdi.tp.practica5.Utils;
 
 public class PlayerInformation extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTable jtTable;
 	private Object[][] data;
+	private Map<Piece, Color> colorMap;
 
 	/**
 	 * Create the application.
 	 */
 	public PlayerInformation(Board b, List<Piece> p, Map<Piece, Color> map, Piece viewPiece) {
-		initializeTable(p);
 		updateColors(map);
+		initializeTable(p);
 		updateNumPieces(p, b);
 		for (int i = 0; i < p.size(); i++) {
 			if (viewPiece==null || viewPiece.equals(p.get(i)))
@@ -49,14 +48,35 @@ public class PlayerInformation extends JPanel {
 		setPieces(pieces);
 		String[] columnNames = { "Player", "Mode", "#Pieces" };
 		jtTable = new JTable(data, columnNames) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			public boolean isCellEditable(int row, int column) {
 				return false; // Table cels ARE NOT editable.
 			}
 		};
 
 		jtTable.setPreferredScrollableViewportSize(jtTable.getPreferredSize());
-		jtTable.setFillsViewportHeight(true); // Fills the empty space with
-												// white
+		jtTable.setFillsViewportHeight(true); // Fills the empty space with white
+		//Paint table rows
+		jtTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public Component getTableCellRendererComponent(JTable table,
+                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                Color rowColor = colorMap.get(pieces.get(row));
+                setBackground(rowColor);                
+                setForeground(Utils.getContrastColor(rowColor));   
+                return this;
+            }  
+		});
 		JScrollPane jspScroll = new JScrollPane(jtTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.add(jspScroll);
@@ -74,7 +94,7 @@ public class PlayerInformation extends JPanel {
 	}
 
 	public void updateColors(Map<Piece, Color> map) {
-
+		colorMap = map;
 		repaint();
 	}
 

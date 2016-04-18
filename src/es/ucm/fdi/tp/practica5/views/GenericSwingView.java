@@ -44,7 +44,7 @@ public abstract class GenericSwingView extends JFrame
 
 	protected static Map<Piece, Player> players = new HashMap();
 
-	private Piece viewPiece;
+	protected Piece viewPiece;
 	private Player randomPlayer;
 	private Player aiPlayer;
 	protected BoardGUI boardUI;
@@ -84,16 +84,43 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onGameStart(Board board, String gameDesc, List<Piece> pieces, Piece turn) {
+		initialize(pieces);
+
+		// Creates a new window
+		initWindow(board, gameDesc);
+
+		// Set GameStart comments
+		setStartingActions(board, gameDesc, turn);
+	}
+
+	/**
+	 * Initialize the pieces list, the pieces-players map and the color map of
+	 * the frame.
+	 * 
+	 * @param pieces
+	 *            List of pieces on the game.
+	 */
+	private void initialize(List<Piece> pieces) {
 		this.pieces = pieces;
 		// Generate a HashMap that associates pieces with players.
-		for(Piece p: pieces){
-			setManualPlayer(p);
+		for (Piece p : pieces) {
+			if (viewPiece == null || viewPiece.equals(p))
+				setManualPlayer(p);
 		}
 		colorMap = new HashMap<Piece, Color>();
 		setColorMap(DEFAULT_COLORS);
+	}
 
-		// Creates a new window
-		//removeAll();
+	/**
+	 * Initialize the graphic components of the frame.
+	 * 
+	 * @param board
+	 *            Board of the game.
+	 * @param gameDesc
+	 *            Short description of the game.
+	 */
+	private void initWindow(Board board, String gameDesc) {
+		// removeAll();
 		setSize(650, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -117,10 +144,21 @@ public abstract class GenericSwingView extends JFrame
 				resizePreview(boardUI, jpBoard);
 			}
 		});
-		//revalidate();
+		// revalidate();
 		setVisible(true);
+	}
 
-		// Set GameStart comments
+	/**
+	 * Make necessary changes when game starts.
+	 * 
+	 * @param board
+	 *            Board of the game.
+	 * @param gameDesc
+	 *            Short description of the game.
+	 * @param turn
+	 *            First turn piece.
+	 */
+	private void setStartingActions(Board board, String gameDesc, Piece turn) {
 		settings.write("Starting '" + gameDesc + "'");
 		settings.write("----------------------");
 		String pieceTurn = turn.toString();
@@ -128,7 +166,7 @@ public abstract class GenericSwingView extends JFrame
 			pieceTurn += " (You)";
 		settings.write("Turn for " + pieceTurn);
 		setLastState(board, turn);
-		if(viewPiece !=null && !viewPiece.equals(turn)){
+		if (viewPiece != null && !viewPiece.equals(turn)) {
 			disablePanels();
 		}
 	}
@@ -140,7 +178,6 @@ public abstract class GenericSwingView extends JFrame
 		if (state == State.Won) {
 			settings.write("Winner: " + winner);
 		}
-		boardUI.setEnabled(false);
 		settings.setEnabled(false, true);
 	}
 
@@ -162,28 +199,25 @@ public abstract class GenericSwingView extends JFrame
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
 		settings.write("Turn for " + pieceTurn);
-		if (turn.equals(randomPlayer)) {
+		setLastState(board, turn);
+		if (viewPiece != null && !viewPiece.equals(turn)) {
+			disablePanels();
+		} else
+			enablePanels();
+		if (players.get(turn).equals(randomPlayer)) {
 			controller.makeMove(randomPlayer);
-		} else if (turn.equals(aiPlayer)) {
+		} else if (players.get(turn).equals(aiPlayer)) {
 			controller.makeMove(aiPlayer);
 		}
-		setLastState(board, turn);
-		if(!viewPiece.equals(turn)){
-			disablePanels();
-		} else enablePanels();
 	}
 
 	@Override
 	public void onError(String msg) {
-		//JOptionPane.showMessageDialog(null, msg, "Error Message", JOptionPane.ERROR_MESSAGE);
-		settings.write(msg);
-		resetMove();
+		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+			settings.write(msg);
+			resetMove();
+		}
 	}
-
-	/*
-	 * private void visible() { SwingUtilities.invokeLater(new Runnable() {
-	 * public void run() { setVisible(true); } }); }
-	 */
 
 	public void setColorMap(List<Color> colors) {
 		for (int i = 0; i < pieces.size(); i++) {
@@ -192,12 +226,10 @@ public abstract class GenericSwingView extends JFrame
 	}
 
 	private void enablePanels() {
-		boardUI.setEnabled(true);
 		settings.setEnabled(true, true);
 	}
 
 	private void disablePanels() {
-		boardUI.setEnabled(false);
 		settings.setEnabled(false, false);
 	}
 
@@ -235,9 +267,11 @@ public abstract class GenericSwingView extends JFrame
 				break;
 			case "Intelligent":
 				players.put(p, aiPlayer);
+				//controller.makeMove(aiPlayer);
 				break;
 			case "Random":
 				players.put(p, randomPlayer);
+				//controller.makeMove(randomPlayer);
 				break;
 			default:
 				throw new UnsupportedOperationException(
@@ -255,7 +289,7 @@ public abstract class GenericSwingView extends JFrame
 				"Are sure you want to quit the game?\n (You will lose the game)", "Quit confirm",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (response == JOptionPane.YES_OPTION) {
-			System.out.println("Yes button clicked");
+			System.err.println("Yes button clicked. Quit");
 			controller.stop();
 			// System.exit(0);
 		}
@@ -266,9 +300,8 @@ public abstract class GenericSwingView extends JFrame
 				"Are sure you want to restart the game?\n (You will lose the game)", "Restart confirm",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (response == JOptionPane.YES_OPTION) {
-			System.out.println("Yes button clicked");
+			System.err.println("Yes button clicked. Restart");
 			controller.restart();
-
 			boardUI.update();
 		}
 	}
@@ -304,6 +337,10 @@ public abstract class GenericSwingView extends JFrame
 
 	public void resetMove() {
 		move = "";
+	}
+
+	public Piece getViewPiece() {
+		return viewPiece;
 	}
 
 }
