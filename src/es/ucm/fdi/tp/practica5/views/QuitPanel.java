@@ -6,7 +6,6 @@ import javax.swing.*;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.control.SwingController;
 
 public class QuitPanel extends JPanel {
 

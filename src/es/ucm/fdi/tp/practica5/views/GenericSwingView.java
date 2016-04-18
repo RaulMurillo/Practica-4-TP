@@ -20,11 +20,13 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
+import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 
-public class GenericSwingView extends JFrame
+public abstract class GenericSwingView extends JFrame
 		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
 		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
 
@@ -37,16 +39,20 @@ public class GenericSwingView extends JFrame
 	 * starts and used when the state is printed.
 	 */
 	private List<Piece> pieces;
-	private Controller controller;
+	protected Controller controller;
 	private Map<Piece, Color> colorMap;
-	// private Map<Piece, Player> players;
+
+	protected static Map<Piece, Player> players = new HashMap();
+
 	private Piece viewPiece;
 	private Player randomPlayer;
 	private Player aiPlayer;
-	private BoardGUI boardUI;
-	private SettingsPanel settings;
-	private boolean doubleClick;
-	//private GSVListener listener;
+	protected BoardGUI boardUI;
+	protected SettingsPanel settings;
+
+	protected Piece lastTurn;
+	protected Board lastBoard;
+	protected String move;
 
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		/**
@@ -62,28 +68,32 @@ public class GenericSwingView extends JFrame
 		}
 	};
 
-	public interface GSVListener {
-
-	}
-
 	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		controller = c;
-		// listener = c;
 		viewPiece = p;
 		randomPlayer = random;
 		aiPlayer = ai;
-		doubleClick = false;
-		g.addObserver(this); // register as an observer
-		//System.err.println(g.toString());
+		move = "";
+		g.addObserver(this);
+	}
+
+	private void setLastState(Board board, Piece turn) {
+		this.lastBoard = board;
+		this.lastTurn = turn;
 	}
 
 	@Override
 	public void onGameStart(Board board, String gameDesc, List<Piece> pieces, Piece turn) {
 		this.pieces = pieces;
+		// Generate a HashMap that associates pieces with players.
+		for(Piece p: pieces){
+			setManualPlayer(p);
+		}
 		colorMap = new HashMap<Piece, Color>();
 		setColorMap(DEFAULT_COLORS);
 
 		// Creates a new window
+		//removeAll();
 		setSize(650, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -107,8 +117,8 @@ public class GenericSwingView extends JFrame
 				resizePreview(boardUI, jpBoard);
 			}
 		});
-
-		visible();
+		//revalidate();
+		setVisible(true);
 
 		// Set GameStart comments
 		settings.write("Starting '" + gameDesc + "'");
@@ -117,6 +127,7 @@ public class GenericSwingView extends JFrame
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
 		settings.write("Turn for " + pieceTurn);
+		setLastState(board, turn);
 	}
 
 	@Override
@@ -148,48 +159,29 @@ public class GenericSwingView extends JFrame
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
 		settings.write("Turn for " + pieceTurn);
+		if (turn.equals(randomPlayer)) {
+			controller.makeMove(randomPlayer);
+		} else if (turn.equals(aiPlayer)) {
+			controller.makeMove(aiPlayer);
+		}
+		setLastState(board, turn);
 	}
 
 	@Override
 	public void onError(String msg) {
-		JOptionPane.showInternalMessageDialog(null, msg, "Error Message", JOptionPane.ERROR_MESSAGE);
+		//JOptionPane.showMessageDialog(null, msg, "Error Message", JOptionPane.ERROR_MESSAGE);
+		settings.write(msg);
+		resetMove();
 	}
 
-	private void visible() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				setVisible(true);
-			}
-		});
-	}
+	/*
+	 * private void visible() { SwingUtilities.invokeLater(new Runnable() {
+	 * public void run() { setVisible(true); } }); }
+	 */
 
 	public void setColorMap(List<Color> colors) {
 		for (int i = 0; i < pieces.size(); i++) {
 			this.colorMap.put(pieces.get(i), colors.get(i));
-		}
-	}
-
-	public boolean getDoubleClick() {
-		return doubleClick;
-	}
-
-	public void setDoubleClick(boolean set) {
-		doubleClick = set;
-	}
-
-	public boolean casillaSeleccionada(int col, int fila) {
-		if (!doubleClick) {
-			// return controller.firstPartMove(col, fila);
-		} else {
-			// controller.secondPartMove(col, fila);
-			return false;
-		}
-		return doubleClick;
-	}
-
-	public void casillaDeseleccionada(int col, int fila) {
-		if (doubleClick) {
-			// controller.casillaDeseleccionada(col, fila);
 		}
 	}
 
@@ -211,25 +203,20 @@ public class GenericSwingView extends JFrame
 	}
 
 	@Override
-	public boolean leftButtonPressed(int row, int col) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	public abstract void leftButtonPressed(int row, int col);
 
 	@Override
-	public void rightButtonPressed(int row, int col) {
-		// TODO Auto-generated method stub
-
-	}
+	public abstract void rightButtonPressed(int row, int col);
 
 	@Override
 	public void randomPressed() {
-		// if(viewPiece==null || viewPiece.equals(turn))
+		resetMove();
 		controller.makeMove(randomPlayer);
 	}
 
 	@Override
 	public void aiPressed() {
+		resetMove();
 		controller.makeMove(aiPlayer);
 	}
 
@@ -238,13 +225,13 @@ public class GenericSwingView extends JFrame
 		if (viewPiece == null || viewPiece.equals(p)) {
 			switch (mode) {
 			case "Manual":
-				// players.add(gameFactory.createConsolePlayer());
+				setManualPlayer(p);
 				break;
 			case "Intelligent":
-				// players.put(p, gameFactory.createAIPlayer(aiPlayerAlg));
+				players.put(p, aiPlayer);
 				break;
 			case "Random":
-				// players.add(gameFactory.createRandomPlayer());
+				players.put(p, randomPlayer);
 				break;
 			default:
 				throw new UnsupportedOperationException(
@@ -253,6 +240,8 @@ public class GenericSwingView extends JFrame
 			settings.updateTableMode(p, mode);
 		}
 	}
+
+	public abstract void setManualPlayer(Piece p);
 
 	@Override
 	public void quitPressed() {
@@ -272,7 +261,6 @@ public class GenericSwingView extends JFrame
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (response == JOptionPane.YES_OPTION) {
 			System.out.println("Yes button clicked");
-			// BUGS!
 			controller.restart();
 
 			boardUI.update();
@@ -294,6 +282,22 @@ public class GenericSwingView extends JFrame
 		int size = Math.min(w, h);
 		innerPanel.setPreferredSize(new Dimension(size, size));
 		container.revalidate();
+	}
+
+	public void setPlayer(Piece piece, Player player) {
+		players.put(piece, player);
+	}
+
+	public String getMove() {
+		return move;
+	}
+
+	public void setMove(int row, int col) {
+		move += row + " " + col + " ";
+	}
+
+	public void resetMove() {
+		move = "";
 	}
 
 }

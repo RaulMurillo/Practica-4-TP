@@ -30,7 +30,7 @@ public class BoardGUI extends JPanel {
 
 	public interface BoardGUIListener {
 
-		boolean leftButtonPressed(int row, int col);
+		void leftButtonPressed(int row, int col);
 
 		void rightButtonPressed(int row, int col);
 	}
@@ -116,8 +116,12 @@ public class BoardGUI extends JPanel {
 	}
 
 	private void squareWasClicked(int row, int col, MouseEvent e) {
-		// gestiona un click en una celda
-		selectSquare(row, col);
+		if(e.getButton() == MouseEvent.BUTTON1){
+			controlsListener.leftButtonPressed(row, col);
+		}
+		else if(e.getButton() == MouseEvent.BUTTON3){
+			controlsListener.rightButtonPressed(row, col);
+		}
 	}
 
 }

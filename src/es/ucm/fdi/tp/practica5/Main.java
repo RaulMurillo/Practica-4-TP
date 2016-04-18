@@ -7,6 +7,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -29,7 +31,7 @@ import es.ucm.fdi.tp.basecode.connectn.ConnectNFactory;
 import es.ucm.fdi.tp.basecode.ttt.TicTacToeFactory;
 //import es.ucm.fdi.tp.practica4.ataxx.AtaxxFactory;
 import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
-import es.ucm.fdi.tp.practica5.control.SwingController;
+
 
 /**
  * This is the class with the main method for the board games application.
@@ -801,16 +803,23 @@ public class Main {
 					throw new UnsupportedOperationException(
 							"Something went wrong! This program point should be unreachable!");
 				}
-			}			
-			c = new SwingController(g, pieces, players);
-			if (multiviews) {
-				for (Piece p : pieces) {
-					gameFactory.createSwingView(g, c, p, gameFactory.createRandomPlayer(),
-							gameFactory.createAIPlayer(aiPlayerAlg));
+			}
+			c = new Controller(g, pieces);			
+			final Controller c2 = c;
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (multiviews) {
+						for (Piece p : pieces) {
+							gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
+									gameFactory.createAIPlayer(aiPlayerAlg));
+						}
+					} else {
+						gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
+								gameFactory.createAIPlayer(aiPlayerAlg));
+					}
 				}
-			} else
-				gameFactory.createSwingView(g, c, null, gameFactory.createRandomPlayer(),
-						gameFactory.createAIPlayer(aiPlayerAlg));
+			});
+		
 			break;
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");

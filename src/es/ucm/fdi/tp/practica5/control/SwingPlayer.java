@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
@@ -35,27 +36,22 @@ public class SwingPlayer extends Player {
 	 */
 	private List<GameMove> availableMoves;
 
-	private SwingController ctrl;
+	private GenericSwingView view;
 
-	public SwingPlayer(List<GameMove> availableMoves, SwingController ctrl) {
-		//this.view = view;
-		this.ctrl = ctrl;
+	public SwingPlayer(List<GameMove> availableMoves, GenericSwingView view) {
+		// this.view = view;
+		this.view = view;
 		this.availableMoves = new ArrayList<GameMove>(availableMoves);
 	}
 
 	@Override
 	public GameMove requestMove(Piece p, Board board, List<Piece> pieces, GameRules rules) {
-		// TODO Auto-generated method stub
-		
-		GameMove newMove = ctrl.getUserMove();
-		// the fir GameMove that succeeds to parse the user's input is returned
 		for (GameMove m : availableMoves) {
-			if (m.equals(newMove)) {
+			GameMove newMove = m.fromString(p, view.getMove());
+			if (newMove != null) {
 				return newMove;
 			}
 		}
-
 		throw new GameError("Invalid move");
 	}
-
 }

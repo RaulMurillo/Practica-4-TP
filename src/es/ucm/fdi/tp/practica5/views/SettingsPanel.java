@@ -12,7 +12,7 @@ import javax.swing.border.TitledBorder;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.control.SwingController;
+
 
 public class SettingsPanel extends JPanel {
 	private StatusMessages textArea;
