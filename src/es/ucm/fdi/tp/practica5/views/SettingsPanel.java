@@ -1,21 +1,21 @@
 package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
-import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 
 public class SettingsPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private StatusMessages textArea;
 	private PlayerInformation table;
 	private PieceColorChooser colorChooser;
@@ -25,7 +25,6 @@ public class SettingsPanel extends JPanel {
 
 	private Board board;
 	private List<Piece> pieces;
-	//private Map<Piece, Player> players;
 
 	public SettingsPanel(List<Piece> p, Map<Piece, Color> map, Board b, GenericSwingView listener, Piece viewPiece) {
 		pieces = p;

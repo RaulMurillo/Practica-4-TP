@@ -1,16 +1,22 @@
 package es.ucm.fdi.tp.practica5.views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica5.Utils;
 
 public class BoardGUI extends JPanel {
 
@@ -25,6 +31,10 @@ public class BoardGUI extends JPanel {
 	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.white);
 	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();// createLineBorder(Color.red)
 	final public Color OBS_COLOR = Color.getHSBColor(25, 25, 0);
+	final public String OBS_PATH = "Block.png";
+	final public String PIECE_PATH = "Piece.png";
+	private BufferedImage OBS_IMAGE;
+	private BufferedImage PIECE_IMAGE;
 
 	private BoardGUIListener controlsListener;
 
@@ -57,6 +67,12 @@ public class BoardGUI extends JPanel {
 	public BoardGUI(Board b, Map<Piece, Color> color, BoardGUIListener controlsListener) {
 		this.controlsListener = controlsListener;
 		colorMap = color;
+		try {
+			OBS_IMAGE = ImageIO.read(new File(OBS_PATH));
+			PIECE_IMAGE = ImageIO.read(new File(PIECE_PATH));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setBoard(b);
 	}
 
@@ -65,7 +81,6 @@ public class BoardGUI extends JPanel {
 		this.board = board;
 		setLayout(new GridLayout(board.getRows(), board.getCols(), 1, 1));
 		initSquares();
-		update();
 	}
 
 	public void initSquares() {
@@ -75,6 +90,7 @@ public class BoardGUI extends JPanel {
 				squares[i][j] = new Square(i, j);
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorder(DEFAULT_BORDER);
+				squares[i][j].setLayout(new BorderLayout());
 				add(squares[i][j]);
 			}
 		}
@@ -84,12 +100,19 @@ public class BoardGUI extends JPanel {
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getCols(); j++) {
 				Piece p = board.getPosition(i, j);
-				if (p == null) {
+				if (p == null) { // Blanks in board
+					squares[i][j].setIcon(null);
 					squares[i][j].setBackground(null);
-				} else if (colorMap.containsKey(p)) {
+				} else if (colorMap.containsKey(p)) { // Paint pieces
+					if (PIECE_IMAGE != null) {
+						Utils.setImageOnJLabel(squares[i][j], PIECE_IMAGE);
+					}
 					squares[i][j].setBackground(colorMap.get(p));
 				} else { // paint obstacles
-					squares[i][j].setBackground(OBS_COLOR);
+					if (OBS_IMAGE != null) {
+						Utils.setImageOnJLabel(squares[i][j], OBS_IMAGE);
+					} else
+						squares[i][j].setBackground(OBS_COLOR);
 				}
 			}
 		}
@@ -112,8 +135,9 @@ public class BoardGUI extends JPanel {
 			controlsListener.rightButtonPressed(row, col);
 		}
 	}
-	public void setMap(Map<Piece, Color> colorMap){
-		
+
+	public void setMap(Map<Piece, Color> colorMap) {
 		this.colorMap = colorMap;
 	}
+
 }

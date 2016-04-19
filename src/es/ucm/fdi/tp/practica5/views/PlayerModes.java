@@ -10,6 +10,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public class PlayerModes extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private PlayerModesListener controlsListener;
 	private JButton jbSet;
 

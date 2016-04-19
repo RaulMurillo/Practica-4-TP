@@ -32,7 +32,7 @@ public class PlayerInformation extends JPanel {
 		initializeTable(p);
 		updateNumPieces(p, b);
 		for (int i = 0; i < p.size(); i++) {
-			if (viewPiece==null || viewPiece.equals(p.get(i)))
+			if (viewPiece == null || viewPiece.equals(p.get(i)))
 				updateMode(i, "Manual");
 		}
 	}
@@ -59,23 +59,24 @@ public class PlayerInformation extends JPanel {
 		};
 
 		jtTable.setPreferredScrollableViewportSize(jtTable.getPreferredSize());
-		jtTable.setFillsViewportHeight(true); // Fills the empty space with white
-		//Paint table rows
-		jtTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+		jtTable.setFillsViewportHeight(true); // Fills the empty space with
+												// white
+		// Paint table rows
+		jtTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
-            public Component getTableCellRendererComponent(JTable table,
-                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-                Color rowColor = colorMap.get(pieces.get(row));
-                setBackground(rowColor);                
-                setForeground(Utils.getContrastColor(rowColor));   
-                return this;
-            }  
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int col) {
+				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+				Color rowColor = colorMap.get(pieces.get(row));
+				setBackground(rowColor);
+				setForeground(Utils.getContrastColor(rowColor));
+				return this;
+			}
 		});
 		JScrollPane jspScroll = new JScrollPane(jtTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -110,5 +111,4 @@ public class PlayerInformation extends JPanel {
 		}
 		repaint();
 	}
-	
 }

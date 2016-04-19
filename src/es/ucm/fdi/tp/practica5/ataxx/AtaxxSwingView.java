@@ -2,11 +2,9 @@ package es.ucm.fdi.tp.practica5.ataxx;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
-import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class AtaxxSwingView extends GenericSwingView {

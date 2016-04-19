@@ -9,6 +9,11 @@ import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class ConnectNSwingView extends GenericSwingView {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ConnectNSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
 	}

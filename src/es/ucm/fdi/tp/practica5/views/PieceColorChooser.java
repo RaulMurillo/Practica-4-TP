@@ -13,6 +13,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public class PieceColorChooser extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private PieceColorsListener controlsListener;
 
 	public interface PieceColorsListener {

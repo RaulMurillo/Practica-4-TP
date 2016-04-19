@@ -1,11 +1,7 @@
 package es.ucm.fdi.tp.practica5.views;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import es.ucm.fdi.tp.basecode.bgame.control.Controller;
-import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public class QuitPanel extends JPanel {
 

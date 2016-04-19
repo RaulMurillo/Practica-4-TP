@@ -2,9 +2,7 @@ package es.ucm.fdi.tp.practica5.control;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;

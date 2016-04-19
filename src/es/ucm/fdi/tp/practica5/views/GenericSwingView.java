@@ -20,11 +20,9 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
-import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 
 public abstract class GenericSwingView extends JFrame
 		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
@@ -42,7 +40,7 @@ public abstract class GenericSwingView extends JFrame
 	protected Controller controller;
 	private Map<Piece, Color> colorMap;
 
-	protected static Map<Piece, Player> players = new HashMap();
+	protected static Map<Piece, Player> players = new HashMap<Piece, Player>();
 
 	protected Piece viewPiece;
 	private Player randomPlayer;
@@ -54,10 +52,6 @@ public abstract class GenericSwingView extends JFrame
 	protected Board lastBoard;
 	protected String move;
 
-	////////////
-	private boolean restarted;
-	////////////
-	
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		/**
 		 * 
@@ -73,7 +67,6 @@ public abstract class GenericSwingView extends JFrame
 	};
 
 	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
-		restarted = false;
 		controller = c;
 		viewPiece = p;
 		randomPlayer = random;
@@ -92,18 +85,22 @@ public abstract class GenericSwingView extends JFrame
 		initialize(pieces);
 
 		// Creates a new window
-		if(!restarted)
-		initWindow(board, gameDesc);
-		else{ 
+		if (!this.isVisible())
+			initWindow(board, gameDesc);
+		else {
 			boardUI.setBoard(board);
-			boardUI.update();
 			settings.setBoard(board);
-			
-		
 		}
 
 		// Set GameStart comments
 		setStartingActions(board, gameDesc, turn);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				boardUI.update();
+			}
+		});
+
 	}
 
 	/**
@@ -156,7 +153,6 @@ public abstract class GenericSwingView extends JFrame
 				resizePreview(boardUI, jpBoard);
 			}
 		});
-		restarted = true;
 		revalidate();
 		setVisible(true);
 	}
@@ -208,7 +204,7 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onChangeTurn(Board board, Piece turn) {
-		//if(lastTurn.equals(viewPiece))toFront();
+		// if(lastTurn.equals(viewPiece))toFront();
 		String pieceTurn = turn.toString();
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
@@ -289,7 +285,7 @@ public abstract class GenericSwingView extends JFrame
 				break;
 			case "Intelligent":
 				players.put(p, aiPlayer);
-				if (lastTurn.equals(viewPiece) || viewPiece == null) {
+				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
 					//////
 					resetMove();
 					controller.makeMove(aiPlayer);
@@ -297,7 +293,7 @@ public abstract class GenericSwingView extends JFrame
 				break;
 			case "Random":
 				players.put(p, randomPlayer);
-				if (lastTurn.equals(viewPiece) || viewPiece == null) {
+				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
 					///////
 					resetMove();
 					controller.makeMove(randomPlayer);
@@ -346,7 +342,6 @@ public abstract class GenericSwingView extends JFrame
 	 *            Panel that contains the panel witch will be resized.
 	 */
 	private static void resizePreview(JPanel innerPanel, JPanel container) {
-		// System.err.println("Size changed to " + container.getSize());
 		int w = container.getWidth();
 		int h = container.getHeight();
 		int size = Math.min(w, h);
