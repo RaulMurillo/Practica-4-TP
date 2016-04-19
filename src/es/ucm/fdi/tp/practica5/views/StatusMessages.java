@@ -2,9 +2,6 @@ package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Component;
 import java.awt.event.*;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
@@ -18,7 +15,6 @@ public class StatusMessages extends JPanel {
 
 	private JTextArea jtaScreen;
 	private String message;
-	private int counter;
 
 	StatusMessages() {
 		initUI();
@@ -29,9 +25,9 @@ public class StatusMessages extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		message = new String();
-		counter = 1;
 		jtaScreen = new JTextArea(message);
 		jtaScreen.setEditable(false);
+		
 		//AutoScroll
 		DefaultCaret caret = (DefaultCaret)jtaScreen.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
