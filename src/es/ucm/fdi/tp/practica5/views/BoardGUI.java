@@ -111,4 +111,8 @@ public class BoardGUI extends JPanel {
 			controlsListener.rightButtonPressed(row, col);
 		}
 	}
+	public void setMap(Map<Piece, Color> colorMap){
+		
+		this.colorMap = colorMap;
+	}
 }

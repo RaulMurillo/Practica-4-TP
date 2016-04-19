@@ -2,6 +2,7 @@ package es.ucm.fdi.tp.practica5.attt;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
+import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
@@ -28,25 +29,29 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		if (!mode) {
-			simpleMove(row, col);
-			turnCount++;
-			if (turnCount > 5) {
-				mode = true;
+		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+			if (!mode) {
+				simpleMove(row, col);
+				if (turnCount > 5) {
+					mode = true;
+				}
+			} else {
+				complexMove(row, col);
 			}
-		} else {
-			complexMove(row, col);
+			System.err.println("Turn count = " +turnCount);
 		}
-
 	}
 
 	private void complexMove(int row, int col) {
+		System.err.println("Begining complex move");
 		if (iniCol == -1) {
 			if (lastTurn.equals(lastBoard.getPosition(row, col))) {
+				settings.setEnabled(false, true, true);
 				iniCol = col;
 				iniRow = row;
 				setMove(row, col);
 				boardUI.selectSquare(row, col);
+				System.err.println("First square move: "+iniRow + iniCol);
 			}
 		} else {
 			boardUI.deselectSquare(iniRow, iniCol);
@@ -56,11 +61,15 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				iniRow = row;
 				setMove(row, col);
 				boardUI.selectSquare(row, col);
+				System.err.println("First square changed: " + iniRow+ iniCol);
 			} else {
 				move += "> ";
 				setMove(row, col);
+				System.err.println("Second square move: " + row+col);
 				move = move.substring(0, move.length() - 1);
+				System.err.println("Your move: " + move);
 				controller.makeMove(players.get(lastTurn));
+				settings.setEnabled(true, true, true);
 				resetMove();
 			}
 		}
@@ -92,5 +101,15 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		iniRow = -1;
 		iniCol = -1;
 	}
+	
+	@Override
+	public void onChangeTurn(Board board, Piece turn){
+		super.onChangeTurn(board, turn);
+		turnCount++;
+	}
 
+	/*@Override
+	public void setMove(int row, int col) {
+		move += "("+row + ") (" + col + ") ";
+	}*/
 }

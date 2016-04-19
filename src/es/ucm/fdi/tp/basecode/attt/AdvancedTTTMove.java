@@ -100,6 +100,14 @@ public class AdvancedTTTMove extends ConnectNMove {
 	@Override
 	public GameMove fromString(Piece p, String str) {
 		Matcher m = simpleMove.matcher(str);
+		////////////////
+		System.err.println("Simple move: "+simpleMove);
+		System.err.println("Advanced move: "+advancedMove);
+		System.err.println("Your move: "+str);
+		System.err.println("Your move matcher: "+m);
+		System.err.println("Shold be: "+advancedMove.matcher(str));
+		////////////////
+		
 		if (m.find()) {
 			return new AdvancedTTTMove(-1, -1, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), p);
 		} else {

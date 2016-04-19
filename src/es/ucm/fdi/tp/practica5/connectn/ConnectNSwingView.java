@@ -7,7 +7,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
-public class ConnectNSwingView extends GenericSwingView{
+public class ConnectNSwingView extends GenericSwingView {
 
 	public ConnectNSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
@@ -15,15 +15,17 @@ public class ConnectNSwingView extends GenericSwingView{
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		setMove(row, col);
-		controller.makeMove(players.get(lastTurn));
-		resetMove();
+		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+			setMove(row, col);
+			controller.makeMove(players.get(lastTurn));
+			resetMove();
+		}
 	}
 
 	@Override
 	public void rightButtonPressed(int row, int col) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

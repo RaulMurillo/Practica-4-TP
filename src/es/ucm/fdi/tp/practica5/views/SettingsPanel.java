@@ -1,6 +1,7 @@
 package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +25,11 @@ public class SettingsPanel extends JPanel {
 
 	private Board board;
 	private List<Piece> pieces;
-	private Map<Piece, Player> players;
+	//private Map<Piece, Player> players;
 
 	public SettingsPanel(List<Piece> p, Map<Piece, Color> map, Board b, GenericSwingView listener, Piece viewPiece) {
 		pieces = p;
 		board = b;
-		this.players = players;
 		initComponents(map, listener, viewPiece);
 	}
 
@@ -67,10 +67,12 @@ public class SettingsPanel extends JPanel {
 		textArea.showMessage(text);
 	}
 
-	public void setEnabled(boolean moves, boolean quit) {
+	public void setEnabled(boolean moves, boolean quit, boolean modes) {
 		autoMovPane.setEnabled(moves);
 
 		quitPanel.setEnabled(quit);
+		
+		modeSelector.setEnabled(modes);
 	}
 
 	public void updateTableColor(Map<Piece, Color> map) {
@@ -104,6 +106,14 @@ public class SettingsPanel extends JPanel {
 				autoMovPane.addRandomButton();
 			if (ai)
 				autoMovPane.addIntelligentButton();
+		}
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+		updateTablePieces();
+		for(Piece p:pieces){
+			updateTableMode(p, "Manual");
+			
 		}
 	}
 }

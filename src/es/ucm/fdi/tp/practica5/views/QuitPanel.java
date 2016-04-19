@@ -9,6 +9,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public class QuitPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton jbQuit;
 	private JButton jbRestart;
 
@@ -33,8 +37,9 @@ public class QuitPanel extends JPanel {
 	 */
 	private void initialize() {
 		jbQuit = new JButton("Quit");
-		jbQuit.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
+		jbQuit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				controlsListener.quitPressed();
 			}
 		});
@@ -43,8 +48,9 @@ public class QuitPanel extends JPanel {
 
 	public void setRestartButton() {
 		jbRestart = new JButton("Restart");
-		jbRestart.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
+		jbRestart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				controlsListener.restartPressed();
 			}
 		});
@@ -57,7 +63,6 @@ public class QuitPanel extends JPanel {
 		if (jbRestart != null) {
 			jbRestart.setEnabled(b);
 		}
-		//this.setEnabled(b);
 	}
 
 }

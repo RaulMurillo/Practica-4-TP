@@ -11,6 +11,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 public class PlayerModes extends JPanel {
 
 	private PlayerModesListener controlsListener;
+	private JButton jbSet;
 
 	public interface PlayerModesListener {
 		void changeModePressed(Piece p, String mode);
@@ -34,9 +35,10 @@ public class PlayerModes extends JPanel {
 		JComboBox<String> jcbMode = new JComboBox<String>(modesStrings);
 		add(jcbMode);
 
-		JButton jbSet = new JButton("Set");
-		jbSet.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
+		jbSet = new JButton("Set");
+		jbSet.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				int playerIndex = jcbPlayer.getSelectedIndex();
 				int modeIndex = jcbMode.getSelectedIndex();
 				controlsListener.changeModePressed(jcbPlayer.getItemAt(playerIndex), jcbMode.getItemAt(modeIndex));
@@ -44,6 +46,10 @@ public class PlayerModes extends JPanel {
 			}
 		});
 		add(jbSet);
+	}
+	
+	public void setEnabled(boolean b){
+		jbSet.setEnabled(b);
 	}
 
 }

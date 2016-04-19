@@ -28,6 +28,7 @@ public class AtaxxSwingView extends GenericSwingView {
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
 			if (iniCol == -1) {
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
+					settings.setEnabled(false, true, true);
 					iniCol = col;
 					iniRow = row;
 					setMove(row, col);
@@ -44,6 +45,7 @@ public class AtaxxSwingView extends GenericSwingView {
 				} else {
 					setMove(row, col);
 					controller.makeMove(players.get(lastTurn));
+					settings.setEnabled(true, true, true);
 					resetMove();
 				}
 			}

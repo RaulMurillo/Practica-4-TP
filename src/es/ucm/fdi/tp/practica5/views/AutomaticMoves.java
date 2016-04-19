@@ -64,8 +64,9 @@ public class AutomaticMoves extends JPanel {
 	 */
 	public void addRandomButton() {
 		jbRandom = new JButton("Random");
-		jbRandom.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
+		jbRandom.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				controlsListener.randomPressed();
 			}
 		});
@@ -77,8 +78,9 @@ public class AutomaticMoves extends JPanel {
 	 */
 	public void addIntelligentButton() {
 		jbIntelligent = new JButton("Intelligent");
-		jbIntelligent.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
+		jbIntelligent.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 				controlsListener.aiPressed();
 			}
 		});
@@ -89,7 +91,6 @@ public class AutomaticMoves extends JPanel {
 	public void setEnabled(boolean b) {
 		jbIntelligent.setEnabled(b);
 		jbRandom.setEnabled(b);
-		//this.setEnabled(b);
 	}
 
 }
