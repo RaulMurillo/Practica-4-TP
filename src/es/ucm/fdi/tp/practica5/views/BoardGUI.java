@@ -94,6 +94,7 @@ public class BoardGUI extends JPanel {
 			}
 		}
 		repaint(); // obligas a que se repinte el tablero
+		revalidate();
 	}
 
 	public void selectSquare(int row, int col) {

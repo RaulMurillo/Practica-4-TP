@@ -289,13 +289,17 @@ public abstract class GenericSwingView extends JFrame
 				break;
 			case "Intelligent":
 				players.put(p, aiPlayer);
-				if (lastTurn.equals(viewPiece)) {
+				if (lastTurn.equals(viewPiece) || viewPiece == null) {
+					//////
+					resetMove();
 					controller.makeMove(aiPlayer);
 				}
 				break;
 			case "Random":
 				players.put(p, randomPlayer);
-				if (lastTurn.equals(viewPiece)) {
+				if (lastTurn.equals(viewPiece) || viewPiece == null) {
+					///////
+					resetMove();
 					controller.makeMove(randomPlayer);
 				}
 				break;
