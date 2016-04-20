@@ -16,14 +16,14 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private boolean mode;
+	private static boolean advancedMode;
 	private int iniCol;
 	private int iniRow;
 	private static int turnCount;
 
 	public AdvancedTTTSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
-		mode = false;
+		advancedMode = false;
 		turnCount = 0;
 		resetMove();
 	}
@@ -31,27 +31,24 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	@Override
 	public void leftButtonPressed(int row, int col) {
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
-			if (!mode) {
+			if (!advancedMode) {
 				simpleMove(row, col);
-				if (turnCount > 5) {
-					mode = true;
-				}
 			} else {
 				complexMove(row, col);
 			}
-			System.err.println("Turn count = " +turnCount);
+			System.err.println("Turn count = " + turnCount);
 		}
 	}
 
 	private void complexMove(int row, int col) {
-		System.err.println("Begining complex move");
 		if (iniCol == -1) {
 			if (lastTurn.equals(lastBoard.getPosition(row, col))) {
 				settings.setEnabled(false, true, true);
 				iniCol = col;
 				iniRow = row;
 				boardUI.selectSquare(row, col);
-				System.err.println("First square move: "+iniRow + iniCol);
+				showHelp();
+				System.err.println("First square move: " + iniRow + iniCol);
 			}
 		} else {
 			boardUI.deselectSquare(iniRow, iniCol);
@@ -60,11 +57,11 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				iniCol = col;
 				iniRow = row;
 				boardUI.selectSquare(row, col);
-				System.err.println("First square changed: " + iniRow+ iniCol);
+				System.err.println("First square changed: " + iniRow + iniCol);
 			} else {
 				move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
 				controller.makeMove(players.get(lastTurn));
-				settings.setEnabled(true, true, true);
+				enablePanels();
 				resetMove();
 			}
 		}
@@ -78,9 +75,10 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 
 	@Override
 	public void rightButtonPressed(int row, int col) {
-		if (mode) {
+		if (advancedMode) {
 			if (row == iniRow && col == iniCol) {
 				resetMove();
+				enablePanels();
 				boardUI.deselectSquare(row, col);
 			}
 		}
@@ -96,15 +94,40 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		iniRow = -1;
 		iniCol = -1;
 	}
-	
+
 	@Override
-	public void onChangeTurn(Board board, Piece turn){
-		super.onChangeTurn(board, turn);
-		turnCount++;
+	public void onMoveEnd(Board board, Piece turn, boolean success) {
+		super.onMoveEnd(board, turn, success);
+		if (success && turn.equals(viewPiece)) {
+			turnCount++;
+		}
+		if (turnCount > 5) {
+			advancedMode = true;
+		}
+
 	}
 
-	/*@Override
-	public void setMove(int row, int col) {
-		move += "("+row + ") (" + col + ") ";
-	}*/
+	@Override
+	public void onChangeTurn(Board board, Piece turn) {
+		super.onChangeTurn(board, turn);
+	}
+
+	@Override
+	protected void showHelp() {
+		if (advancedMode) {
+			if (iniCol == -1) {
+				settings.setMessage("Click on an origin piece");
+			} else {
+				settings.setMessage("Click on the destination position");
+			}
+		} else {
+			settings.setMessage("Click on an empty cell");
+		}
+
+	}
+
+	@Override
+	protected void showStartingHelp() {
+		settings.setMessage("Click on an empty cell");
+	}
 }

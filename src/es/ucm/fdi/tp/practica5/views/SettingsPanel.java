@@ -18,7 +18,7 @@ public class SettingsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private StatusMessages textArea;
 	private PlayerInformation table;
-	private PieceColorChooser colorChooser;
+	private PieceColors colorChooser;
 	private PlayerModes modeSelector;
 	private AutomaticMoves autoMovPane;
 	private QuitPanel quitPanel;
@@ -26,16 +26,17 @@ public class SettingsPanel extends JPanel {
 	private Board board;
 	private List<Piece> pieces;
 
-	public SettingsPanel(List<Piece> p, Map<Piece, Color> map, Board b, GenericSwingView listener, Piece viewPiece) {
-		pieces = p;
-		board = b;
+	public SettingsPanel(List<Piece> pieces, Map<Piece, Color> map, Board board, GenericSwingView listener, Piece viewPiece) {
+		this.pieces = pieces;
+		this.board = board;
 		initComponents(map, listener, viewPiece);
 	}
 
 	private void initComponents(Map<Piece, Color> map, GenericSwingView listener, Piece viewPiece) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		textArea = new StatusMessages(); // Revisar esta clase
+		
+		//Status Messages text area
+		textArea = new StatusMessages();
 		add(textArea);
 
 		// Player Information Table
@@ -43,7 +44,7 @@ public class SettingsPanel extends JPanel {
 		add(table);
 
 		// Piece Colors Chooser
-		colorChooser = new PieceColorChooser(pieces, listener);
+		colorChooser = new PieceColors(pieces, listener);
 		add(colorChooser);
 
 		// Player Mode Selector
@@ -62,8 +63,8 @@ public class SettingsPanel extends JPanel {
 		add(quitPanel);
 	}
 
-	public void write(String text) {
-		textArea.showMessage(text);
+	public void setMessage(String msg) {
+		textArea.showMessage(msg);
 	}
 
 	public void setEnabled(boolean moves, boolean quit, boolean modes) {
@@ -79,7 +80,6 @@ public class SettingsPanel extends JPanel {
 	}
 
 	public void updateTablePieces() {
-		// table.updateModes(Piece p, String mode)
 		table.updateNumPieces(pieces, board);
 	}
 

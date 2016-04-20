@@ -36,8 +36,8 @@ public class UtilsPr4 {
 	 * @return The distance between point one and two.
 	 *         <p>
 	 *         Distancia entre el punto 1 y el punto 2.
-	 */
-	public static int distancia(int row1, int col1, int row2, int col2) {
+	 *//*
+	public static int distance(int row1, int col1, int row2, int col2) {
 		return Math.max(Math.abs(row1 - row2), Math.abs(col1 - col2));
-	}
+	}*/
 }

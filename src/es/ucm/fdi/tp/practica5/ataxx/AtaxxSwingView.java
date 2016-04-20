@@ -14,8 +14,8 @@ public class AtaxxSwingView extends GenericSwingView {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int iniCol;
-	private int iniRow;
+	private int iniCol = -1;
+	private int iniRow = -1;
 
 	public AtaxxSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
@@ -31,6 +31,7 @@ public class AtaxxSwingView extends GenericSwingView {
 					iniCol = col;
 					iniRow = row;
 					boardUI.selectSquare(row, col);
+					showHelp();
 				}
 			} else {
 				boardUI.deselectSquare(iniRow, iniCol);
@@ -42,7 +43,7 @@ public class AtaxxSwingView extends GenericSwingView {
 				} else {
 					move = new AtaxxMove(iniRow, iniCol, row, col, lastTurn);
 					controller.makeMove(players.get(lastTurn));
-					settings.setEnabled(true, true, true);
+					enablePanels();
 					resetMove();
 				}
 			}
@@ -53,6 +54,7 @@ public class AtaxxSwingView extends GenericSwingView {
 	public void rightButtonPressed(int row, int col) {
 		if (row == iniRow && col == iniCol) {
 			resetMove();
+			enablePanels();
 			boardUI.deselectSquare(row, col);
 		}
 	}
@@ -64,10 +66,24 @@ public class AtaxxSwingView extends GenericSwingView {
 
 	public void resetMove() {
 		super.resetMove();
-		if(iniRow!=-1)boardUI.deselectSquare(iniRow, iniCol);
+		if (iniRow != -1)
+			boardUI.deselectSquare(iniRow, iniCol);
 		iniRow = -1;
 		iniCol = -1;
 	}
 
-	
+	@Override
+	protected void showHelp() {
+		if (iniCol == -1) {
+			settings.setMessage("Click on an origin piece");
+		} else {
+			settings.setMessage("Click on the destination position");
+		}
+	}
+
+	@Override
+	protected void showStartingHelp() {
+		settings.setMessage("Click on an origin piece");
+	}
+
 }

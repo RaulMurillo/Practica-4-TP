@@ -27,9 +27,13 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 	}
 	
 	public AtaxxFactoryExt(int dim, int obstacles) {
-		super(dim,obstacles);
+		
 	}
 	
+	public AtaxxFactoryExt(Integer obstacles) {
+		super(obstacles);
+	}
+
 	@Override
 	public void createSwingView(final Observable<GameObserver> game, final Controller ctrl, final Piece viewPiece,
 			Player randPlayer, Player aiPlayer) {

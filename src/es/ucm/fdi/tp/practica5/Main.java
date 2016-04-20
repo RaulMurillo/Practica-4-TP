@@ -31,7 +31,6 @@ import es.ucm.fdi.tp.practica5.ttt.TicTacToeFactoryExt;
 import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
 import es.ucm.fdi.tp.practica5.attt.AdvancedTTTFactoryExt;
 
-
 /**
  * This is the class with the main method for the board games application.
  * 
@@ -87,7 +86,7 @@ public class Main {
 	 */
 	enum GameInfo {
 		CONNECTN("cn", "ConnectN"), TicTacToe("ttt", "Tic-Tac-Toe"), AdvancedTicTacToe("attt",
-				"Advanced Tic-Tac-Toe"), Ataxx("ataxx", "Ataxx");
+				"Advanced Tic-Tac-Toe"), ATAXX("ataxx", "Ataxx");
 
 		private String id;
 		private String desc;
@@ -147,7 +146,7 @@ public class Main {
 	 * <p>
 	 * Juego por defecto.
 	 */
-	final private static GameInfo DEFAULT_GAME = GameInfo.Ataxx;
+	final private static GameInfo DEFAULT_GAME = GameInfo.ATAXX;
 
 	/**
 	 * default view to use.
@@ -546,7 +545,7 @@ public class Main {
 		case AdvancedTicTacToe:
 			gameFactory = new AdvancedTTTFactoryExt();
 			break;
-		case Ataxx:
+		case ATAXX:
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
 				if (obstacles != null) {
 					gameFactory = new AtaxxFactoryExt(dimRows, obstacles);
@@ -554,7 +553,11 @@ public class Main {
 					gameFactory = new AtaxxFactoryExt(dimRows, 0);
 				}
 			} else {
-				gameFactory = new AtaxxFactoryExt();
+				if (obstacles != null) {
+					gameFactory = new AtaxxFactoryExt(obstacles);
+				} else {
+					gameFactory = new AtaxxFactoryExt();
+				}
 			}
 			break;
 		case CONNECTN:
@@ -657,7 +660,7 @@ public class Main {
 			try {
 				obstacles = Integer.parseInt(obstaclesVal);
 				obstacles = (obstacles / 4) * 4;
-				if ((dimRows == 5 && obstacles > 12) || (obstacles > 24)) {
+				if ((obstacles > 24) || (obstacles > 12 && (dimRows == null || dimRows == 5))) {
 					throw new GameError("Invalid number of obstacles.");
 				}
 			} catch (NumberFormatException e) {
@@ -788,7 +791,7 @@ public class Main {
 			break;
 		case WINDOW:
 			for (int i = 0; i < pieces.size(); i++) {
-				switch (playerModes.get(i)) {				
+				switch (playerModes.get(i)) {
 				case AI:
 					players.add(gameFactory.createAIPlayer(aiPlayerAlg));
 					break;
@@ -803,7 +806,7 @@ public class Main {
 							"Something went wrong! This program point should be unreachable!");
 				}
 			}
-			c = new Controller(g, pieces);			
+			c = new Controller(g, pieces);
 			final Controller c2 = c;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
@@ -818,7 +821,7 @@ public class Main {
 					}
 				}
 			});
-		
+
 			break;
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");

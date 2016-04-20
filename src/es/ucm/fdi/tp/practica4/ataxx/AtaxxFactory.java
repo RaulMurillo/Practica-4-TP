@@ -30,7 +30,7 @@ public class AtaxxFactory implements GameFactory {
 	private static final long serialVersionUID = 1L;
 	private int dim;
 	private int obstacles;
-	private static final int minDim = 5;
+	private static final int MIN_DIM = 5;
 
 	/**
 	 * Default constructor of the class that gives a game with dimension 5 and
@@ -40,7 +40,23 @@ public class AtaxxFactory implements GameFactory {
 	 * sin obstaculos.
 	 */
 	public AtaxxFactory() {
-		this(minDim, 0);
+		this(MIN_DIM, 0);
+	}
+
+	/**
+	 * Constructor of the class that gives a game with dimension 5 and many
+	 * obstacles as given.
+	 * <p>
+	 * Constructor predeterminado de la clase que da un juego con dimension y 5
+	 * tantos obstaculos se indiquen.
+	 * 
+	 * @param obstacles
+	 *            Number of obstacles in the board.
+	 *            <p>
+	 *            Numero de obstaculos en el tablero.
+	 */
+	public AtaxxFactory(int obstacles) {
+		this(MIN_DIM, obstacles);
 	}
 
 	/**
@@ -58,7 +74,7 @@ public class AtaxxFactory implements GameFactory {
 	 *            Numero de obstaculos en el tablero.
 	 */
 	public AtaxxFactory(int dim, int obstacles) {
-		if (dim < minDim && dim % 2 == 0) {
+		if (dim < MIN_DIM && dim % 2 == 0) {
 			throw new GameError("Dimension must be at least 5 and odd: " + dim);
 		} else {
 			this.dim = dim;

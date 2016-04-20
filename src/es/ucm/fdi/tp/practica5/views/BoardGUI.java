@@ -28,13 +28,13 @@ public class BoardGUI extends JPanel {
 	protected Square[][] squares;
 	protected Board board;
 	private Map<Piece, Color> colorMap;
-	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.white);
-	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();// createLineBorder(Color.red)
-	final public Color OBS_COLOR = Color.getHSBColor(25, 25, 0);
-	final public String OBS_PATH = "Block.png";
-	final public String PIECE_PATH = "Piece.png";
-	private BufferedImage OBS_IMAGE;
-	private BufferedImage PIECE_IMAGE;
+	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.WHITE);
+	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();
+	final public Color OBS_COLOR = Color.BLACK;
+	final public String OBS_PATH = "8Block.png";
+	final public String PIECE_PATH = "1Piece.png";
+	private BufferedImage obsImage;
+	private BufferedImage pieceImage;
 
 	private BoardGUIListener controlsListener;
 
@@ -64,12 +64,12 @@ public class BoardGUI extends JPanel {
 		}
 	}
 
-	public BoardGUI(Board b, Map<Piece, Color> color, BoardGUIListener controlsListener) {
+	public BoardGUI(Board b, Map<Piece, Color> colorMap, BoardGUIListener controlsListener) {
 		this.controlsListener = controlsListener;
-		colorMap = color;
+		this.colorMap = colorMap;
 		try {
-			OBS_IMAGE = ImageIO.read(new File(OBS_PATH));
-			PIECE_IMAGE = ImageIO.read(new File(PIECE_PATH));
+			pieceImage = ImageIO.read(new File(PIECE_PATH));
+			obsImage = ImageIO.read(new File(OBS_PATH));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +91,7 @@ public class BoardGUI extends JPanel {
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorder(DEFAULT_BORDER);
 				squares[i][j].setLayout(new BorderLayout());
-				add(squares[i][j]);
+				add(squares[i][j]);				
 			}
 		}
 	}
@@ -104,13 +104,13 @@ public class BoardGUI extends JPanel {
 					squares[i][j].setIcon(null);
 					squares[i][j].setBackground(null);
 				} else if (colorMap.containsKey(p)) { // Paint pieces
-					if (PIECE_IMAGE != null) {
-						Utils.setImageOnJLabel(squares[i][j], PIECE_IMAGE);
+					if (pieceImage != null) {
+						Utils.setImageOnJLabel(squares[i][j], pieceImage);
 					}
 					squares[i][j].setBackground(colorMap.get(p));
 				} else { // paint obstacles
-					if (OBS_IMAGE != null) {
-						Utils.setImageOnJLabel(squares[i][j], OBS_IMAGE);
+					if (obsImage != null) {
+						Utils.setImageOnJLabel(squares[i][j], obsImage);
 					} else
 						squares[i][j].setBackground(OBS_COLOR);
 				}

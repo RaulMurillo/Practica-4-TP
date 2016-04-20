@@ -39,4 +39,14 @@ public class ConnectNSwingView extends GenericSwingView {
 		players.put(p, ConnectNFactoryExt.createSwingPlayer(this));
 	}
 
+	@Override
+	protected void showHelp() {
+		settings.setMessage("Click on an empty cell");
+	}
+
+	@Override
+	protected void showStartingHelp() {
+		showHelp();
+	}
+
 }

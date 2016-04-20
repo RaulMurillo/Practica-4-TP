@@ -43,13 +43,13 @@ public class AtaxxRules implements GameRules {
 
 	private int dim;
 
-	protected static final Piece obstacle = new Piece("*");
+	protected static final Piece OBSTACLE = new Piece("*");
 
 	private int numObstacles;
 
-	private final int minPlayers = 2;
+	private final int MIN_PLAYERS = 2;
 
-	private final int maxPlayers = 4;
+	private final int MAX_PLAYERS = 4;
 
 	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {
@@ -112,11 +112,12 @@ public class AtaxxRules implements GameRules {
 			while (board.getPosition(rnd / c, rnd % c) != null) {
 				rnd = Utils.randomInt(c * c);
 			}
-			// The symmetry in this algorithm is axial.
-			board.setPosition(rnd / c, rnd % c, obstacle);
-			board.setPosition(dim - 1 - rnd / c, rnd % c, obstacle);
-			board.setPosition(rnd / c, dim - 1 - rnd % c, obstacle);
-			board.setPosition(dim - 1 - rnd / c, dim - 1 - rnd % c, obstacle);
+			// Set obstacles in board using axial symmetry with the middle
+			// column and row as axes.
+			board.setPosition(rnd / c, rnd % c, OBSTACLE);
+			board.setPosition(dim - 1 - rnd / c, rnd % c, OBSTACLE);
+			board.setPosition(rnd / c, dim - 1 - rnd % c, OBSTACLE);
+			board.setPosition(dim - 1 - rnd / c, dim - 1 - rnd % c, OBSTACLE);
 		}
 	}
 
@@ -127,12 +128,12 @@ public class AtaxxRules implements GameRules {
 
 	@Override
 	public int minPlayers() {
-		return minPlayers;
+		return MIN_PLAYERS;
 	}
 
 	@Override
 	public int maxPlayers() {
-		return maxPlayers;
+		return MAX_PLAYERS;
 	}
 
 	@Override
@@ -265,7 +266,6 @@ public class AtaxxRules implements GameRules {
 	/**
 	 * Generates a list of valid moves for a particular piece, or {@code null}
 	 * if this operation is not supported.
-	 * 
 	 * <p>
 	 * Genera una lista de movimientos validos para una determinda pieza, o
 	 * {@code null} si no se permite esta operacion.
@@ -302,14 +302,14 @@ public class AtaxxRules implements GameRules {
 	 */
 	private List<GameMove> pieceMoves(Board board, List<Piece> playersPieces, Piece turn, int row, int col) {
 		List<GameMove> moves = new ArrayList<GameMove>();
-		int a = row - 2, b = col - 2;
-		// Adjusts the initial indexes.
-		if (a < 0)
-			a = 0;
-		if (b < 0)
-			b = 0;
-		for (int i = a; (i < board.getRows()) && (i <= row + 2); i++) {
-			for (int j = b; (j < board.getCols()) && (j <= col + 2); j++) {
+		// We explore the surroundings of the piece (p) and make the
+		// pertinent changes if necessary in the surrounding pieces
+		int startRow = Math.max(0, row - 2);
+		int startCol = Math.max(0, col - 2);
+		int endRow = Math.min(board.getRows(), row + 3);
+		int endCol = Math.min(board.getCols(), col + 3);
+		for (int i = startRow; i < endRow; i++) {
+			for (int j = startCol; j < endCol; j++) {
 				if (board.getPosition(i, j) == null) {
 					moves.add(new AtaxxMove(row, col, i, j, turn));
 				}

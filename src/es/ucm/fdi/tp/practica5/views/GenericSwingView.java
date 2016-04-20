@@ -26,8 +26,8 @@ import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public abstract class GenericSwingView extends JFrame
-		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
-		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver{
+		implements PieceColors.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
+		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
 
 	/**
 	 * 
@@ -60,10 +60,10 @@ public abstract class GenericSwingView extends JFrame
 		private static final long serialVersionUID = 1L;
 
 		{
-			add(Color.red);
-			add(Color.green);
-			add(Color.blue);
-			add(Color.yellow);
+			add(Color.RED);
+			add(Color.GREEN);
+			add(Color.BLUE);
+			add(Color.YELLOW);
 		}
 	};
 
@@ -131,7 +131,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Short description of the game.
 	 */
 	private void initWindow(Board board, String gameDesc) {
-		setSize(650, 500);
+		setSize(450, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -155,8 +155,6 @@ public abstract class GenericSwingView extends JFrame
 				boardUI.update();
 			}
 		});
-		
-		
 		revalidate();
 		setVisible(true);
 	}
@@ -172,12 +170,16 @@ public abstract class GenericSwingView extends JFrame
 	 *            First turn piece.
 	 */
 	private void setStartingActions(Board board, String gameDesc, Piece turn) {
-		settings.write("Starting '" + gameDesc + "'");
-		settings.write("----------------------");
+		settings.setMessage("Starting '" + gameDesc + "'");
+		settings.setMessage("----------------------");
 		String pieceTurn = turn.toString();
-		if (turn.equals(viewPiece))
+		if (turn.equals(viewPiece)) {
 			pieceTurn += " (You)";
-		settings.write("Turn for " + pieceTurn);
+		}
+		settings.setMessage("Turn for " + pieceTurn);
+		if (turn.equals(viewPiece)) {
+			showStartingHelp();
+		}
 		setLastState(board, turn);
 		if (viewPiece != null && !viewPiece.equals(turn)) {
 			disablePanels();
@@ -186,10 +188,10 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onGameOver(Board board, State state, Piece winner) {
-		settings.write("\n Game Over!!");
-		settings.write("Game Status: " + state);
+		settings.setMessage("\n Game Over!!");
+		settings.setMessage("Game Status: " + state);
 		if (state == State.Won) {
-			settings.write("Winner: " + winner);
+			settings.setMessage("Winner: " + winner);
 		}
 		settings.setEnabled(false, true, false);
 	}
@@ -208,16 +210,21 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onChangeTurn(Board board, Piece turn) {
-		// if(lastTurn.equals(viewPiece))toFront();
 		String pieceTurn = turn.toString();
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
-		settings.write("Turn for " + pieceTurn);
+		settings.setMessage("Turn for " + pieceTurn);
 		setLastState(board, turn);
-		if (viewPiece != null && !viewPiece.equals(turn)) {
-			disablePanels();
-		} else
+		// Bring window to the front
+		if (lastTurn.equals(viewPiece)) {
+			toFront();
+		}
+		if (viewPiece == null || (viewPiece.equals(turn)
+				&& !(players.get(viewPiece).equals(randomPlayer) || players.get(viewPiece).equals(aiPlayer)))) {
 			enablePanels();
+			showHelp();
+		} else
+			disablePanels();
 		if (players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer)) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -235,10 +242,14 @@ public abstract class GenericSwingView extends JFrame
 	@Override
 	public void onError(String msg) {
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
-			settings.write(msg);
+			settings.setMessage(msg);
 			resetMove();
 		}
 	}
+
+	protected abstract void showHelp();
+
+	protected abstract void showStartingHelp();
 
 	public void setColorMap(List<Color> colors) {
 		for (int i = 0; i < pieces.size(); i++) {
@@ -246,7 +257,7 @@ public abstract class GenericSwingView extends JFrame
 		}
 	}
 
-	private void enablePanels() {
+	protected void enablePanels() {
 		settings.setEnabled(true, true, true);
 	}
 
@@ -362,15 +373,12 @@ public abstract class GenericSwingView extends JFrame
 		return move;
 	}
 
-
 	public void resetMove() {
 		move = null;
 	}
 
 	public Piece getViewPiece() {
 		return viewPiece;
-		
 	}
-	
 
 }

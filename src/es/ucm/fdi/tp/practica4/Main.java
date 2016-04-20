@@ -84,7 +84,7 @@ public class Main {
 	 */
 	enum GameInfo {
 		CONNECTN("cn", "ConnectN"), TicTacToe("ttt", "Tic-Tac-Toe"), AdvancedTicTacToe("attt",
-				"Advanced Tic-Tac-Toe"), Ataxx("ataxx", "Ataxx");
+				"Advanced Tic-Tac-Toe"), ATAXX("ataxx", "Ataxx");
 
 		private String id;
 		private String desc;
@@ -144,7 +144,7 @@ public class Main {
 	 * <p>
 	 * Juego por defecto.
 	 */
-	final private static GameInfo DEFAULT_GAME = GameInfo.Ataxx;
+	final private static GameInfo DEFAULT_GAME = GameInfo.ATAXX;
 
 	/**
 	 * default view to use.
@@ -543,7 +543,7 @@ public class Main {
 		case AdvancedTicTacToe:
 			gameFactory = new AdvancedTTTFactory();
 			break;
-		case Ataxx:
+		case ATAXX:
 			if (dimRows != null && dimCols != null && dimRows == dimCols) {
 				if (obstacles != null) {
 					gameFactory = new AtaxxFactory(dimRows, obstacles);
@@ -551,7 +551,11 @@ public class Main {
 					gameFactory = new AtaxxFactory(dimRows, 0);
 				}
 			} else {
-				gameFactory = new AtaxxFactory();
+				if (obstacles != null) {
+					gameFactory = new AtaxxFactory(obstacles);
+				} else {
+					gameFactory = new AtaxxFactory();
+				}
 			}
 			break;
 		case CONNECTN:
@@ -654,7 +658,7 @@ public class Main {
 			try {
 				obstacles = Integer.parseInt(obstaclesVal);
 				obstacles = (obstacles / 4) * 4;
-				if ((dimRows == 5 && obstacles > 12) || (obstacles > 24)) {
+				if ((obstacles > 24) || (obstacles > 12 && (dimRows == null || dimRows == 5))) {
 					throw new GameError("Invalid number of obstacles.");
 				}
 			} catch (NumberFormatException e) {
