@@ -20,13 +20,14 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
+import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public abstract class GenericSwingView extends JFrame
 		implements PieceColorChooser.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
-		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
+		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver{
 
 	/**
 	 * 
@@ -50,7 +51,7 @@ public abstract class GenericSwingView extends JFrame
 
 	protected Piece lastTurn;
 	protected Board lastBoard;
-	protected String move;
+	protected GameMove move;
 
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		/**
@@ -71,7 +72,7 @@ public abstract class GenericSwingView extends JFrame
 		viewPiece = p;
 		randomPlayer = random;
 		aiPlayer = ai;
-		move = "";
+		move = null;
 		g.addObserver(this);
 	}
 
@@ -151,8 +152,11 @@ public abstract class GenericSwingView extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
+				boardUI.update();
 			}
 		});
+		
+		
 		revalidate();
 		setVisible(true);
 	}
@@ -282,19 +286,20 @@ public abstract class GenericSwingView extends JFrame
 			switch (mode) {
 			case "Manual":
 				setManualPlayer(p);
+				enablePanels();
 				break;
 			case "Intelligent":
+				disablePanels();
 				players.put(p, aiPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
-					//////
 					resetMove();
 					controller.makeMove(aiPlayer);
 				}
 				break;
 			case "Random":
+				disablePanels();
 				players.put(p, randomPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
-					///////
 					resetMove();
 					controller.makeMove(randomPlayer);
 				}
@@ -353,20 +358,19 @@ public abstract class GenericSwingView extends JFrame
 		players.put(piece, player);
 	}
 
-	public String getMove() {
+	public GameMove getMove() {
 		return move;
 	}
 
-	public void setMove(int row, int col) {
-		move += row + " " + col + " ";
-	}
 
 	public void resetMove() {
-		move = "";
+		move = null;
 	}
 
 	public Piece getViewPiece() {
 		return viewPiece;
+		
 	}
+	
 
 }

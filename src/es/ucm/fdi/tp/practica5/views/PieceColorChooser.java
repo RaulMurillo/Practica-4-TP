@@ -17,14 +17,13 @@ public class PieceColorChooser extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PieceColorsListener controlsListener;
+
 
 	public interface PieceColorsListener {
 		void changeColorPressed(Piece p, Color c);
 	}
 
 	public PieceColorChooser(List<Piece> piece, PieceColorsListener controlsListener) {
-		this.controlsListener = controlsListener;
 		setBorder(new TitledBorder(null, "Piece Colors", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		JComboBox<Piece> jcbPieces = new JComboBox(piece.toArray());
 		setLayout(new FlowLayout());

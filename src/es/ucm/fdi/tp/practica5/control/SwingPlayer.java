@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.practica5.control;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
@@ -32,22 +31,19 @@ public class SwingPlayer extends Player {
 	 * Lista de tipos de movimientos que puede jugar el jugador (solo un tipo de
 	 * movimientos para juegos simples).
 	 */
-	private List<GameMove> availableMoves;
+
 
 	private GenericSwingView view;
 
 	public SwingPlayer(List<GameMove> availableMoves, GenericSwingView view) {
 		this.view = view;
-		this.availableMoves = new ArrayList<GameMove>(availableMoves);
 	}
 
 	@Override
 	public GameMove requestMove(Piece p, Board board, List<Piece> pieces, GameRules rules) {
-		for (GameMove m : availableMoves) {
-			GameMove newMove = m.fromString(p, view.getMove());
-			if (newMove != null) {
-				return newMove;
-			}
+		GameMove newMove = view.getMove();
+		if (newMove != null) {
+			return newMove;
 		}
 		throw new GameError("Invalid move");
 	}

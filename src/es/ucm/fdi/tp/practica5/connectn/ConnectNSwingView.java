@@ -5,6 +5,7 @@ import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.basecode.connectn.ConnectNMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class ConnectNSwingView extends GenericSwingView {
@@ -21,7 +22,7 @@ public class ConnectNSwingView extends GenericSwingView {
 	@Override
 	public void leftButtonPressed(int row, int col) {
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
-			setMove(row, col);
+			move = new ConnectNMove(row, col, lastTurn);
 			controller.makeMove(players.get(lastTurn));
 			resetMove();
 		}

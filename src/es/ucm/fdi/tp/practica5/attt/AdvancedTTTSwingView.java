@@ -1,5 +1,6 @@
 package es.ucm.fdi.tp.practica5.attt;
 
+import es.ucm.fdi.tp.basecode.attt.AdvancedTTTMove;
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
@@ -49,7 +50,6 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				settings.setEnabled(false, true, true);
 				iniCol = col;
 				iniRow = row;
-				setMove(row, col);
 				boardUI.selectSquare(row, col);
 				System.err.println("First square move: "+iniRow + iniCol);
 			}
@@ -59,15 +59,10 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				resetMove();
 				iniCol = col;
 				iniRow = row;
-				setMove(row, col);
 				boardUI.selectSquare(row, col);
 				System.err.println("First square changed: " + iniRow+ iniCol);
 			} else {
-				move += "> ";
-				setMove(row, col);
-				System.err.println("Second square move: " + row+col);
-				move = move.substring(0, move.length() - 1);
-				System.err.println("Your move: " + move);
+				move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
 				controller.makeMove(players.get(lastTurn));
 				settings.setEnabled(true, true, true);
 				resetMove();
@@ -76,7 +71,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	}
 
 	private void simpleMove(int row, int col) {
-		setMove(row, col);
+		move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
 		controller.makeMove(players.get(lastTurn));
 		resetMove();
 	}

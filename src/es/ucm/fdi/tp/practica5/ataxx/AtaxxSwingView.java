@@ -5,6 +5,7 @@ import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica4.ataxx.AtaxxMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class AtaxxSwingView extends GenericSwingView {
@@ -29,7 +30,6 @@ public class AtaxxSwingView extends GenericSwingView {
 					settings.setEnabled(false, true, true);
 					iniCol = col;
 					iniRow = row;
-					setMove(row, col);
 					boardUI.selectSquare(row, col);
 				}
 			} else {
@@ -38,10 +38,9 @@ public class AtaxxSwingView extends GenericSwingView {
 					resetMove();
 					iniCol = col;
 					iniRow = row;
-					setMove(row, col);
 					boardUI.selectSquare(row, col);
 				} else {
-					setMove(row, col);
+					move = new AtaxxMove(iniRow, iniCol, row, col, lastTurn);
 					controller.makeMove(players.get(lastTurn));
 					settings.setEnabled(true, true, true);
 					resetMove();
@@ -69,4 +68,6 @@ public class AtaxxSwingView extends GenericSwingView {
 		iniRow = -1;
 		iniCol = -1;
 	}
+
+	
 }

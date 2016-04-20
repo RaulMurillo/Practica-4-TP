@@ -27,7 +27,7 @@ public class StatusMessages extends JPanel {
 		message = new String();
 		jtaScreen = new JTextArea(message);
 		jtaScreen.setEditable(false);
-		
+		jtaScreen.setRows(4);
 		//AutoScroll
 		DefaultCaret caret = (DefaultCaret)jtaScreen.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -46,7 +46,7 @@ public class StatusMessages extends JPanel {
 			}
 		});
 		jbReset.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+		
 		add(jbReset);
 	}
 
