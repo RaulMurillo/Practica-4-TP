@@ -125,7 +125,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Short description of the game.
 	 */
 	private void initWindow(Board board, String gameDesc) {
-		setSize(650, 400);
+		setSize(600,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -165,7 +165,7 @@ public abstract class GenericSwingView extends JFrame
 	 * @param turn
 	 *            First turn piece.
 	 */
-	private void setStartingActions(Board board, String gameDesc, Piece turn) {
+	protected void setStartingActions(Board board, String gameDesc, Piece turn) {
 		settings.setMessage("Starting '" + gameDesc + "'");
 		settings.setMessage("----------------------");
 		String pieceTurn = turn.toString();
@@ -341,7 +341,6 @@ public abstract class GenericSwingView extends JFrame
 		if (response == JOptionPane.YES_OPTION) {
 			controller.restart();
 			boardUI.update();
-
 		}
 	}
 

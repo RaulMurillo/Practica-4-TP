@@ -153,7 +153,7 @@ public class Main {
 	 * <p>
 	 * Vista por defecto.
 	 */
-	final private static ViewInfo DEFAULT_VIEW = ViewInfo.CONSOLE;
+	final private static ViewInfo DEFAULT_VIEW = ViewInfo.WINDOW;
 
 	/**
 	 * Default player mode to use.

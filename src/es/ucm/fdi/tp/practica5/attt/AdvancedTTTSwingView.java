@@ -5,7 +5,6 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
-import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica4.ataxx.AtaxxMove;
@@ -22,14 +21,9 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	private int iniCol;
 	private int iniRow;
 	private static int turnCount;
-	@SuppressWarnings("unused")
-	private GameRules rules;
 
 	public AdvancedTTTSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
-		advancedMode = false;
-		turnCount = 0;
-		resetMove();
 	}
 
 	@Override
@@ -52,7 +46,6 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				iniRow = row;
 				boardUI.selectSquare(row, col);
 				showHelp();
-				System.err.println("First square move: " + iniRow + iniCol);
 			}
 		} else {
 			boardUI.deselectSquare(iniRow, iniCol);
@@ -115,10 +108,13 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 			advancedMode = true;
 		}
 	}
-
+	
 	@Override
-	public void onChangeTurn(Board board, Piece turn) {
-		super.onChangeTurn(board, turn);
+	protected void setStartingActions(Board board, String gameDesc, Piece turn) {
+		super.setStartingActions(board, gameDesc, turn);
+		turnCount=0;
+		resetMove();
+		advancedMode = false;
 	}
 
 	@Override
@@ -132,7 +128,6 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		} else {
 			settings.setMessage("Click on an empty cell");
 		}
-
 	}
 
 	@Override

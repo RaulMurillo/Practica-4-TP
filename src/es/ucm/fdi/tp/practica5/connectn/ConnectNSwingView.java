@@ -32,7 +32,6 @@ public class ConnectNSwingView extends GenericSwingView {
 	@Override
 	public void rightButtonPressed(int row, int col) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

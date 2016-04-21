@@ -28,14 +28,14 @@ public class BoardGUI extends JPanel {
 	protected Square[][] squares;
 	protected Board board;
 	private Map<Piece, Color> colorMap;
-	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.WHITE);
+	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.WHITE, 2);
 	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();
 	final public Color OBS_COLOR = Color.BLACK;
 	final public String OBS_PATH = "Block.png";
 	final public String PIECE_PATH = "Piece.png";
 	private BufferedImage obsImage;
 	private BufferedImage pieceImage;
-	
+
 	private BoardGUIListener controlsListener;
 
 	public interface BoardGUIListener {
@@ -64,12 +64,12 @@ public class BoardGUI extends JPanel {
 				}
 			});
 		}
-		
+
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			if ( ! empty) {
-				g.drawImage(obstacle ? obsImage : pieceImage, 0,  0, getWidth()-1, getHeight()-1, this);
+			if (!empty) {
+				g.drawImage(obstacle ? obsImage : pieceImage, 2, 2, getWidth() - 4, getHeight() - 4, this);
 			}
 		}
 	}
@@ -87,9 +87,9 @@ public class BoardGUI extends JPanel {
 	}
 
 	public void setBoard(Board board) {
-		removeAll(); // descartamos squares antiguos
+		removeAll(); // discard previous squares
 		this.board = board;
-		setLayout(new GridLayout(board.getRows(), board.getCols(), 1, 1));
+		setLayout(new GridLayout(board.getRows(), board.getCols()));
 		initSquares();
 	}
 
@@ -101,7 +101,7 @@ public class BoardGUI extends JPanel {
 				squares[i][j].setOpaque(true);
 				squares[i][j].setBorder(DEFAULT_BORDER);
 				squares[i][j].setLayout(new BorderLayout());
-				add(squares[i][j]);				
+				add(squares[i][j]);
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class BoardGUI extends JPanel {
 					squares[i][j].empty = true;
 				} else if (colorMap.containsKey(p)) { // Paint pieces
 					if (pieceImage != null) {
-						//squares[i][j].setIcon(pieceImage);
+						// squares[i][j].setIcon(pieceImage);
 					}
 					squares[i][j].setBackground(colorMap.get(p));
 					squares[i][j].obstacle = false;
@@ -125,7 +125,7 @@ public class BoardGUI extends JPanel {
 					squares[i][j].obstacle = true;
 					squares[i][j].empty = false;
 					if (obsImage != null) {
-						//Utils.setImageOnJLabel(squares[i][j], obsImage);
+						// Utils.setImageOnJLabel(squares[i][j], obsImage);
 					} else
 						squares[i][j].setBackground(OBS_COLOR);
 				}
