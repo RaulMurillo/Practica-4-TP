@@ -37,7 +37,7 @@ public abstract class GenericSwingView extends JFrame
 	 * The list of pieces involved in the game. It is stored when the game
 	 * starts and used when the state is printed.
 	 */
-	private List<Piece> pieces;
+	protected List<Piece> pieces;
 	protected Controller controller;
 	private Map<Piece, Color> colorMap;
 
@@ -52,7 +52,7 @@ public abstract class GenericSwingView extends JFrame
 	protected Piece lastTurn;
 	protected Board lastBoard;
 	protected GameMove move;
-
+	
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		/**
 		 * 
@@ -125,7 +125,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Short description of the game.
 	 */
 	private void initWindow(Board board, String gameDesc) {
-		setSize(450, 400);
+		setSize(650, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -173,7 +173,7 @@ public abstract class GenericSwingView extends JFrame
 			pieceTurn += " (You)";
 		}
 		settings.setMessage("Turn for " + pieceTurn);
-		if (turn.equals(viewPiece)) {
+		if (turn.equals(viewPiece) || viewPiece == null) {
 			showStartingHelp();
 		}
 		setLastState(board, turn);
@@ -206,13 +206,14 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onChangeTurn(Board board, Piece turn) {
+		resetMove();
 		String pieceTurn = turn.toString();
 		if (turn.equals(viewPiece))
 			pieceTurn += " (You)";
 		settings.setMessage("Turn for " + pieceTurn);
 		setLastState(board, turn);
 		// Bring window to the front
-		if (lastTurn.equals(viewPiece)) {
+		if (lastTurn.equals(viewPiece)&& !(players.get(lastTurn).equals(randomPlayer) || players.get(lastTurn).equals(aiPlayer))) {
 			toFront();
 		}
 		if ((viewPiece == null || lastTurn.equals(viewPiece))
@@ -240,6 +241,7 @@ public abstract class GenericSwingView extends JFrame
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
 			settings.setMessage(msg);
 			resetMove();
+			boardUI.update();
 		}
 	}
 
@@ -327,9 +329,8 @@ public abstract class GenericSwingView extends JFrame
 				"Are sure you want to quit the game?\n (You will lose the game)", "Quit confirm",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (response == JOptionPane.YES_OPTION) {
-			System.err.println("Yes button clicked. Quit");
 			controller.stop();
-			// System.exit(0);
+			System.exit(0);
 		}
 	}
 
@@ -338,7 +339,6 @@ public abstract class GenericSwingView extends JFrame
 				"Are sure you want to restart the game?\n (You will lose the game)", "Restart confirm",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (response == JOptionPane.YES_OPTION) {
-			System.err.println("Yes button clicked. Restart");
 			controller.restart();
 			boardUI.update();
 

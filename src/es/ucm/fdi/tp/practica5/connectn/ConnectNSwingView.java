@@ -21,11 +21,12 @@ public class ConnectNSwingView extends GenericSwingView {
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+		if(lastBoard.getPosition(row, col) == null){
 			move = new ConnectNMove(row, col, lastTurn);
 			controller.makeMove(players.get(lastTurn));
+			}
+			else settings.setMessage("Invalid move");
 			resetMove();
-		}
 	}
 
 	@Override

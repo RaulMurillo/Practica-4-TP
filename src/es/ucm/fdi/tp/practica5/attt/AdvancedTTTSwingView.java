@@ -5,8 +5,10 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
+import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica4.ataxx.AtaxxMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 public class AdvancedTTTSwingView extends GenericSwingView {
@@ -20,6 +22,8 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	private int iniCol;
 	private int iniRow;
 	private static int turnCount;
+	@SuppressWarnings("unused")
+	private GameRules rules;
 
 	public AdvancedTTTSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
 		super(g, c, p, random, ai);
@@ -57,19 +61,25 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				iniCol = col;
 				iniRow = row;
 				boardUI.selectSquare(row, col);
-				System.err.println("First square changed: " + iniRow + iniCol);
 			} else {
-				move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
-				controller.makeMove(players.get(lastTurn));
-				enablePanels();
-				resetMove();
+				if (lastBoard.getPosition(row, col) == null && AtaxxMove.distance(row, col, iniRow, iniCol) <= 2) {
+					move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
+					controller.makeMove(players.get(lastTurn));
+					enablePanels();
+				} else {
+					settings.setMessage("Invalid move");
+					resetMove();
+				}
 			}
 		}
 	}
 
 	private void simpleMove(int row, int col) {
+		if(lastBoard.getPosition(row, col) == null){
 		move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
 		controller.makeMove(players.get(lastTurn));
+		}
+		else settings.setMessage("Invalid move");
 		resetMove();
 	}
 
@@ -98,13 +108,12 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	@Override
 	public void onMoveEnd(Board board, Piece turn, boolean success) {
 		super.onMoveEnd(board, turn, success);
-		if (success && turn.equals(viewPiece)) {
+		if (success && turn.equals(viewPiece) || viewPiece == null) {
 			turnCount++;
 		}
 		if (turnCount > 5) {
 			advancedMode = true;
 		}
-
 	}
 
 	@Override

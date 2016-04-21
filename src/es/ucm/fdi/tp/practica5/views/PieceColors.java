@@ -25,6 +25,7 @@ public class PieceColors extends JPanel {
 
 	public PieceColors(List<Piece> piece, PieceColorsListener controlsListener) {
 		setBorder(new TitledBorder(null, "Piece Colors", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		JComboBox<Piece> jcbPieces = new JComboBox(piece.toArray());
 		setLayout(new FlowLayout());
 		add(jcbPieces);

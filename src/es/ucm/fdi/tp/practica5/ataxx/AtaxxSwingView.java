@@ -41,10 +41,14 @@ public class AtaxxSwingView extends GenericSwingView {
 					iniRow = row;
 					boardUI.selectSquare(row, col);
 				} else {
-					move = new AtaxxMove(iniRow, iniCol, row, col, lastTurn);
-					controller.makeMove(players.get(lastTurn));
-					enablePanels();
-					resetMove();
+					if (lastBoard.getPosition(row, col) == null && AtaxxMove.distance(row, col, iniRow, iniCol) <= 2) {
+						move = new AtaxxMove(iniRow, iniCol, row, col, lastTurn);
+						controller.makeMove(players.get(lastTurn));
+						enablePanels();
+					} else {
+						settings.setMessage("Invalid move");
+						resetMove();
+					}
 				}
 			}
 		}
@@ -74,6 +78,7 @@ public class AtaxxSwingView extends GenericSwingView {
 
 	@Override
 	protected void showHelp() {
+		System.err.println(iniCol+""+iniRow);
 		if (iniCol == -1) {
 			settings.setMessage("Click on an origin piece");
 		} else {

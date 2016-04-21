@@ -2,6 +2,7 @@ package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,6 @@ import javax.swing.border.Border;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.Utils;
 
 public class BoardGUI extends JPanel {
 
@@ -35,7 +35,7 @@ public class BoardGUI extends JPanel {
 	final public String PIECE_PATH = "Piece.png";
 	private BufferedImage obsImage;
 	private BufferedImage pieceImage;
-
+	
 	private BoardGUIListener controlsListener;
 
 	public interface BoardGUIListener {
@@ -52,6 +52,8 @@ public class BoardGUI extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		private int row, col;
+		private boolean obstacle;
+		private boolean empty;
 
 		public Square(int row, int col) {
 			this.row = row;
@@ -61,6 +63,14 @@ public class BoardGUI extends JPanel {
 					squareWasClicked(Square.this.row, Square.this.col, e);
 				}
 			});
+		}
+		
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			if ( ! empty) {
+				g.drawImage(obstacle ? obsImage : pieceImage, 0,  0, getWidth()-1, getHeight()-1, this);
+			}
 		}
 	}
 
@@ -103,14 +113,19 @@ public class BoardGUI extends JPanel {
 				if (p == null) { // Blanks in board
 					squares[i][j].setIcon(null);
 					squares[i][j].setBackground(null);
+					squares[i][j].empty = true;
 				} else if (colorMap.containsKey(p)) { // Paint pieces
 					if (pieceImage != null) {
-						Utils.setImageOnJLabel(squares[i][j], pieceImage);
+						//squares[i][j].setIcon(pieceImage);
 					}
 					squares[i][j].setBackground(colorMap.get(p));
+					squares[i][j].obstacle = false;
+					squares[i][j].empty = false;
 				} else { // paint obstacles
+					squares[i][j].obstacle = true;
+					squares[i][j].empty = false;
 					if (obsImage != null) {
-						Utils.setImageOnJLabel(squares[i][j], obsImage);
+						//Utils.setImageOnJLabel(squares[i][j], obsImage);
 					} else
 						squares[i][j].setBackground(OBS_COLOR);
 				}

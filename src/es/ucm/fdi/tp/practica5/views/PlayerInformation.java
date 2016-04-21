@@ -1,18 +1,19 @@
 package es.ucm.fdi.tp.practica5.views;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
-import es.ucm.fdi.tp.practica5.Utils;
+import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
 public class PlayerInformation extends JPanel {
 
@@ -74,7 +75,7 @@ public class PlayerInformation extends JPanel {
 				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 				Color rowColor = colorMap.get(pieces.get(row));
 				setBackground(rowColor);
-				setForeground(Utils.getContrastColor(rowColor));
+				setForeground(getContrastColor(rowColor));
 				return this;
 			}
 		});
@@ -110,5 +111,18 @@ public class PlayerInformation extends JPanel {
 				data[j][2] = board.getPieceCount(pieces.get(j));
 		}
 		repaint();
+	}
+	
+	/**
+	 * Generates the opposite color by converting the RGB values into YIQ
+	 * values.
+	 * 
+	 * @param color
+	 *            Color to generate opposite.
+	 * @return Opposite color in RGB.
+	 */
+	public Color getContrastColor(Color color) {
+		double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+		return y >= 128 ? Color.black : Color.white;
 	}
 }

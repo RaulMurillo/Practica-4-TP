@@ -31,7 +31,7 @@ public class PlayerModes extends JPanel {
 	 */
 	private void initialize(List<Piece> pieces) {
 		setBorder(new TitledBorder(null, "Player Modes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		JComboBox<Piece> jcbPlayer = new JComboBox(pieces.toArray());
 		add(jcbPlayer);
 
