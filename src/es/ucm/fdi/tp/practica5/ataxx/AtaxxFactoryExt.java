@@ -27,7 +27,7 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 	}
 	
 	public AtaxxFactoryExt(int dim, int obstacles) {
-		
+		super(dim, obstacles);
 	}
 	
 	public AtaxxFactoryExt(Integer obstacles) {

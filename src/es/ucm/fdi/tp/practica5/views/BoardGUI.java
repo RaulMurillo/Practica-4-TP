@@ -31,8 +31,8 @@ public class BoardGUI extends JPanel {
 	final public Border DEFAULT_BORDER = BorderFactory.createLineBorder(Color.WHITE);
 	final public Border SELECTED_BORDER = BorderFactory.createLoweredBevelBorder();
 	final public Color OBS_COLOR = Color.BLACK;
-	final public String OBS_PATH = "8Block.png";
-	final public String PIECE_PATH = "1Piece.png";
+	final public String OBS_PATH = "Block.png";
+	final public String PIECE_PATH = "Piece.png";
 	private BufferedImage obsImage;
 	private BufferedImage pieceImage;
 

@@ -95,13 +95,7 @@ public abstract class GenericSwingView extends JFrame
 
 		// Set GameStart comments
 		setStartingActions(board, gameDesc, turn);
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				boardUI.update();
-			}
-		});
-
+		boardUI.update();
 	}
 
 	/**
@@ -161,6 +155,8 @@ public abstract class GenericSwingView extends JFrame
 
 	/**
 	 * Make necessary changes when game starts.
+	 * <p>
+	 * Realiza los cambios necesarios al iniciar el juego.
 	 * 
 	 * @param board
 	 *            Board of the game.
@@ -219,8 +215,8 @@ public abstract class GenericSwingView extends JFrame
 		if (lastTurn.equals(viewPiece)) {
 			toFront();
 		}
-		if (viewPiece == null || (viewPiece.equals(turn)
-				&& !(players.get(viewPiece).equals(randomPlayer) || players.get(viewPiece).equals(aiPlayer)))) {
+		if ((viewPiece == null || lastTurn.equals(viewPiece))
+				&& !(players.get(lastTurn).equals(randomPlayer) || players.get(lastTurn).equals(aiPlayer))) {
 			enablePanels();
 			showHelp();
 		} else
@@ -300,17 +296,17 @@ public abstract class GenericSwingView extends JFrame
 				enablePanels();
 				break;
 			case "Intelligent":
-				disablePanels();
 				players.put(p, aiPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
+					disablePanels();
 					resetMove();
 					controller.makeMove(aiPlayer);
 				}
 				break;
 			case "Random":
-				disablePanels();
 				players.put(p, randomPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
+					disablePanels();
 					resetMove();
 					controller.makeMove(randomPlayer);
 				}
