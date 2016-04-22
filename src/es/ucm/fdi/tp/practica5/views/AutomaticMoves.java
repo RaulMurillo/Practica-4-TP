@@ -46,14 +46,14 @@ public class AutomaticMoves extends JPanel {
 	public interface AutoMovesListener {
 
 		/**
-		 * Notifies RANDOM move button has been pressed.
+		 * Notifies that RANDOM move button has been pressed.
 		 * <p>
 		 * Notifica que el boton de movimiento aleatorio ha sido pulsado.
 		 */
 		void randomPressed();
 
 		/**
-		 * Notifies INTELLIGENT move button has been pressed.
+		 * Notifies that INTELLIGENT move button has been pressed.
 		 * <p>
 		 * Notifica que el boton de movimiento inteligente ha sido pulsado.
 		 */

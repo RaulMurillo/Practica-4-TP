@@ -25,6 +25,13 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
+/**
+ * Abstract class implementing a game observer that outputs all the events in
+ * the game in a graphic window.
+ * <p>
+ * Clase abstracta que implementa un observador de juegos que muestra todos los
+ * eventos del juego en una ventana grafica.
+ */
 public abstract class GenericSwingView extends JFrame
 		implements PieceColors.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
 		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
@@ -36,23 +43,104 @@ public abstract class GenericSwingView extends JFrame
 	/**
 	 * The list of pieces involved in the game. It is stored when the game
 	 * starts and used when the state is printed.
+	 * <p>
+	 * La lista de piezas involucradas en el juego. Es almacenada al inicio del
+	 * juego y se emplea a lo largo de este.
 	 */
 	protected List<Piece> pieces;
+
+	/**
+	 * Controller of the game. Realizes the internal processes of the game.
+	 * <p>
+	 * Controlador del juego que realiza los procesos internos.
+	 */
 	protected Controller controller;
+
+	/**
+	 * Map that indicates the color of the pieces in the board.
+	 * <p>
+	 * Mapa que indica los colores de las piezas del tablero.
+	 */
 	private Map<Piece, Color> colorMap;
 
+	/**
+	 * A map that associates pieces with players (manual, random, etc.). It is
+	 * declared as static to maintain consistency on multi-view games.
+	 * <p>
+	 * Map que asocia fichas con jugadores (manual, random, etc.). Se declara
+	 * estático para mantener la consistencia en juego con multiventana.
+	 */
 	protected static Map<Piece, Player> players = new HashMap<Piece, Player>();
 
+	/**
+	 * The piece to which this view belongs ({@code null} means that it belongs
+	 * to all pieces).
+	 * <p>
+	 * La ficha a la que pertenece la vista ({@code null} si la vista pertenece
+	 * a todos los jugadores).
+	 */
 	protected Piece viewPiece;
+
+	/**
+	 * The player to be used for generating random moves, if {@code null} the
+	 * view should not support random player.
+	 * <p>
+	 * El jugador que se va a utilizar para generar movimientos aleatorios. Si
+	 * es {@code null}, la vista no permite jugadores aleatorios.
+	 */
 	private Player randomPlayer;
+
+	/**
+	 * The player to be used for generating automatics moves, if {@code null}
+	 * the view should not support AI (automatic) player.
+	 * <p>
+	 * El jugador que se va a utilizar para generar movimientos automaticos. Si
+	 * es {@code null}, la vista no permite jugadores IA (automaticos).
+	 */
 	private Player aiPlayer;
+
+	/**
+	 * Graphic board of the game.
+	 * <p>
+	 * Representacion grafica del tablero de juego.
+	 */
 	protected BoardGUI boardUI;
+
+	/**
+	 * A panel to be used for user's interactions with the game.
+	 * <p>
+	 * Panel que el usuario utilizara para interactuar con el juego.
+	 */
 	protected SettingsPanel settings;
 
+	/**
+	 * The piece is playing next. Might be null if the game has not started yet.
+	 * <p>
+	 * Ficha que juega a continuacion. Puede ser null si el juego todavia no ha
+	 * comenzado.
+	 */
 	protected Piece lastTurn;
+
+	/**
+	 * Board of the game before the current turn's move is done.
+	 * <p>
+	 * Tablero previo a la realización del movimiento correspondiente al turno
+	 * actual.
+	 */
 	protected Board lastBoard;
+
+	/**
+	 * Move of the current turn.
+	 * <p>
+	 * Movimiento a ejecutar en el turno actual.
+	 */
 	protected GameMove move;
-	
+
+	/**
+	 * Default list of colors for painting the pieces.
+	 * <p>
+	 * Lista de coloreado de piezas por defecto.
+	 */
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
 		/**
 		 * 
@@ -67,15 +155,58 @@ public abstract class GenericSwingView extends JFrame
 		}
 	};
 
-	public GenericSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
-		controller = c;
-		viewPiece = p;
-		randomPlayer = random;
-		aiPlayer = ai;
+	/**
+	 * Construct a generic view for playing {@code game}, with a {@code piece}
+	 * associated to the view.
+	 * <p>
+	 * Construye una vista generica para jugar al juego {@code game} con una
+	 * pieza asociada a la vista.
+	 * 
+	 * @param g
+	 *            Observer of the view.
+	 *            <p>
+	 *            Observador de la vista.
+	 * @param controller
+	 *            Controller of the view.
+	 *            <p>
+	 *            Controlador de la vista.
+	 * @param viewPiece
+	 *            The piece to which this view belongs ({@code null} means that
+	 *            it belongs to all pieces).
+	 *            <p>
+	 *            La ficha a la que pertenece la vista ({@code null} si la vista
+	 *            pertenece a todos los jugadores).
+	 * @param randomPlayer
+	 *            The player to be used for generating random moves, if
+	 *            {@code null} the view should not support random player.
+	 *            <p>
+	 *            El jugador que se va a utilizar para generar movimientos
+	 *            aleatorios. Si es {@code null}, la vista no permite jugadores
+	 *            aleatorios.
+	 * @param aiPlayer
+	 *            The player to be used for generating automatics moves, if
+	 *            {@code null} the view should not support AI (automatic)
+	 *            player.
+	 *            <p>
+	 *            El jugador que se va a utilizar para generar movimientos
+	 *            automaticos. Si es {@code null}, la vista no permite jugadores
+	 *            IA (automaticos).
+	 */
+	public GenericSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player randomPlayer,
+			Player aiPlayer) {
+		this.controller = controller;
+		this.viewPiece = viewPiece;
+		this.randomPlayer = randomPlayer;
+		this.aiPlayer = aiPlayer;
 		move = null;
 		g.addObserver(this);
 	}
 
+	/**
+	 * Sets the state of the game according to the beginning of a turn.
+	 * <p>
+	 * Fija el estado del juego correspondiente al inicio de un turno.
+	 */
 	private void setLastState(Board board, Piece turn) {
 		this.lastBoard = board;
 		this.lastTurn = turn;
@@ -99,11 +230,16 @@ public abstract class GenericSwingView extends JFrame
 	}
 
 	/**
-	 * Initialize the pieces list, the pieces-players map and the color map of
-	 * the frame.
+	 * Initialize the pieces list and the {@code pieces-players} and
+	 * {@code pieces-colors} maps of the view.
+	 * <p>
+	 * Inicializa la lista de fichas y los mapas de {@code pieces-players} y
+	 * {@code pieces-colors} de la vista.
 	 * 
 	 * @param pieces
 	 *            List of pieces on the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
 	 */
 	private void initialize(List<Piece> pieces) {
 		this.pieces = pieces;
@@ -117,7 +253,9 @@ public abstract class GenericSwingView extends JFrame
 	}
 
 	/**
-	 * Initialize the graphic components of the frame.
+	 * Initialize the graphic components of the view.
+	 * <p>
+	 * Inicializa los componentes graficos de la vista.
 	 * 
 	 * @param board
 	 *            Board of the game.
@@ -125,7 +263,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Short description of the game.
 	 */
 	private void initWindow(Board board, String gameDesc) {
-		setSize(600,500);
+		setSize(600, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -147,6 +285,7 @@ public abstract class GenericSwingView extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
+				boardUI.update();
 			}
 		});
 		revalidate();
@@ -160,10 +299,16 @@ public abstract class GenericSwingView extends JFrame
 	 * 
 	 * @param board
 	 *            Board of the game.
+	 *            <p>
+	 *            Tablero interno del juego.
 	 * @param gameDesc
-	 *            Short description of the game.
+	 *            Brief description of the game.
+	 *            <p>
+	 *            Breve descripcion del juego.
 	 * @param turn
 	 *            First turn piece.
+	 *            <p>
+	 *            Ficha del primer turno de juego.
 	 */
 	protected void setStartingActions(Board board, String gameDesc, Piece turn) {
 		settings.setMessage("Starting '" + gameDesc + "'");
@@ -213,7 +358,8 @@ public abstract class GenericSwingView extends JFrame
 		settings.setMessage("Turn for " + pieceTurn);
 		setLastState(board, turn);
 		// Bring window to the front
-		if (lastTurn.equals(viewPiece)&& !(players.get(lastTurn).equals(randomPlayer) || players.get(lastTurn).equals(aiPlayer))) {
+		if (lastTurn.equals(viewPiece)
+				&& !(players.get(lastTurn).equals(randomPlayer) || players.get(lastTurn).equals(aiPlayer))) {
 			toFront();
 		}
 		if ((viewPiece == null || lastTurn.equals(viewPiece))
@@ -245,20 +391,54 @@ public abstract class GenericSwingView extends JFrame
 		}
 	}
 
+	/**
+	 * Show a message to {@code MANUAL} players about how to make a move.
+	 * <p>
+	 * Muestra información a los jugadores de modo {@code MANUAL} indicando como
+	 * realizar un movimiento.
+	 */
 	protected abstract void showHelp();
 
+	/**
+	 * Show a message to at the beginning of the game about how to make a move.
+	 * <p>
+	 * Muestra información al cominezo de la partida indicando como realizar un
+	 * movimiento.
+	 */
 	protected abstract void showStartingHelp();
 
+	/**
+	 * Set the {@code colorMap} of the view.
+	 * <p>
+	 * Establece el mapa {@code colorMap} de la vista.
+	 * 
+	 * @param colors
+	 *            List that indicates the color of the pieces, in the same
+	 *            order.
+	 *            <p>
+	 *            Lista que indica los colores de las piezas, con igual orden.
+	 */
 	public void setColorMap(List<Color> colors) {
 		for (int i = 0; i < pieces.size(); i++) {
 			this.colorMap.put(pieces.get(i), colors.get(i));
 		}
 	}
 
+	/**
+	 * Enable all the sub-panels that can be disabled.
+	 * <p>
+	 * Habilita todos los subpaneles que puedan ser deshabilitados.
+	 */
 	protected void enablePanels() {
 		settings.setEnabled(true, true, true);
 	}
 
+	/**
+	 * Disable all the sub-panels except the {@link QuitPanel}.
+	 * <p>
+	 * Deshabilita todos los subpaneles que puedan a escepcion del
+	 * {@link QuitPanel}.
+	 */
 	private void disablePanels() {
 		settings.setEnabled(false, false, true);
 	}
@@ -321,7 +501,17 @@ public abstract class GenericSwingView extends JFrame
 		}
 	}
 
-	public abstract void setManualPlayer(Piece p);
+	/**
+	 * Set the mode of a {@code piece} as {@code MANUAL}.
+	 * <p>
+	 * Establece el modo de una {@code piece} como {@code MANUAL}.
+	 * 
+	 * @param piece
+	 *            Piece to set {@code MANUAL} game mode.
+	 *            <p>
+	 *            Piece a establecer en modo {@code MANUAL}.
+	 */
+	public abstract void setManualPlayer(Piece piece);
 
 	@Override
 	public void quitPressed() {
@@ -334,6 +524,7 @@ public abstract class GenericSwingView extends JFrame
 		}
 	}
 
+	@Override
 	public void restartPressed() {
 		int response = JOptionPane.showConfirmDialog(null,
 				"Are sure you want to restart the game?\n (You will lose the game)", "Restart confirm",
@@ -346,11 +537,17 @@ public abstract class GenericSwingView extends JFrame
 
 	/**
 	 * Resizes a panel to a square form.
+	 * <p>
+	 * Cambia el tamaño de un panel a forma cuadrada
 	 * 
 	 * @param innerPanel
 	 *            Panel to resize.
+	 *            <p>
+	 *            Panel interior a reescalar.
 	 * @param container
 	 *            Panel that contains the panel witch will be resized.
+	 *            <p>
+	 *            Panel contenedor del panel a cambiar a tamaño cuadrado.
 	 */
 	private static void resizePreview(JPanel innerPanel, JPanel container) {
 		int w = container.getWidth();
@@ -360,18 +557,56 @@ public abstract class GenericSwingView extends JFrame
 		container.revalidate();
 	}
 
+	/**
+	 * Set the {@code player} of a {@code piece} as indicated.
+	 * <p>
+	 * Establece el jugador ({@code player}) de una {@code piece} como se
+	 * indique.
+	 * 
+	 * @param piece
+	 *            Piece to set {@code player}.
+	 *            <p>
+	 *            Pieza a establecer el jugador {@code player}.
+	 * @param player
+	 *            Player to associate to the {@code piece}.
+	 *            <p>
+	 *            Jugador a asociar con la ficha ({@code piece}).
+	 */
 	public void setPlayer(Piece piece, Player player) {
 		players.put(piece, player);
 	}
 
+	/**
+	 * Consults the last {@code move} selected by the user.
+	 * <p>
+	 * Proporciona el ultimo movimiento seleccionado por el usuario.
+	 * 
+	 * @return Last {@code move} selected.
+	 *         <p>
+	 *         Ultimo movimiento seleccionado.
+	 */
 	public GameMove getMove() {
 		return move;
 	}
 
+	/**
+	 * Resets the last {@code move} selected by the user.
+	 * <p>
+	 * Borra el ultimo movimiento seleccionado por el usuario.
+	 */
 	public void resetMove() {
 		move = null;
 	}
 
+	/**
+	 * Consults the piece to which this view belongs.
+	 * <p>
+	 * Proporciona la ficha a la que pertenece la vista.
+	 * 
+	 * @return The piece to which this view belongs.
+	 *         <p>
+	 *         La ficha a la que pertenece la vista.
+	 */
 	public Piece getViewPiece() {
 		return viewPiece;
 	}

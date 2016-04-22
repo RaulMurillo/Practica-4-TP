@@ -31,12 +31,14 @@ public class BoardGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Matrix of squares ({@link JLabel}s) that represents the cells of the board.
+	 * Matrix of squares ({@link JLabel}s) that represents the cells of the
+	 * board.
 	 * <p>
-	 * Matriz de squares ({@link JLabel}s) que representa las celdas del tablero.
+	 * Matriz de squares ({@link JLabel}s) que representa las celdas del
+	 * tablero.
 	 */
-	protected Square[][] squares; 
-	
+	protected Square[][] squares;
+
 	/**
 	 * Internal board of the game.
 	 * <p>
@@ -246,6 +248,8 @@ public class BoardGUI extends JPanel {
 			e.printStackTrace();
 		}
 		setBoard(board);
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
+				BorderFactory.createLoweredBevelBorder()));
 	}
 
 	/**
@@ -259,7 +263,7 @@ public class BoardGUI extends JPanel {
 	 *            Tablero del juego.
 	 */
 	public void setBoard(Board board) {
-		removeAll(); // discard previous squares
+		removeAll(); // Discard previous squares
 		this.board = board;
 		setLayout(new GridLayout(board.getRows(), board.getCols()));
 		initSquares();

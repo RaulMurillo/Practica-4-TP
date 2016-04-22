@@ -3,25 +3,71 @@ package es.ucm.fdi.tp.practica5.views;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * A panel for quit or restart the game.
+ * <p>
+ * Panel para abandonar o reiniciar el juego.
+ */
 public class QuitPanel extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Button for quit the game.
+	 * <p>
+	 * Boton para salir el juego.
+	 */
 	private JButton jbQuit;
+
+	/**
+	 * Button for restart the game.
+	 * <p>
+	 * Boton para reiniciar el juego.
+	 */
 	private JButton jbRestart;
 
+	/**
+	 * Listener of the class.
+	 * <p>
+	 * "Listener" de la clase.
+	 */
 	private QuitPanelListener controlsListener;
 
+	/**
+	 * The listener interface for sending action events.
+	 * <p>
+	 * Interfaz "listener" de la clase para enviar eventos.
+	 */
 	public interface QuitPanelListener {
+
+		/**
+		 * Notifies that Quit button has been pressed.
+		 * <p>
+		 * Notifica que el boton de abandono ha sido pulsado.
+		 */
 		void quitPressed();
 
+		/**
+		 * Notifies that Restart button has been pressed.
+		 * <p>
+		 * Notifica que el boton de reinicio ha sido pulsado.
+		 */
 		void restartPressed();
 	}
 
 	/**
-	 * Create the panel.
+	 * Creates a panel with one (or two) {@link JButton} for quit (or restart)
+	 * the game.
+	 * <p>
+	 * Crea un panel con un (o dos) {@link JButton} para salir (o reiniciar) el
+	 * 
+	 * @param controlsListener
+	 *            Listener of the class.
+	 *            <p>
+	 *            "Listener" de la clase.
 	 */
 	public QuitPanel(QuitPanelListener controlsListener) {
 		this.controlsListener = controlsListener;
@@ -29,7 +75,9 @@ public class QuitPanel extends JPanel {
 	}
 
 	/**
-	 * Initialize the contents of the panel.
+	 * Initialize the default contents of the panel.
+	 * <p>
+	 * Inicializa los contenidos predeterminados del panel.
 	 */
 	private void initialize() {
 		jbQuit = new JButton("Quit");
@@ -42,6 +90,11 @@ public class QuitPanel extends JPanel {
 		add(jbQuit);
 	}
 
+	/**
+	 * Sets the Restart {@link JButton} in the panel.
+	 * <p>
+	 * Establece el boton de reinicio en el panel.
+	 */
 	public void setRestartButton() {
 		jbRestart = new JButton("Restart");
 		jbRestart.addActionListener(new ActionListener() {

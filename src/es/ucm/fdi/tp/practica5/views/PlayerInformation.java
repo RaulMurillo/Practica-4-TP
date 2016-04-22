@@ -50,21 +50,51 @@ public class PlayerInformation extends JPanel {
 	 */
 	private Map<Piece, Color> colorMap;
 
-	
-	public PlayerInformation(Board b, List<Piece> p, Map<Piece, Color> map, Piece viewPiece) {
-		updateColors(map);
-		initializeTable(p);
-		updateNumPieces(p, b);
-		for (int i = 0; i < p.size(); i++) {
-			if (viewPiece == null || viewPiece.equals(p.get(i)))
+	/**
+	 * Creates a panel with a {@link JTable} that shows the game mode and the
+	 * number of pieces of each player. Each row is painted in same color as
+	 * pieces in the board.
+	 * <p>
+	 * Crea un panel con un {@link JTable} que muestra el modo de juego y el
+	 * numero de piezas de cada jugador. Cada fila es pintada en el mismo color
+	 * que las piezas en el tablero.
+	 * 
+	 * @param board
+	 *            Internal board of the game.
+	 *            <p>
+	 *            Tablero interno del juego.
+	 * @param pieces
+	 *            List of pieces on the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
+	 * @param colorMap
+	 *            Map that indicates the color of the pieces in the board.
+	 *            <p>
+	 *            Mapa que indica los colores de las piezas del tablero.
+	 * @param viewPiece
+	 *            The piece to which this view belongs ({@code null} means that
+	 *            it belongs to all pieces).
+	 *            <p>
+	 *            La ficha a la que pertenece la vista ({@code null} si la vista
+	 *            pertenece a todos los jugadores).
+	 */
+	public PlayerInformation(Board board, List<Piece> pieces, Map<Piece, Color> colorMap, Piece viewPiece) {
+		setBorder(new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+		updateColors(colorMap);
+		initializeTable(pieces);
+		updateNumPieces(pieces, board);
+		for (int i = 0; i < pieces.size(); i++) {
+			if (viewPiece == null || viewPiece.equals(pieces.get(i)))
 				updateMode(i, "Manual");
 		}
 	}
 
 	/**
-	 * Initialize the table and the contents .
+	 * Initialize the table.
 	 * <p>
-	 * Inicializa la tabla y sus contenidos.
+	 * Inicializa la tabla.
 	 * 
 	 * @param pieces
 	 *            List of pieces in the game.
@@ -72,9 +102,6 @@ public class PlayerInformation extends JPanel {
 	 *            Lista de piezas del juego.
 	 */
 	private void initializeTable(List<Piece> pieces) {
-		this.setBorder(
-				new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		data = new Object[pieces.size()][3];
 		setPieces(pieces);
 		String[] columnNames = { "Player", "Mode", "#Pieces" };
@@ -84,6 +111,7 @@ public class PlayerInformation extends JPanel {
 			 */
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false; // Table cels ARE NOT editable.
 			}
@@ -109,15 +137,21 @@ public class PlayerInformation extends JPanel {
 				return this;
 			}
 		});
+
 		JScrollPane jspScroll = new JScrollPane(jtTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.add(jspScroll);
 	}
 
 	/**
-	 * Initialize the table row data according to the number of players.
+	 * Sets the table's pieces' field.
+	 * <p>
+	 * Establece el campo/columna de piezas de la tabla.
 	 * 
-	 * @return
+	 * @param pieces
+	 *            List of pieces in the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
 	 */
 	private void setPieces(List<Piece> pieces) {
 		for (int j = 0; j < pieces.size(); j++) {
@@ -125,16 +159,55 @@ public class PlayerInformation extends JPanel {
 		}
 	}
 
-	public void updateColors(Map<Piece, Color> map) {
-		colorMap = map;
+	/**
+	 * Updates the pieces-colors map for painting rows.
+	 * <p>
+	 * Actualiza el mapa de piezas-colores para pintar filas.
+	 * 
+	 * @param colorMap
+	 *            New pieces-colors map.
+	 *            <p>
+	 *            Nuevo mapa de piezas-colores.
+	 */
+	public void updateColors(Map<Piece, Color> colorMap) {
+		this.colorMap = colorMap;
 		repaint();
 	}
 
-	public void updateMode(int p, String mode) {
-		data[p][1] = mode;
+	/**
+	 * Updates a player's game mode in the table.
+	 * <p>
+	 * Actualiza el modo de juego de un jugador en la tabla.
+	 * 
+	 * @param player
+	 *            Number of table row where the player to change mode is.
+	 *            <p>
+	 *            Numero de fila de la tabla en la que el jugador en cuestion se
+	 *            encuentra.
+	 * @param mode
+	 *            New game mode of the player.
+	 *            <p>
+	 *            Nuevo modo de juego del jugador.
+	 */
+	public void updateMode(int player, String mode) {
+		data[player][1] = mode;
 		repaint();
 	}
 
+	/**
+	 * Updates the number of pieces on board of all the players in game.
+	 * <p>
+	 * Actualiza el numero de piezas en el tablero de todos los jugadores.
+	 * 
+	 * @param pieces
+	 *            List of pieces in the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
+	 * @param board
+	 *            Board of the game.
+	 *            <p>
+	 *            Tablero del juego.
+	 */
 	public void updateNumPieces(List<Piece> pieces, Board board) {
 		for (int j = 0; j < pieces.size(); j++) {
 			if (board.getPieceCount(pieces.get(j)) != null)
@@ -144,14 +217,19 @@ public class PlayerInformation extends JPanel {
 	}
 
 	/**
-	 * Generates the opposite color by converting the RGB values into YIQ
-	 * values.
+	 * Generates a contrast color by converting the RGB values into YIQ values.
+	 * <p>
+	 * Genera un color de contraste para un color dado.
 	 * 
 	 * @param color
-	 *            Color to generate opposite.
+	 *            Color to generate contrast.
+	 *            <p>
+	 *            Color a contrastar.
 	 * @return Opposite color in RGB.
+	 *         <p>
+	 *         Color de contraste respecto al codigo RGB.
 	 */
-	public Color getContrastColor(Color color) {
+	private Color getContrastColor(Color color) {
 		double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
 		return y >= 128 ? Color.black : Color.white;
 	}
