@@ -147,7 +147,6 @@ public abstract class GenericSwingView extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
-				boardUI.update();
 			}
 		});
 		revalidate();
