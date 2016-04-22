@@ -140,6 +140,7 @@ public abstract class GenericSwingView extends JFrame
 
 		settings = new SettingsPanel(pieces, colorMap, board, this, viewPiece);
 		settings.configAutoMoves(randomPlayer != null, aiPlayer != null);
+		settings.configPlayerModes(randomPlayer != null, aiPlayer != null);
 		add(settings, BorderLayout.EAST);
 
 		addComponentListener(new ComponentAdapter() {

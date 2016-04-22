@@ -8,7 +8,7 @@ import javax.swing.border.TitledBorder;
 /**
  * A panel for making automatic moves when playing MANUAL mode.
  * <p>
- * Panel para realizar movimientos automaticos cuando se juega en modo manual.
+ * Panel para realizar movimientos automaticos cuando se juega en modo MANUAL.
  */
 public class AutomaticMoves extends JPanel {
 
@@ -19,40 +19,58 @@ public class AutomaticMoves extends JPanel {
 
 	/**
 	 * Listener of the class.
+	 * <p>
+	 * "Listener" de la clase.
 	 */
 	private AutoMovesListener controlsListener;
 
 	/**
 	 * Button for AI moves.
+	 * <p>
+	 * Boton para movimientos inteligentes.
 	 */
 	private JButton jbIntelligent;
 
 	/**
 	 * Button for random moves.
+	 * <p>
+	 * Boton para movimientos aleatorios.
 	 */
 	private JButton jbRandom;
 
 	/**
-	 * Listener of the class.
+	 * The listener interface for sending action events.
+	 * <p>
+	 * Interfaz "listener" de la clase para enviar eventos.
 	 */
 	public interface AutoMovesListener {
 
 		/**
-		 * Notifies Random move button has been pressed.
+		 * Notifies RANDOM move button has been pressed.
+		 * <p>
+		 * Notifica que el boton de movimiento aleatorio ha sido pulsado.
 		 */
 		void randomPressed();
 
 		/**
-		 * Notifies AI move button has been pressed.
+		 * Notifies INTELLIGENT move button has been pressed.
+		 * <p>
+		 * Notifica que el boton de movimiento inteligente ha sido pulsado.
 		 */
 		void aiPressed();
 	}
 
 	/**
-	 * Create the panel.
+	 * Creates a panel with buttons for making automatics move while playing
+	 * MANUAL mode.
+	 * <p>
+	 * Crea un panel con botones para realizar movimientos automaticos mientras
+	 * se juega en modo MANUAL.
 	 * 
 	 * @param controlsListener
 	 *            Listener of the class.
+	 *            <p>
+	 *            "Listener" de la clase.
 	 */
 	public AutomaticMoves(AutoMovesListener controlsListener) {
 		this.controlsListener = controlsListener;
@@ -60,7 +78,9 @@ public class AutomaticMoves extends JPanel {
 	}
 
 	/**
-	 * Add a button to the panel for making random moves.
+	 * Adds a button to the panel for making RANDOM moves.
+	 * <p>
+	 * Añade al panel un boton para realizar movimientos aleatorios.
 	 */
 	public void addRandomButton() {
 		jbRandom = new JButton("Random");
@@ -74,7 +94,9 @@ public class AutomaticMoves extends JPanel {
 	}
 
 	/**
-	 * Add a button to the panel for making AI moves.
+	 * Adds a button to the panel for making AI moves.
+	 * <p>
+	 * Añade al panel un boton para realizar movimientos inteligentes.
 	 */
 	public void addIntelligentButton() {
 		jbIntelligent = new JButton("Intelligent");
@@ -89,8 +111,12 @@ public class AutomaticMoves extends JPanel {
 
 	@Override
 	public void setEnabled(boolean b) {
-		jbIntelligent.setEnabled(b);
-		jbRandom.setEnabled(b);
+		if (jbIntelligent != null) {
+			jbIntelligent.setEnabled(b);
+		}
+		if (jbRandom != null) {
+			jbRandom.setEnabled(b);
+		}
 	}
 
 }

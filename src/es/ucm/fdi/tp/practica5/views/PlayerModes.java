@@ -16,6 +16,7 @@ public class PlayerModes extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private PlayerModesListener controlsListener;
 	private JButton jbSet;
+	private JComboBox<String> jcbMode;
 
 	public interface PlayerModesListener {
 		void changeModePressed(Piece p, String mode);
@@ -34,11 +35,6 @@ public class PlayerModes extends JPanel {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		JComboBox<Piece> jcbPlayer = new JComboBox(pieces.toArray());
 		add(jcbPlayer);
-
-		String[] modesStrings = { "Manual", "Random", "Intelligent" };
-		JComboBox<String> jcbMode = new JComboBox<String>(modesStrings);
-		add(jcbMode);
-
 		jbSet = new JButton("Set");
 		jbSet.addActionListener(new ActionListener() {
 			@Override
@@ -49,11 +45,27 @@ public class PlayerModes extends JPanel {
 				;
 			}
 		});
-		add(jbSet);
 	}
-	
-	public void setEnabled(boolean b){
+
+	public void setEnabled(boolean b) {
 		jbSet.setEnabled(b);
+	}
+
+	public void addModes(boolean rand, boolean ai) {
+		if (!rand || !ai) {
+			if (!ai) {
+				String[] modesStrings = { "Manual", "Random" };
+				jcbMode = new JComboBox<String>(modesStrings);
+			} else {
+				String[] modesStrings = { "Manual", "Intelligent" };
+				jcbMode = new JComboBox<String>(modesStrings);
+			}
+		} else {
+			String[] modesStrings = { "Manual", "Random", "Intelligent" };
+			jcbMode = new JComboBox<String>(modesStrings);
+		}
+		add(jcbMode);
+		add(jbSet);
 	}
 
 }

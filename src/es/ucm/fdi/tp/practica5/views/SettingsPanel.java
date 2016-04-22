@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
-
 public class SettingsPanel extends JPanel {
 	/**
 	 * 
@@ -26,7 +25,8 @@ public class SettingsPanel extends JPanel {
 	private Board board;
 	private List<Piece> pieces;
 
-	public SettingsPanel(List<Piece> pieces, Map<Piece, Color> map, Board board, GenericSwingView listener, Piece viewPiece) {
+	public SettingsPanel(List<Piece> pieces, Map<Piece, Color> map, Board board, GenericSwingView listener,
+			Piece viewPiece) {
 		this.pieces = pieces;
 		this.board = board;
 		initComponents(map, listener, viewPiece);
@@ -34,8 +34,8 @@ public class SettingsPanel extends JPanel {
 
 	private void initComponents(Map<Piece, Color> map, GenericSwingView listener, Piece viewPiece) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		//Status Messages text area
+
+		// Status Messages text area
 		textArea = new StatusMessages();
 		add(textArea);
 
@@ -71,7 +71,7 @@ public class SettingsPanel extends JPanel {
 		autoMovPane.setEnabled(moves);
 
 		quitPanel.setEnabled(quit);
-		
+
 		modeSelector.setEnabled(modes);
 	}
 
@@ -107,12 +107,21 @@ public class SettingsPanel extends JPanel {
 				autoMovPane.addIntelligentButton();
 		}
 	}
+
 	public void setBoard(Board board) {
 		this.board = board;
 		updateTablePieces();
-		for(Piece p:pieces){
+		for (Piece p : pieces) {
 			updateTableMode(p, "Manual");
-			
+
+		}
+	}
+
+	public void configPlayerModes(boolean rand, boolean ai) {
+		if (!rand && !ai) {
+			modeSelector.setVisible(false);
+		} else {
+			modeSelector.addModes(rand, ai);
 		}
 	}
 }
