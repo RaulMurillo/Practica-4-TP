@@ -61,10 +61,10 @@ public class AutomaticMoves extends JPanel {
 	}
 
 	/**
-	 * Creates a panel with buttons for making automatics move while playing
+	 * Creates a panel with ({@link JButton})s for making automatics move while playing
 	 * MANUAL mode.
 	 * <p>
-	 * Crea un panel con botones para realizar movimientos automaticos mientras
+	 * Crea un panel con botones ({@link JButton}) para realizar movimientos automaticos mientras
 	 * se juega en modo MANUAL.
 	 * 
 	 * @param controlsListener

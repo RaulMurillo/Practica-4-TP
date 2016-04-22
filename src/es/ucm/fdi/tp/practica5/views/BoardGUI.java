@@ -31,12 +31,12 @@ public class BoardGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Matrix of labels that represents the cells of the board.
+	 * Matrix of squares ({@link JLabel}s) that represents the cells of the board.
 	 * <p>
-	 * Matriz de etiquetas que representa las celdas del tablero.
+	 * Matriz de squares ({@link JLabel}s) que representa las celdas del tablero.
 	 */
-	protected Square[][] squares;
-
+	protected Square[][] squares; 
+	
 	/**
 	 * Internal board of the game.
 	 * <p>
@@ -173,16 +173,16 @@ public class BoardGUI extends JPanel {
 		private int col;
 
 		/**
-		 * Indicates if there is an obstacle in the square.
+		 * Indicates the square contains an obstacle.
 		 * <p>
-		 * Indica si hay un obstaculo en el square.
+		 * Indica que el square continene un obstaculo.
 		 */
 		private boolean obstacle;
 
 		/**
-		 * Indicates if there is nothing in the square.
+		 * Indicates the square contains nothing.
 		 * <p>
-		 * Indica si no hay nada en el square.
+		 * Indica que el square no contiene nada.
 		 */
 		private boolean empty;
 

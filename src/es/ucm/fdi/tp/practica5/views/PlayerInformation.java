@@ -15,19 +15,42 @@ import javax.swing.table.DefaultTableCellRenderer;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
+/**
+ * A panel for showing the players' information.
+ * <p>
+ * Panel para mostrar la informacion de los jugadores.
+ */
 public class PlayerInformation extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTable jtTable;
-	private Object[][] data;
-	private Map<Piece, Color> colorMap;
 
 	/**
-	 * Create the application.
+	 * Table where the information is shown.
+	 * <p>
+	 * Tabla donde se muestra la informacion.
 	 */
+	private JTable jtTable;
+
+	/**
+	 * A double array with the information to show in the table. Different rows
+	 * and columns indicates different players and fields.
+	 * <p>
+	 * Array doble con la informacion que se muestra en la tabla. Los jugadores
+	 * se ordenan por filas y los campos por columnas.
+	 */
+	private Object[][] data;
+
+	/**
+	 * A map that associates pieces with colors.
+	 * <p>
+	 * Mapa que asocia fichas con colores.
+	 */
+	private Map<Piece, Color> colorMap;
+
+	
 	public PlayerInformation(Board b, List<Piece> p, Map<Piece, Color> map, Piece viewPiece) {
 		updateColors(map);
 		initializeTable(p);
@@ -39,7 +62,14 @@ public class PlayerInformation extends JPanel {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the table and the contents .
+	 * <p>
+	 * Inicializa la tabla y sus contenidos.
+	 * 
+	 * @param pieces
+	 *            List of pieces in the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
 	 */
 	private void initializeTable(List<Piece> pieces) {
 		this.setBorder(
@@ -112,7 +142,7 @@ public class PlayerInformation extends JPanel {
 		}
 		repaint();
 	}
-	
+
 	/**
 	 * Generates the opposite color by converting the RGB values into YIQ
 	 * values.
