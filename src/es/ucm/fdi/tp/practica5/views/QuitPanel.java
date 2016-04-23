@@ -87,6 +87,7 @@ public class QuitPanel extends JPanel {
 				controlsListener.quitPressed();
 			}
 		});
+		jbQuit.setToolTipText("<html>Quit the game");
 		add(jbQuit);
 	}
 
@@ -103,6 +104,7 @@ public class QuitPanel extends JPanel {
 				controlsListener.restartPressed();
 			}
 		});
+		jbRestart.setToolTipText("<html>Restart the game");
 		add(jbRestart);
 	}
 

@@ -111,6 +111,7 @@ public class PieceColors extends JPanel {
 				controlsListener.changeColorPressed(jcbPieces.getItemAt(pieceIndex), c);
 			}
 		});
+		jbChange.setToolTipText("<html>Change the color of the selected pieces");
 		add(jbChange);
 	}
 }

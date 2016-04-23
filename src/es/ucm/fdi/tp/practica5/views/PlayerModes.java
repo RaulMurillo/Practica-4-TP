@@ -94,6 +94,7 @@ public class PlayerModes extends JPanel {
 				;
 			}
 		});
+		jbSet.setToolTipText("<html>Change the player game mode as selected");
 	}
 
 	@Override

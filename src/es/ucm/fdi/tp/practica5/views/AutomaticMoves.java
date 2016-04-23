@@ -90,6 +90,7 @@ public class AutomaticMoves extends JPanel {
 				controlsListener.randomPressed();
 			}
 		});
+		jbRandom.setToolTipText("<html>Make a random move");
 		add(jbRandom);
 	}
 
@@ -106,6 +107,7 @@ public class AutomaticMoves extends JPanel {
 				controlsListener.aiPressed();
 			}
 		});
+		jbIntelligent.setToolTipText("<html>Make an intelligent move");
 		add(jbIntelligent);
 	}
 

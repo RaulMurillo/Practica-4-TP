@@ -72,6 +72,7 @@ public class StatusMessages extends JPanel {
 			}
 		});
 		jbReset.setAlignmentX(Component.CENTER_ALIGNMENT);
+		jbReset.setToolTipText("<html>Clear the panel from messages");
 		add(jbReset);
 	}
 
