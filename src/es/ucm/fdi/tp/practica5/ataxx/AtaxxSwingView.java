@@ -5,17 +5,16 @@ import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica4.ataxx.AtaxxMove;
+import es.ucm.fdi.tp.practica5.ataxx.AtaxxMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
-
 
 /**
  * 
- * This class that extends GenericSwingView, adds to the abstract class 
- * the new functionality that allow us to play ataxx in swing.
+ * This class that extends GenericSwingView, adds to the abstract class the new
+ * functionality that allow us to play ataxx in swing.
  * <p>
- * Esta clase que extiende GenericSwingView añade a la clase abstracta la
- * nueva funcionalidad que permite jugar a ataxx en swing.
+ * Esta clase que extiende GenericSwingView aÃ±ade a la clase abstracta la nueva
+ * funcionalidad que permite jugar a ataxx en swing.
  * <p>
  * 
  * @author Antonio Valdivia y Raul Murillo
@@ -41,11 +40,11 @@ public class AtaxxSwingView extends GenericSwingView {
 	private int iniRow;
 
 	/**
-	 * Construct a swing view for playing ataxx{@code game}, with a {@code piece}
-	 * associated to the view.
+	 * Construct a swing view for playing ataxx{@code game}, with a
+	 * {@code piece} associated to the view.
 	 * <p>
-	 * Construye una vista para jugar a ataxx {@code game} con una
-	 * pieza asociada a la vista.
+	 * Construye una vista para jugar a ataxx {@code game} con una pieza
+	 * asociada a la vista.
 	 * 
 	 * @param g
 	 *            Observer of the view.
@@ -77,16 +76,17 @@ public class AtaxxSwingView extends GenericSwingView {
 	 *            automaticos. Si es {@code null}, la vista no permite jugadores
 	 *            IA (automaticos).
 	 */
-	public AtaxxSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player random, Player ai) {
+	public AtaxxSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player random,
+			Player ai) {
 		super(g, controller, viewPiece, random, ai);
 		resetMove();
 	}
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		//If it is your turn
+		// If it is your turn
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
-			//We have not selected a piece to move yet
+			// We have not selected a piece to move yet
 			if (iniCol == -1) {
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
 					settings.setEnabled(false, true, true);
@@ -96,7 +96,7 @@ public class AtaxxSwingView extends GenericSwingView {
 					showHelp();
 				}
 			}
-			//We have a piece selected
+			// We have a piece selected
 			else {
 				boardUI.deselectSquare(iniRow, iniCol);
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
