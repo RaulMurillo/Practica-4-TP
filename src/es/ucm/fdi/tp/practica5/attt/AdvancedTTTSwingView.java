@@ -7,7 +7,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.ataxx.AtaxxMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 /**
@@ -145,7 +144,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 				iniRow = row;
 				boardUI.selectSquare(row, col);
 			} else {
-				if (lastBoard.getPosition(row, col) == null && AtaxxMove.distance(row, col, iniRow, iniCol) <= 2) {
+				if (lastBoard.getPosition(row, col) == null) {
 					move = new AdvancedTTTMove(iniRow, iniCol, row, col, lastTurn);
 					controller.makeMove(players.get(lastTurn));
 					enablePanels();
