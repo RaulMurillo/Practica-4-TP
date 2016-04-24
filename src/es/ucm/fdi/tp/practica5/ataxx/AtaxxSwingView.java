@@ -8,23 +8,85 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica4.ataxx.AtaxxMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
+
+/**
+ * 
+ * This class that extends GenericSwingView, adds to the abstract class 
+ * the new functionality that allow us to play ataxx in swing.
+ * <p>
+ * Esta clase que extiende GenericSwingView añade a la clase abstracta la
+ * nueva funcionalidad que permite jugar a ataxx en swing.
+ * <p>
+ * 
+ * @author Antonio Valdivia y Raul Murillo
+ *
+ */
 public class AtaxxSwingView extends GenericSwingView {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int iniCol = -1;
-	private int iniRow = -1;
+	/**
+	 * Origin colum
+	 * <p>
+	 * Columna de origen
+	 */
+	private int iniCol;
+	/**
+	 * Origin row
+	 * <p>
+	 * Fila de origen
+	 */
+	private int iniRow;
 
-	public AtaxxSwingView(Observable<GameObserver> g, Controller c, Piece p, Player random, Player ai) {
-		super(g, c, p, random, ai);
+	/**
+	 * Construct a swing view for playing ataxx{@code game}, with a {@code piece}
+	 * associated to the view.
+	 * <p>
+	 * Construye una vista para jugar a ataxx {@code game} con una
+	 * pieza asociada a la vista.
+	 * 
+	 * @param g
+	 *            Observer of the view.
+	 *            <p>
+	 *            Observador de la vista.
+	 * @param controller
+	 *            Controller of the view.
+	 *            <p>
+	 *            Controlador de la vista.
+	 * @param viewPiece
+	 *            The piece to which this view belongs ({@code null} means that
+	 *            it belongs to all pieces).
+	 *            <p>
+	 *            La ficha a la que pertenece la vista ({@code null} si la vista
+	 *            pertenece a todos los jugadores).
+	 * @param random
+	 *            The player to be used for generating random moves, if
+	 *            {@code null} the view should not support random player.
+	 *            <p>
+	 *            El jugador que se va a utilizar para generar movimientos
+	 *            aleatorios. Si es {@code null}, la vista no permite jugadores
+	 *            aleatorios.
+	 * @param ai
+	 *            The player to be used for generating automatics moves, if
+	 *            {@code null} the view should not support AI (automatic)
+	 *            player.
+	 *            <p>
+	 *            El jugador que se va a utilizar para generar movimientos
+	 *            automaticos. Si es {@code null}, la vista no permite jugadores
+	 *            IA (automaticos).
+	 */
+	public AtaxxSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player random, Player ai) {
+		super(g, controller, viewPiece, random, ai);
 		resetMove();
 	}
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
+		//If it is your turn
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
+			//We have not selected a piece to move yet
 			if (iniCol == -1) {
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
 					settings.setEnabled(false, true, true);
@@ -33,7 +95,9 @@ public class AtaxxSwingView extends GenericSwingView {
 					boardUI.selectSquare(row, col);
 					showHelp();
 				}
-			} else {
+			}
+			//We have a piece selected
+			else {
 				boardUI.deselectSquare(iniRow, iniCol);
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {
 					resetMove();
@@ -64,10 +128,6 @@ public class AtaxxSwingView extends GenericSwingView {
 	}
 
 	@Override
-	public void setManualPlayer(Piece p) {
-		players.put(p, AtaxxFactoryExt.createSwingPlayer(this));
-	}
-
 	public void resetMove() {
 		super.resetMove();
 		if (iniRow != -1)
@@ -78,7 +138,6 @@ public class AtaxxSwingView extends GenericSwingView {
 
 	@Override
 	protected void showHelp() {
-		System.err.println(iniCol+""+iniRow);
 		if (iniCol == -1) {
 			settings.setMessage("Click on an origin piece");
 		} else {

@@ -20,6 +20,7 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
+import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
@@ -227,6 +228,7 @@ public abstract class GenericSwingView extends JFrame
 		// Set GameStart comments
 		setStartingActions(board, gameDesc, turn);
 		boardUI.update();
+		if(viewPiece!=null && !turn.equals(viewPiece))toBack();
 	}
 
 	/**
@@ -263,7 +265,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Short description of the game.
 	 */
 	private void initWindow(Board board, String gameDesc) {
-		setSize(600, 500);
+		setSize(680, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		String view = "";
@@ -285,7 +287,6 @@ public abstract class GenericSwingView extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
-				boardUI.update();
 			}
 		});
 		revalidate();
@@ -511,7 +512,9 @@ public abstract class GenericSwingView extends JFrame
 	 *            <p>
 	 *            Piece a establecer en modo {@code MANUAL}.
 	 */
-	public abstract void setManualPlayer(Piece piece);
+	public void setManualPlayer(Piece piece){
+		players.put(piece, new SwingPlayer(this));
+	}
 
 	@Override
 	public void quitPressed() {

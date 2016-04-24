@@ -24,18 +24,22 @@ public class SwingPlayer extends Player {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * List of moves that can be played by the player (typically include one
-	 * type of move for simple games, e.g., Tic-Tac-Toe).
-	 * 
+	 * Swing view associated to a manual swing player.
 	 * <p>
-	 * Lista de tipos de movimientos que puede jugar el jugador (solo un tipo de
-	 * movimientos para juegos simples).
+	 * Vista de ventana asociada a un jugador manual de swing.
 	 */
-
-
 	private GenericSwingView view;
 
-	public SwingPlayer(List<GameMove> availableMoves, GenericSwingView view) {
+	/**
+	 * Constructor of the class.
+	 * <p>
+	 * Constructor de la clase.
+	 * @param view
+	 * 			View asociated to the player
+	 * <p>
+	 * 			Vista asociada al jugador
+	 */
+	public SwingPlayer(GenericSwingView view) {
 		this.view = view;
 	}
 
@@ -45,6 +49,7 @@ public class SwingPlayer extends Player {
 		if (newMove != null) {
 			return newMove;
 		}
+		//This point should be unreachable
 		throw new GameError("Invalid move");
 	}
 }
