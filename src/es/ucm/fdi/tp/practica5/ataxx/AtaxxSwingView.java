@@ -130,8 +130,9 @@ public class AtaxxSwingView extends GenericSwingView {
 	@Override
 	public void resetMove() {
 		super.resetMove();
-		if (iniRow != -1)
+		if (iniRow != -1 && boardUI != null) {
 			boardUI.deselectSquare(iniRow, iniCol);
+		}
 		iniRow = -1;
 		iniCol = -1;
 	}
