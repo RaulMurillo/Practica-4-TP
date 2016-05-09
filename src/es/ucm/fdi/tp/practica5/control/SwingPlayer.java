@@ -34,10 +34,11 @@ public class SwingPlayer extends Player {
 	 * Constructor of the class.
 	 * <p>
 	 * Constructor de la clase.
+	 * 
 	 * @param view
-	 * 			View asociated to the player
-	 * <p>
-	 * 			Vista asociada al jugador
+	 *            View asociated to the player
+	 *            <p>
+	 *            Vista asociada al jugador
 	 */
 	public SwingPlayer(GenericSwingView view) {
 		this.view = view;
@@ -49,7 +50,7 @@ public class SwingPlayer extends Player {
 		if (newMove != null) {
 			return newMove;
 		}
-		//This point should be unreachable
+		// This point should be unreachable
 		throw new GameError("Invalid move");
 	}
 }

@@ -1,0 +1,13 @@
+Raul Murillo Montero
+Antonio Valdivia de la Torre
+----------------------------
+2º DG Ingenieria Informatica - Matematicas
+
+CAMBIOS SOBRE LA PRACTICA 4:
+* Las constantes e instancias de enum ahora estan todas en mayusculas.
+* Resuleto problema al introducir obstaculos y no dimension: ahora se crea un juego de 5x5 con n obstaculos (no da error).
+* Mejorados algunos nombre de variables significativas (por ejemplo, se cambio destiny por target).
+* Mejorados los bucles de recorrido de casillas colindantes.
+* No se declaran variables sin inicializar.
+* Mejor especificacion del algoritmo de simetria de obstaculos.
+* Se ha eliminado la clase UtilsPr4. El unico metodo que contenia se ha movido a la clase desde la que se llama (AtaxxMove).

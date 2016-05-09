@@ -8,14 +8,13 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.connectn.ConnectNMove;
 import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
-
 /**
  * 
- * This class that extends GenericSwingView, adds to the abstract class 
- * the new functionality that allow us to play Connect N in swing.
+ * This class that extends GenericSwingView, adds to the abstract class the new
+ * functionality that allow us to play Connect N in swing.
  * <p>
- * Esta clase que extiende GenericSwingView añade a la clase abstracta la
- * nueva funcionalidad que permite jugar a Connect N en swing.
+ * Esta clase que extiende GenericSwingView aï¿½ade a la clase abstracta la nueva
+ * funcionalidad que permite jugar a Connect N en swing.
  * <p>
  * 
  * @author Antonio Valdivia y Raul Murillo
@@ -28,13 +27,12 @@ public class ConnectNSwingView extends GenericSwingView {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	/**
-	 * Construct a swing view for playing connect N{@code game}, with a {@code piece}
-	 * associated to the view.
+	 * Construct a swing view for playing connect N{@code game}, with a
+	 * {@code piece} associated to the view.
 	 * <p>
-	 * Construye una vista para jugar a connect N {@code game} con una
-	 * pieza asociada a la vista.
+	 * Construye una vista para jugar a connect N {@code game} con una pieza
+	 * asociada a la vista.
 	 * 
 	 * @param g
 	 *            Observer of the view.
@@ -66,25 +64,25 @@ public class ConnectNSwingView extends GenericSwingView {
 	 *            automaticos. Si es {@code null}, la vista no permite jugadores
 	 *            IA (automaticos).
 	 */
-	public ConnectNSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player random, Player ai) {
+	public ConnectNSwingView(Observable<GameObserver> g, Controller controller, Piece viewPiece, Player random,
+			Player ai) {
 		super(g, controller, viewPiece, random, ai);
 	}
 
 	@Override
 	public void leftButtonPressed(int row, int col) {
-		if(lastBoard.getPosition(row, col) == null){
+		if (lastBoard.getPosition(row, col) == null) {
 			move = new ConnectNMove(row, col, lastTurn);
 			controller.makeMove(players.get(lastTurn));
-			}
-			else settings.setMessage("Invalid move");
-			resetMove();
+		} else
+			settings.setMessage("Invalid move");
+		resetMove();
 	}
 
 	@Override
 	public void rightButtonPressed(int row, int col) {
 		// TODO Auto-generated method stub
 	}
-
 
 	@Override
 	protected void showHelp() {
