@@ -613,5 +613,13 @@ public abstract class GenericSwingView extends JFrame
 	public Piece getViewPiece() {
 		return viewPiece;
 	}
-
+	/**
+	 * 
+	 * @return a copy of the current board
+	 * <p>
+	 * 		devuelve una copia del tablero actual
+	 */
+	public Board getLastBoard(){
+		return lastBoard;
+	}
 }
