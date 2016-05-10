@@ -34,13 +34,18 @@ public class ProxyPlayer extends Player implements GameObserver {
 	private String hostname;
 	
 	private Controller controller;
+	private List<Piece> pieces;
+	private GameFactory gameFactory;
+	private Piece localPiece;
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	GameMove move;
-		
+	private GameMove move;
+
+	
 	public static abstract class ControlMessage implements Serializable {
 		/**
 		 * 
@@ -51,20 +56,22 @@ public class ProxyPlayer extends Player implements GameObserver {
 		public void initializeConnection(ProxyController proxyController){}
 	}
 	
-	public ProxyPlayer(Controller controller){
-		this("localserver", controller);
+	public ProxyPlayer(Controller controller,GameFactory gameFactory, List<Piece> pieces, Piece localPiece){
+		this("localserver", controller, gameFactory, pieces, localPiece);
 	};
 	
-	public ProxyPlayer(String hostname, Controller controller){
+	public ProxyPlayer(String hostname, Controller controller, GameFactory gameFactory, List<Piece> pieces, Piece localPiece){
 		this.hostname = hostname;
 		this.controller = controller;
+		this.gameFactory = gameFactory;
+		this.pieces = pieces;
+		this.localPiece = localPiece;
 	}
 	
 	
 	 public void start(final Socket socket) throws IOException {
 	        try {
 	            oos = new ObjectOutputStream(socket.getOutputStream());
-	            
 	            new Thread(new Runnable() {
 	                public void run() {
 	                    try {
@@ -91,6 +98,7 @@ public class ProxyPlayer extends Player implements GameObserver {
 						}
 	                }
 	            }, hostname+"Listener").start();
+	            newConnection();
 	        } catch (IOException e) {
 	            log.log(Level.WARNING, "Error while handling client connection", e);
 	        }
@@ -230,20 +238,19 @@ public class ProxyPlayer extends Player implements GameObserver {
 		
 	}
 	
-	public void newConnection(Game g, List<Piece> p, GameFactory gf, Piece lp) {
+	public void newConnection() {
 		sendData(new ControlMessage(){
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 			
-			Game game = g;
-			List<Piece> pieces =p ;
-			GameFactory gameFactory = gf;
-			Piece localPiece = lp;
+			List<Piece> p = pieces ;
+			GameFactory gf = gameFactory;
+			Piece lp = localPiece;
 			@Override
 			public void initializeConnection(ProxyController proxyController){
-				proxyController.connectionEstablished(game, pieces, gameFactory, localPiece);
+				proxyController.connectionEstablished(p, gf, lp);
 			}
 			
 		});
@@ -254,9 +261,9 @@ public class ProxyPlayer extends Player implements GameObserver {
 		 try {
 	            oos.writeObject(message);
 	        } catch (SocketTimeoutException ste) {
-	            log.log(Level.INFO, "Failed to write; target must be full!");
+	            log.log(Level.INFO, "Failed to write; target must be full!", ste);
 	        } catch (IOException ioe) {
-	            log.log(Level.WARNING, "Failed to write: bad serialization");
+	            log.log(Level.WARNING, "Failed to write: bad serialization", ioe);
 	        }
 	}
 	

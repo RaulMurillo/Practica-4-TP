@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +19,14 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
 import es.ucm.fdi.tp.practica6.ProxyPlayer.ControlMessage;
 
-public class ProxyController extends Controller {
+public class ProxyController extends Controller implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
@@ -67,7 +70,7 @@ public class ProxyController extends Controller {
 			socket.setSoTimeout(timeout);
 			oos = new ObjectOutputStream(socket.getOutputStream());
 
-			new Thread(new Runnable() {
+			Thread t = new Thread(new Runnable() {
 				public void run() {
 					try {
 						ois = new ObjectInputStream(socket.getInputStream());
@@ -80,13 +83,19 @@ public class ProxyController extends Controller {
 						} catch (SocketTimeoutException ste) {
 							log.log(Level.FINE, "Failed to read; will retry");
 						} catch (IOException | ClassNotFoundException se) {
-							log.log(Level.WARNING, "Failed to read: bad serialization");
+							log.log(Level.WARNING, "Failed to read: bad serialization", se);
 							stopped = true;
 						}
 					}
 					log.log(Level.INFO, "Client exiting gracefully");
 				}
-			}, hostname + "Listener").start();
+			}, hostname + "Listener");
+			t.start();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				log.log(Level.WARNING, "Error while waiting the thread", e);
+			}
 		} catch (IOException e) {
 			log.log(Level.WARNING, "Error while handling client connection", e);
 		}
@@ -172,10 +181,10 @@ public class ProxyController extends Controller {
 		this.stopped = true;
 	}
 
-	public void connectionEstablished(Game game, List<Piece> pieces, GameFactory gameFactory, Piece localPiece) {
+	public void connectionEstablished(List<Piece> pieces, GameFactory gameFactory, Piece localPiece) {
 		this.gameFactory = gameFactory;
 		this.localPiece = localPiece;
-		this.game = game;
+		this.game = new Game(gameFactory.gameRules());
 		this.pieces = pieces;
 		initialize();
 	}

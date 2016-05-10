@@ -71,7 +71,6 @@ public class Server {
 						log.info("Connection " + numConnections + " accepted by server");
 						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
 						proxyPlayer.start(s);
-						proxyPlayer.newConnection(game, pieces, gameFactory, getLocalPiece());
 					}
 					server.close();
 				} catch (IOException e) {
@@ -83,7 +82,7 @@ public class Server {
 	}
 
 	private ProxyPlayer createProxyPlayer(String string) {
-		return new ProxyPlayer(string, controller);
+		return new ProxyPlayer(string, controller, gameFactory, pieces, getLocalPiece());
 	}
 
 	public Piece getLocalPiece() {
