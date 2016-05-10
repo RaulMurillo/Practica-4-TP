@@ -64,7 +64,7 @@ public class ProxyPlayer extends Player implements GameObserver {
 	 public void start(final Socket socket) throws IOException {
 	        try {
 	            oos = new ObjectOutputStream(socket.getOutputStream());
-
+	            
 	            new Thread(new Runnable() {
 	                public void run() {
 	                    try {

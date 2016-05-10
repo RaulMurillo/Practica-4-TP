@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
 import es.ucm.fdi.tp.practica6.ProxyPlayer.ControlMessage;
 
 public class ProxyController extends Controller {
@@ -38,6 +40,7 @@ public class ProxyController extends Controller {
 	private GameFactory gameFactory;
 	private GameRules rules;
 	private Board gameBoard;
+	
 	//
 	private boolean initialized = false;
 
@@ -152,7 +155,9 @@ public class ProxyController extends Controller {
 	public void dataReceived(Object message) {
 		ControlMessage controlMessage = (ControlMessage) message;
 		if (!initialized) {
+			log.log(Level.INFO, "Initializing connection");
 			controlMessage.initializeConnection(this);
+			
 			initialized = true;
 		} else {
 			controlMessage.updateProxy(this);
@@ -161,7 +166,8 @@ public class ProxyController extends Controller {
 			}
 		}
 	}
-	//MIRAR NOMBRE
+
+	// MIRAR NOMBRE
 	public void stopF() {
 		this.stopped = true;
 	}
@@ -182,5 +188,14 @@ public class ProxyController extends Controller {
 
 	public void setBoard(Board gameBoard) {
 		this.gameBoard = gameBoard;
+	}
+
+	public static void main(String... args) {
+		ProxyController ctrl = new ProxyController();
+		try {
+			ctrl.startF();
+		} catch (IOException e) {
+			log.log(Level.WARNING, e.getMessage());
+		}
 	}
 }
