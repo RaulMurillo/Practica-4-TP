@@ -7,8 +7,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -26,10 +24,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.AIAlgorithm;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.connectn.ConnectNFactoryExt;
-import es.ucm.fdi.tp.practica5.ttt.TicTacToeFactoryExt;
 import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
 import es.ucm.fdi.tp.practica5.attt.AdvancedTTTFactoryExt;
+import es.ucm.fdi.tp.practica5.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica5.ttt.TicTacToeFactoryExt;
 
 /**
  * This is the class with the main method for the board games application.
@@ -41,9 +39,9 @@ import es.ucm.fdi.tp.practica5.attt.AdvancedTTTFactoryExt;
  * <p>
  * Esta es la clase con el metodo main de inicio del programa. Se utiliza la
  * libreria Commons-CLI para leer argumentos de la linea de ordenes: el juego al
- * que se quiere jugar y la lista de jugadores. Puedes encontrar mas información
- * sobre esta libreria en {@link https://commons.apache.org/proper/commons-cli/}
- * .
+ * que se quiere jugar y la lista de jugadores. Puedes encontrar mas
+ * información sobre esta libreria en
+ * {@link https://commons.apache.org/proper/commons-cli/} .
  */
 public class Main {
 
@@ -808,19 +806,15 @@ public class Main {
 			}
 			c = new Controller(g, pieces);
 			final Controller c2 = c;
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					if (multiviews) {
-						for (Piece p : pieces) {
-							gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
-									gameFactory.createAIPlayer(aiPlayerAlg));
-						}
-					} else {
-						gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
-								gameFactory.createAIPlayer(aiPlayerAlg));
-					}
+			if (multiviews) {
+				for (Piece p : pieces) {
+					gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
+							gameFactory.createAIPlayer(aiPlayerAlg));
 				}
-			});
+			} else {
+				gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
+						gameFactory.createAIPlayer(aiPlayerAlg));
+			}
 
 			break;
 		default:

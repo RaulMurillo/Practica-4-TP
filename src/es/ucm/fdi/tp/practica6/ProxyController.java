@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,15 +19,12 @@ import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
+import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.ProxyPlayer.ControlMessage;
+import es.ucm.fdi.tp.practica6.ProxyPlayer.ObservableMessage;
+import es.ucm.fdi.tp.practica6.ProxyPlayer.InitializationMessage;
 
-public class ProxyController extends Controller implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ProxyController extends Controller implements Observable<GameObserver> {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
@@ -43,9 +41,9 @@ public class ProxyController extends Controller implements Serializable {
 	private GameFactory gameFactory;
 	private GameRules rules;
 	private Board gameBoard;
-	
+
 	//
-	private boolean initialized = false;
+	private boolean initialized;
 
 	public ProxyController() {
 		this("localhost", 2020, 2000);
@@ -57,10 +55,60 @@ public class ProxyController extends Controller implements Serializable {
 		this.port = port;
 		this.timeout = timeout;
 		this.stopped = false;
+		this.initialized = false;
+		this.observers = new ArrayList<GameObserver>();
 	}
 
-	public interface ClientMessage extends Serializable {
-		public void notifyMessage(Controller controller, ProxyPlayer p);
+	public static abstract class ClientMessage implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6602000723654830197L;
+
+		public void notifyMessage(ProxyPlayer p){}
+	}
+
+	public static class MakeMoveMessage extends ClientMessage {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3336919685539615536L;
+		GameMove move;
+		
+		public MakeMoveMessage(GameMove move) {
+			this.move = move;
+		}
+
+		@Override
+		public void notifyMessage(ProxyPlayer p) {
+			p.setMove(move);
+			p.ctrlMakeMove(p);
+		}
+	}
+
+	public static class StopMessage extends ClientMessage {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -5504413514289998746L;
+
+		@Override
+		public void notifyMessage(ProxyPlayer p) {
+			p.ctrlStop();
+		}
+	}
+
+	public static class RestartMessage extends ClientMessage {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7717151285424567564L;
+
+		@Override
+		public void notifyMessage(ProxyPlayer p) {
+			p.ctrlRestart();
+		}
 	}
 
 	// MIRAR NOMBRE
@@ -79,7 +127,10 @@ public class ProxyController extends Controller implements Serializable {
 					}
 					while (!stopped) {
 						try {
-							dataReceived(ois.readObject());
+							if (!initialized)
+								connectionEstablished(ois.readObject());
+							else
+								dataReceived(ois.readObject());
 						} catch (SocketTimeoutException ste) {
 							log.log(Level.FINE, "Failed to read; will retry");
 						} catch (IOException | ClassNotFoundException se) {
@@ -104,51 +155,18 @@ public class ProxyController extends Controller implements Serializable {
 
 	@Override
 	public void makeMove(Player player) {
-		sendData(new ClientMessage() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			GameMove move = player.requestMove(game.getTurn(), gameBoard, pieces, rules);
-
-			@Override
-			public void notifyMessage(Controller controller, ProxyPlayer p) {
-				p.setMove(move);
-				controller.makeMove(p);
-			}
-		});
+		GameMove move = player.requestMove(localPiece, gameBoard, pieces, rules);
+		sendData(new MakeMoveMessage(move));
 	}
 
 	@Override
 	public void stop() {
-		sendData(new ClientMessage() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void notifyMessage(Controller controller, ProxyPlayer p) {
-				controller.stop();
-			}
-
-		});
+		sendData(new StopMessage());
 	}
 
 	@Override
 	public void restart() {
-		sendData(new ClientMessage() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void notifyMessage(Controller controller, ProxyPlayer p) {
-				controller.restart();
-			}
-
-		});
+		sendData(new RestartMessage());
 	}
 
 	public void sendData(ClientMessage message) {
@@ -162,17 +180,14 @@ public class ProxyController extends Controller implements Serializable {
 	}
 
 	public void dataReceived(Object message) {
-		ControlMessage controlMessage = (ControlMessage) message;
-		if (!initialized) {
-			log.log(Level.INFO, "Initializing connection");
-			controlMessage.initializeConnection(this);
-			
-			initialized = true;
-		} else {
-			controlMessage.updateProxy(this);
-			for (GameObserver g : observers) {
-				controlMessage.notifyMessage(g);
-			}
+		log.log(Level.INFO, "Message received");
+		ObservableMessage controlMessage = (ObservableMessage) message;
+		if (gameBoard == null)
+			this.start();
+		controlMessage.updateProxy(this);
+		log.log(Level.INFO, "Notifying observers");
+		for (GameObserver g : observers) {
+			controlMessage.notifyMessage(g);
 		}
 	}
 
@@ -181,22 +196,22 @@ public class ProxyController extends Controller implements Serializable {
 		this.stopped = true;
 	}
 
-	public void connectionEstablished(List<Piece> pieces, GameFactory gameFactory, Piece localPiece) {
-		this.gameFactory = gameFactory;
-		this.localPiece = localPiece;
-		this.game = new Game(gameFactory.gameRules());
-		this.pieces = pieces;
+	public void connectionEstablished(Object message) throws ClassNotFoundException, IOException {
+		log.log(Level.INFO, "Connection established");
+		InitializationMessage iniMessage = (InitializationMessage) message;
+		this.gameFactory = iniMessage.getGameFactory();
+		this.localPiece = iniMessage.getLocalPiece();
+		this.pieces = iniMessage.getPieces();
 		initialize();
 	}
 
 	public void initialize() {
+		this.game = new Game(gameFactory.gameRules());
 		this.rules = gameFactory.gameRules();
-		gameFactory.createSwingView(game, this, localPiece, gameFactory.createRandomPlayer(),
+		gameFactory.createSwingView(this, this, localPiece, gameFactory.createRandomPlayer(),
 				gameFactory.createAIPlayer(null));
-	}
-
-	public void setBoard(Board gameBoard) {
-		this.gameBoard = gameBoard;
+		initialized = true;
+		log.log(Level.INFO, "The ProxyController has been initialized");
 	}
 
 	public static void main(String... args) {
@@ -206,5 +221,20 @@ public class ProxyController extends Controller implements Serializable {
 		} catch (IOException e) {
 			log.log(Level.WARNING, e.getMessage());
 		}
+	}
+
+	public void updateBoard(Board board) {
+		this.gameBoard = board;
+	}
+
+	@Override
+	public void addObserver(GameObserver o) {
+		observers.add(o);
+		
+	}
+
+	@Override
+	public void removeObserver(GameObserver o) {
+		observers.remove(o);
 	}
 }

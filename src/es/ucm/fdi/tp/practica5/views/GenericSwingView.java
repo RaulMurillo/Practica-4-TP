@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +72,7 @@ public abstract class GenericSwingView extends JFrame
 	 * Map que asocia fichas con jugadores (manual, random, etc.). Se declara
 	 * estático para mantener la consistencia en juego con multiventana.
 	 */
-	protected static Map<Piece, Player> players = new HashMap<Piece, Player>();
+	protected Map<Piece, Player> players = new HashMap<Piece, Player>();
 
 	/**
 	 * The piece to which this view belongs ({@code null} means that it belongs
@@ -369,17 +370,21 @@ public abstract class GenericSwingView extends JFrame
 			showHelp();
 		} else
 			disablePanels();
-		if (players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer)) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (players.get(turn).equals(randomPlayer)) {
-						controller.makeMove(randomPlayer);
-					} else if (players.get(turn).equals(aiPlayer)) {
-						controller.makeMove(aiPlayer);
+		if (players.containsKey(turn)&&(players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer))) {
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						if (players.get(turn).equals(randomPlayer)) {
+							controller.makeMove(randomPlayer);
+						} else if (players.get(turn).equals(aiPlayer)) {
+							controller.makeMove(aiPlayer);
+						}
 					}
-				}
-			});
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			} 
 		}
 	}
 

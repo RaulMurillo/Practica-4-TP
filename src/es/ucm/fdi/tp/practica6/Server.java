@@ -59,7 +59,7 @@ public class Server {
 					ServerSocket server = new ServerSocket(port);
 					server.setSoTimeout(timeout);
 					log.info("AbstractServer waiting for connections");
-					while (!stopped && game.getState() == game.getState().Starting) {
+					while (!stopped && numConnections<pieces.size()) {
 						Socket s = null;
 						try {
 							s = server.accept();
@@ -71,7 +71,11 @@ public class Server {
 						log.info("Connection " + numConnections + " accepted by server");
 						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
 						proxyPlayer.start(s);
+						game.addObserver(proxyPlayer);
 					}
+					log.info("All connections has just been accepted");
+					log.info("The game is going to start");
+					controller.start();
 					server.close();
 				} catch (IOException e) {
 					log.log(Level.WARNING, "Error while receiving connections", e);

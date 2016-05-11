@@ -111,7 +111,7 @@ public class AtaxxMove extends GameMove {
 											// Just in case, this skips turn
 											// and shows a message.
 			throw new GameError("There are no pieces of type " + p + " available.");
-		} else if (board.getPosition(iniRow, iniCol) != p) {
+		} else if (!board.getPosition(iniRow, iniCol).equals(p)) {
 			throw new GameError(
 					"Position (" + iniRow + "," + iniCol + ") does not contains a piece of type " + p + ".");
 		} else if (board.getPosition(targetRow, targetCol) != null) {
