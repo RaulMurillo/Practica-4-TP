@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,16 +15,17 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
-import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica5.control.SwingPlayer;
 
 /**
  * Abstract class implementing a game observer that outputs all the events in
@@ -200,7 +200,7 @@ public abstract class GenericSwingView extends JFrame
 		this.viewPiece = viewPiece;
 		this.randomPlayer = randomPlayer;
 		this.aiPlayer = aiPlayer;
-		move = null;
+		this.move = null;
 		g.addObserver(this);
 	}
 
@@ -217,7 +217,6 @@ public abstract class GenericSwingView extends JFrame
 	@Override
 	public void onGameStart(Board board, String gameDesc, List<Piece> pieces, Piece turn) {
 		initialize(pieces);
-
 		// Creates a new window
 		if (!this.isVisible())
 			initWindow(board, gameDesc);
@@ -225,11 +224,12 @@ public abstract class GenericSwingView extends JFrame
 			boardUI.setBoard(board);
 			settings.setBoard(board);
 		}
-
+		enablePanels();
 		// Set GameStart comments
 		setStartingActions(board, gameDesc, turn);
 		boardUI.update();
-		if(viewPiece!=null && !turn.equals(viewPiece))toBack();
+		if (viewPiece != null && !turn.equals(viewPiece))
+			toBack();
 	}
 
 	/**
@@ -370,21 +370,23 @@ public abstract class GenericSwingView extends JFrame
 			showHelp();
 		} else
 			disablePanels();
-		if (players.containsKey(turn)&&(players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer))) {
-			try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-					@Override
-					public void run() {
-						if (players.get(turn).equals(randomPlayer)) {
-							controller.makeMove(randomPlayer);
-						} else if (players.get(turn).equals(aiPlayer)) {
-							controller.makeMove(aiPlayer);
-						}
+		if (players.containsKey(turn)
+				&& (players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer))) {
+			// try {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					if (players.get(turn).equals(randomPlayer)) {
+						randomPressed();
+					} else if (players.get(turn).equals(aiPlayer)) {
+						aiPressed();
 					}
-				});
-			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
-			} 
+				}
+			});
+			/*
+			 * } catch (InvocationTargetException | InterruptedException e) {
+			 * e.printStackTrace(); }
+			 */
 		}
 	}
 
@@ -451,10 +453,12 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void changeColorPressed(Piece p, Color c) {
-		colorMap.put(p, c);
-		boardUI.setMap(colorMap);
-		boardUI.update();
-		settings.updateTableColor(colorMap);
+		if (c != null) {
+			colorMap.put(p, c);
+			boardUI.setMap(colorMap);
+			boardUI.update();
+			settings.updateTableColor(colorMap);
+		}
 	}
 
 	@Override
@@ -466,13 +470,29 @@ public abstract class GenericSwingView extends JFrame
 	@Override
 	public void randomPressed() {
 		resetMove();
-		controller.makeMove(randomPlayer);
+		final SwingWorker worker = new SwingWorker() {
+
+			@Override
+			protected Object doInBackground() throws Exception {
+				controller.makeMove(randomPlayer);
+				return null;
+			}
+		};
+		worker.execute();
 	}
 
 	@Override
 	public void aiPressed() {
 		resetMove();
-		controller.makeMove(aiPlayer);
+		final SwingWorker worker = new SwingWorker() {
+
+			@Override
+			protected Object doInBackground() throws Exception {
+				controller.makeMove(aiPlayer);
+				return null;
+			}
+		};
+		worker.execute();
 	}
 
 	@Override
@@ -487,16 +507,14 @@ public abstract class GenericSwingView extends JFrame
 				players.put(p, aiPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
 					disablePanels();
-					resetMove();
-					controller.makeMove(aiPlayer);
+					aiPressed();
 				}
 				break;
 			case "Random":
 				players.put(p, randomPlayer);
 				if (lastTurn.equals(viewPiece) || (viewPiece == null && lastTurn.equals(p))) {
 					disablePanels();
-					resetMove();
-					controller.makeMove(randomPlayer);
+					randomPressed();
 				}
 				break;
 			default:
@@ -517,7 +535,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            <p>
 	 *            Piece a establecer en modo {@code MANUAL}.
 	 */
-	public void setManualPlayer(Piece piece){
+	public void setManualPlayer(Piece piece) {
 		players.put(piece, new SwingPlayer(this));
 	}
 
@@ -618,13 +636,14 @@ public abstract class GenericSwingView extends JFrame
 	public Piece getViewPiece() {
 		return viewPiece;
 	}
+
 	/**
 	 * 
 	 * @return a copy of the current board
-	 * <p>
-	 * 		devuelve una copia del tablero actual
+	 *         <p>
+	 *         devuelve una copia del tablero actual
 	 */
-	public Board getLastBoard(){
+	public Board getLastBoard() {
 		return lastBoard;
 	}
 }

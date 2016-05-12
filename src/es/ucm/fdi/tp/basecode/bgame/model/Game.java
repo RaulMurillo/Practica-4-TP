@@ -488,6 +488,8 @@ public class Game implements Observable<GameObserver> {
 		for (GameObserver o : observers) {
 			o.onGameOver(roBoard, state, winner); // we pass a read only board
 		}
+		/////////
+		state = State.Starting;
 	}
 
 	/**

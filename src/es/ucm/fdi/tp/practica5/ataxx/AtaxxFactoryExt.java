@@ -68,12 +68,11 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-
 					new AtaxxSwingView(game, ctrl, viewPiece, randPlayer, aiPlayer);
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
-			throw new GameError (e.getMessage());
+			throw new GameError(e.getMessage());
 		}
 	}
 
