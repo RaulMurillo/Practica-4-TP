@@ -172,6 +172,8 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	public void sendData(ClientMessage message) {
 		try {
 			oos.writeObject(message);
+			oos.flush();
+			oos.reset();
 		} catch (SocketTimeoutException ste) {
 			log.log(Level.INFO, "Failed to write; target must be full!");
 		} catch (IOException ioe) {
@@ -213,15 +215,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		initialized = true;
 		log.log(Level.INFO, "The ProxyController has been initialized");
 	}
-
-	public static void main(String... args) {
-		ProxyController ctrl = new ProxyController();
-		try {
-			ctrl.startF();
-		} catch (IOException e) {
-			log.log(Level.WARNING, e.getMessage());
-		}
-	}
+	
 
 	public void updateBoard(Board board) {
 		this.gameBoard = board;
@@ -237,4 +231,14 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	public void removeObserver(GameObserver o) {
 		observers.remove(o);
 	}
+
+	public static void main(String... args) {
+		ProxyController ctrl = new ProxyController();
+		try {
+			ctrl.startF();
+		} catch (IOException e) {
+			log.log(Level.WARNING, e.getMessage());
+		}
+	}
+
 }

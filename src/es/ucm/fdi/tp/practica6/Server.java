@@ -98,6 +98,7 @@ public class Server {
 		List<Piece> pieces = new ArrayList<Piece>();
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
+		//pieces.add(new Piece("R"));
 		Server server = new Server(gameFactory, pieces);
 		server.initializeServer();
 		server.start();

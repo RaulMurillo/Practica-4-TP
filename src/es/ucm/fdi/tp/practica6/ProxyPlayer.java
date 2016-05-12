@@ -181,6 +181,33 @@ public class ProxyPlayer extends Player implements GameObserver {
 			gameObserver.onError(msg);
 		}
 	}
+	
+	public static class GameOverMessage extends ObservableMessage{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -5985528805709245057L;
+		private Board board;
+		private State state;
+		private Piece winner;
+	
+		public GameOverMessage(Board board, State state, Piece winner){
+			this.board = board;
+			this.state = state;
+			this.winner = winner;
+		}
+		
+		@Override
+		public void notifyMessage(GameObserver gameObserver) {
+			gameObserver.onGameOver(board, state, winner);
+		}
+		@Override
+		public void updateProxy(ProxyController proxyController) {
+			proxyController.updateBoard(board);
+		}
+
+	}
 	public static class InitializationMessage implements Serializable {
 		/**
 		 * 
@@ -274,22 +301,7 @@ public class ProxyPlayer extends Player implements GameObserver {
 
 	@Override
 	public void onGameOver(Board board, State state, Piece winner) {
-		sendData(new ObservableMessage() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			private Board b = board;
-			private State s = state;
-			private Piece w = winner;
-
-			@Override
-			public void notifyMessage(GameObserver gameObserver) {
-				gameObserver.onGameOver(b, s, w);
-			}
-
-		});
+		sendData(new GameOverMessage(board, state, winner));
 
 	}
 
@@ -326,6 +338,8 @@ public class ProxyPlayer extends Player implements GameObserver {
 	public void sendData(Object message) {
 		try {
 			oos.writeObject(message);
+			oos.flush();
+			oos.reset();
 		} catch (SocketTimeoutException ste) {
 			log.log(Level.INFO, "Failed to write; target must be full!", ste);
 		} catch (IOException ioe) {

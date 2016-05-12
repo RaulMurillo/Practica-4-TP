@@ -331,6 +331,8 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onGameOver(Board board, State state, Piece winner) {
+		boardUI.setBoard(board);
+		settings.setBoard(board);
 		settings.setMessage("\n Game Over!!");
 		settings.setMessage("Game Status: " + state);
 		if (state == State.Won) {
@@ -353,6 +355,8 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onChangeTurn(Board board, Piece turn) {
+		boardUI.setBoard(board);
+		settings.setBoard(board);
 		resetMove();
 		String pieceTurn = turn.toString();
 		if (turn.equals(viewPiece))
@@ -372,7 +376,6 @@ public abstract class GenericSwingView extends JFrame
 			disablePanels();
 		if (players.containsKey(turn)
 				&& (players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer))) {
-			// try {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -383,10 +386,6 @@ public abstract class GenericSwingView extends JFrame
 					}
 				}
 			});
-			/*
-			 * } catch (InvocationTargetException | InterruptedException e) {
-			 * e.printStackTrace(); }
-			 */
 		}
 	}
 

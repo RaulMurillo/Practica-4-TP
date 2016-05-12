@@ -267,6 +267,7 @@ public class BoardGUI extends JPanel {
 		this.board = board;
 		setLayout(new GridLayout(board.getRows(), board.getCols()));
 		initSquares();
+		update();
 	}
 
 	/**
@@ -393,5 +394,6 @@ public class BoardGUI extends JPanel {
 	public void setMap(Map<Piece, Color> colorMap) {
 		this.colorMap = colorMap;
 	}
+	
 
 }
