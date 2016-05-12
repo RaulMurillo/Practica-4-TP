@@ -6,9 +6,9 @@ import java.util.Scanner;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.Command;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.CommandSet;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
-import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
+import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactory;
+import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 
 /**
  * A controller that uses MVC. The difference from {@link ConsoleCtrl} is that
@@ -29,34 +29,28 @@ public class ConsoleCtrlMVC extends ConsoleCtrl {
 	@Override
 	public void start() {
 
-		int count = 0;
+		// start the game
+		game.start(pieces);
 
-		for (int i = 0; i < 1000; i++) {
-			// start the game
-			game.start(pieces);
+		while (game.getState() == State.InPlay) {
 
-			///////////
-			while (game.getState() == State.InPlay) {
-				Command cmd = CommandSet.parse("play");
-				cmd.execute(this);
+			// get a line from the user
+			System.out.println();
+			System.out.print("Please type a command ('help' for usage info.): ");
+			String line = in.nextLine().trim();
+
+			// parse and execute the command
+			Command cmd = CommandSet.parse(line);
+			if (cmd != null) {
+				try {
+					cmd.execute(this);
+				} catch (GameError e) {
+				}
+			} else {
+				System.err.println("Uknown command: " + line);
+				System.err.flush();
 			}
-
-			if (game.getWinner().equals(pieces.get(0)))
-				count++;
-			System.err.println(count + " out of " + (i+1));
 		}
-		/*
-		 * while (game.getState() == State.InPlay) {
-		 * 
-		 * // get a line from the user System.out.println(); System.out.print(
-		 * "Please type a command ('help' for usage info.): "); String line =
-		 * in.nextLine().trim();
-		 * 
-		 * // parse and execute the command Command cmd =
-		 * CommandSet.parse(line); if (cmd != null) { try { cmd.execute(this); }
-		 * catch (GameError e) { } } else { System.err.println(
-		 * "Uknown command: " + line); System.err.flush(); } }
-		 */
 
 	}
 

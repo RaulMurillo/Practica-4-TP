@@ -290,9 +290,6 @@ public class SettingsPanel extends JPanel {
 	public void setBoard(Board board) {
 		this.board = board;
 		updateTablePieces();
-		for (Piece p : pieces) {
-			updateTableMode(p, "Manual");
-		}
 	}
 
 	/**

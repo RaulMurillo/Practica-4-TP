@@ -9,13 +9,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingWorker;
+
+import es.ucm.fdi.tp.basecode.bgame.Utils;
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
+import es.ucm.fdi.tp.practica6.ServerWindow.WindowListener;
 
-public class Server {
+public class Server implements WindowListener {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
@@ -28,6 +32,7 @@ public class Server {
 	private Controller controller;
 	private GameFactory gameFactory;
 	private List<Piece> pieces;
+	private ServerWindow swInfo;
 
 	public Server(int port, int timeout, GameFactory gameFactory, List<Piece> pieces) {
 		this.port = port;
@@ -35,6 +40,7 @@ public class Server {
 		this.gameFactory = gameFactory;
 		this.pieces = pieces;
 		this.numConnections = 0;
+		this.swInfo = new ServerWindow(this);
 		initializeServer();
 	}
 
@@ -58,8 +64,11 @@ public class Server {
 				try {
 					ServerSocket server = new ServerSocket(port);
 					server.setSoTimeout(timeout);
-					log.info("AbstractServer waiting for connections");
-					while (!stopped && numConnections<pieces.size()) {
+
+					swInfo.showMessage("Server waiting for connections...");
+					log.info("Server waiting for connections");
+
+					while (!stopped && numConnections < pieces.size()) {
 						Socket s = null;
 						try {
 							s = server.accept();
@@ -68,13 +77,15 @@ public class Server {
 							continue;
 						}
 						numConnections++;
+
+						swInfo.showMessage("Connection " + numConnections + " accepted by server.");
 						log.info("Connection " + numConnections + " accepted by server");
 						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
-						proxyPlayer.start(s);
+						proxyPlayer.startConnection(s, timeout);
 						game.addObserver(proxyPlayer);
 					}
-					log.info("All connections has just been accepted");
-					log.info("The game is going to start");
+					swInfo.showMessage("All connections has just been accepted.\n" + "The game is going to start.");
+					log.info("All connections has just been accepted.\n The game is going to start.");
 					controller.start();
 					server.close();
 				} catch (IOException e) {
@@ -98,10 +109,26 @@ public class Server {
 		List<Piece> pieces = new ArrayList<Piece>();
 		pieces.add(new Piece("X"));
 		pieces.add(new Piece("O"));
-		//pieces.add(new Piece("R"));
+		// pieces.add(new Piece("R"));
 		Server server = new Server(gameFactory, pieces);
 		server.initializeServer();
 		server.start();
+	}
+
+	@Override
+	public void stopPressed() {
+		game.stop();
+		swInfo.showMessage("The game has been stopped.");
+		swInfo.showMessage("Server will be closed in 3 seconds.");
+		new SwingWorker() {
+
+			@Override
+			protected Object doInBackground() throws Exception {
+				Utils.sleep(3000);
+				System.exit(0);
+				return null;
+			}
+		}.execute();
 	}
 
 }

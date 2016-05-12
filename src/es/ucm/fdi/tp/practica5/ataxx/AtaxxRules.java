@@ -51,7 +51,7 @@ public class AtaxxRules implements GameRules {
 
 	private final int MAX_PLAYERS = 4;
 
-	private final double BLANK = 0.0998;
+	private final double BLANK = 0.09;
 
 	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {

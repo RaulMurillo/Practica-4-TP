@@ -324,6 +324,10 @@ public abstract class GenericSwingView extends JFrame
 			showStartingHelp();
 		}
 		setLastState(board, turn);
+		for (Piece p : pieces) {
+			if (viewPiece == null || viewPiece.equals(p))
+				settings.updateTableMode(p, "Manual");
+		}		
 		if (viewPiece != null && !viewPiece.equals(turn)) {
 			disablePanels();
 		}
@@ -339,6 +343,7 @@ public abstract class GenericSwingView extends JFrame
 			settings.setMessage("Winner: " + winner);
 		}
 		settings.setEnabled(false, true, false);
+		lastTurn = null;
 	}
 
 	@Override

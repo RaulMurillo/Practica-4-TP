@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
@@ -21,10 +23,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.ProxyPlayer.ObservableMessage;
 import es.ucm.fdi.tp.practica6.ProxyPlayer.InitializationMessage;
+import es.ucm.fdi.tp.practica6.ProxyPlayer.ObservableMessage;
 
-public class ProxyController extends Controller implements Observable<GameObserver> {
+public class ProxyController extends Controller implements Observable<GameObserver>, SocketEndpoint {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
@@ -41,8 +43,6 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	private GameFactory gameFactory;
 	private GameRules rules;
 	private Board gameBoard;
-
-	//
 	private boolean initialized;
 
 	public ProxyController() {
@@ -65,7 +65,8 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		 */
 		private static final long serialVersionUID = 6602000723654830197L;
 
-		public void notifyMessage(ProxyPlayer p){}
+		public void notifyMessage(ProxyPlayer p) {
+		}
 	}
 
 	public static class MakeMoveMessage extends ClientMessage {
@@ -74,7 +75,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		 */
 		private static final long serialVersionUID = -3336919685539615536L;
 		GameMove move;
-		
+
 		public MakeMoveMessage(GameMove move) {
 			this.move = move;
 		}
@@ -111,8 +112,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
-	// MIRAR NOMBRE
-	public void startF() throws IOException {
+	public void startConnection(Socket s, int timeout) throws IOException {
 		Socket socket = new Socket(hostname, port);
 		try {
 			socket.setSoTimeout(timeout);
@@ -169,7 +169,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		sendData(new RestartMessage());
 	}
 
-	public void sendData(ClientMessage message) {
+	public void sendData(Object message) {
 		try {
 			oos.writeObject(message);
 			oos.flush();
@@ -184,8 +184,9 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	public void dataReceived(Object message) {
 		log.log(Level.INFO, "Message received");
 		ObservableMessage controlMessage = (ObservableMessage) message;
-		if (gameBoard == null)
+		if (gameBoard == null) {
 			this.start();
+		}
 		controlMessage.updateProxy(this);
 		log.log(Level.INFO, "Notifying observers");
 		for (GameObserver g : observers) {
@@ -193,8 +194,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
-	// MIRAR NOMBRE
-	public void stopF() {
+	public void stopConnection() {
 		this.stopped = true;
 	}
 
@@ -215,7 +215,6 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		initialized = true;
 		log.log(Level.INFO, "The ProxyController has been initialized");
 	}
-	
 
 	public void updateBoard(Board board) {
 		this.gameBoard = board;
@@ -224,7 +223,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	@Override
 	public void addObserver(GameObserver o) {
 		observers.add(o);
-		
+
 	}
 
 	@Override
@@ -232,10 +231,15 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		observers.remove(o);
 	}
 
+	public void showFatalError(String msg) {
+		JOptionPane.showMessageDialog(null, msg, "Game error", JOptionPane.ERROR_MESSAGE);
+		System.exit(0);
+	}
+
 	public static void main(String... args) {
 		ProxyController ctrl = new ProxyController();
 		try {
-			ctrl.startF();
+			ctrl.startConnection(null, 2000);
 		} catch (IOException e) {
 			log.log(Level.WARNING, e.getMessage());
 		}

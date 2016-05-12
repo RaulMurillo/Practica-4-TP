@@ -22,7 +22,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.practica6.ProxyController.ClientMessage;
 
-public class ProxyPlayer extends Player implements GameObserver {
+public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
@@ -36,6 +36,7 @@ public class ProxyPlayer extends Player implements GameObserver {
 	private List<Piece> pieces;
 	private GameFactory gameFactory;
 	private Piece localPiece;
+	private boolean endGame;
 
 	/**
 	 * 
@@ -157,7 +158,7 @@ public class ProxyPlayer extends Player implements GameObserver {
 		public void notifyMessage(GameObserver gameObserver) {
 			gameObserver.onChangeTurn(board, turn);
 		}
-		
+
 		@Override
 		public void updateProxy(ProxyController proxyController) {
 			proxyController.updateBoard(board);
@@ -165,24 +166,50 @@ public class ProxyPlayer extends Player implements GameObserver {
 
 	}
 
-	public static class ErrorMessage extends ObservableMessage{
+	public static class ErrorMessage extends ObservableMessage {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -6496896047536110780L;
-		private String msg;
+		protected String msg;
 
-		public ErrorMessage(String msg){
+		public ErrorMessage(String msg) {
 			this.msg = msg;
 		}
+
 		@Override
 		public void notifyMessage(GameObserver gameObserver) {
 			gameObserver.onError(msg);
 		}
 	}
-	
-	public static class GameOverMessage extends ObservableMessage{
+
+	public static class FatalErrorMessage extends ErrorMessage {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6496896047536110780L;
+
+		public FatalErrorMessage(String msg) {
+			super(msg);
+		}
+
+		public FatalErrorMessage() {
+			this("");
+		}
+
+		@Override
+		public void updateProxy(ProxyController proxyController) {
+			proxyController.showFatalError(msg);
+		}
+
+		@Override
+		public void notifyMessage(GameObserver gameObserver) {
+		}
+	}
+
+	public static class GameOverMessage extends ObservableMessage {
 
 		/**
 		 * 
@@ -191,28 +218,31 @@ public class ProxyPlayer extends Player implements GameObserver {
 		private Board board;
 		private State state;
 		private Piece winner;
-	
-		public GameOverMessage(Board board, State state, Piece winner){
+
+		public GameOverMessage(Board board, State state, Piece winner) {
 			this.board = board;
 			this.state = state;
 			this.winner = winner;
 		}
-		
+
 		@Override
 		public void notifyMessage(GameObserver gameObserver) {
 			gameObserver.onGameOver(board, state, winner);
 		}
+
 		@Override
 		public void updateProxy(ProxyController proxyController) {
 			proxyController.updateBoard(board);
 		}
 
 	}
+
 	public static class InitializationMessage implements Serializable {
+
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -6544953671122140980L;
 		private GameFactory gameFactory;
 		private List<Piece> pieces;
 		private Piece localPiece;
@@ -247,11 +277,14 @@ public class ProxyPlayer extends Player implements GameObserver {
 		this.gameFactory = gameFactory;
 		this.pieces = pieces;
 		this.localPiece = localPiece;
+		this.endGame = false;
 	}
 
-	public void start(final Socket socket) throws IOException {
+	public void startConnection(final Socket socket, int timeout) throws IOException {
 		try {
+			socket.setSoTimeout(timeout);
 			oos = new ObjectOutputStream(socket.getOutputStream());
+
 			new Thread(new Runnable() {
 				public void run() {
 					try {
@@ -302,7 +335,11 @@ public class ProxyPlayer extends Player implements GameObserver {
 	@Override
 	public void onGameOver(Board board, State state, Piece winner) {
 		sendData(new GameOverMessage(board, state, winner));
-
+		if (state.equals(State.Stopped)) {
+			sendData(new FatalErrorMessage("An error occurred in the server and the program must be closed.\n"
+					+ "Sorry for the incoveniences."));
+		} else
+			endGame = true;
 	}
 
 	@Override
@@ -361,11 +398,13 @@ public class ProxyPlayer extends Player implements GameObserver {
 	}
 
 	public synchronized void ctrlStop() {
-		try {
-			controller.stop();
-		} catch (GameError e) {
-			log.log(Level.WARNING, "Error while stopping controller", e);
-		}
+		if (!endGame) {
+			try {
+				controller.stop();
+			} catch (GameError e) {
+				log.log(Level.WARNING, "Error while stopping controller", e);
+			}
+		}else stopped = true;
 
 	}
 
@@ -375,6 +414,12 @@ public class ProxyPlayer extends Player implements GameObserver {
 		} catch (GameError e) {
 			log.log(Level.WARNING, "Error while making move", e);
 		}
+
+	}
+
+	@Override
+	public void stopConnection() {
+		// TODO Auto-generated method stub
 
 	}
 
