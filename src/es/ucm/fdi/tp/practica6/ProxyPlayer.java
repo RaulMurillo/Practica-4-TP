@@ -412,7 +412,7 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		try {
 			controller.restart();
 		} catch (GameError e) {
-			log.log(Level.WARNING, "Error while making move", e);
+			log.log(Level.WARNING, "Error while restarting game", e);
 		}
 
 	}

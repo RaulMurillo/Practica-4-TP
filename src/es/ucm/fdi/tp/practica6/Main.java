@@ -141,6 +141,36 @@ public class Main {
 	}
 
 	/**
+	 * Aplication modes (normal, client, server).
+	 * <p>
+	 * Modos de la aplicacion.
+	 */
+	enum AppMode {
+		NORMAL("normal", "Normal"), CLIENT("client", "Client"), SERVER("server", "Server");
+
+		private String id;
+		private String desc;
+
+		AppMode(String id, String desc) {
+			this.id = id;
+			this.desc = desc;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public String toString() {
+			return id;
+		}
+	}
+
+	/**
 	 * Default game to play.
 	 * <p>
 	 * Juego por defecto.
@@ -160,6 +190,43 @@ public class Main {
 	 * Modo de juego por defecto.
 	 */
 	final private static PlayerMode DEFAULT_PLAYERMODE = PlayerMode.MANUAL;
+
+	/**
+	 * Default app mode to use.
+	 * <p>
+	 * Modo de aplicacion por defecto.
+	 */
+	final private static AppMode DEFAULT_APPMODE = AppMode.NORMAL;
+
+	/**
+	 * Default port to use when playing on-line.
+	 * <p>
+	 * Numero de puerto por defecto cuando se juega en red.
+	 */
+	final private static int DEFAULT_PORT = 2000;
+
+	/**
+	 * Default host name to use when playing on-line.
+	 * <p>
+	 * Nombre de la maquina por defecto sobre la que se está ejecutando el
+	 * servidor cuando se juega en red.
+	 */
+	final private static String DEFAULT_HOST = "localhost";
+	
+	/**
+	 * Default timeout to use when playing on-line.
+	 * <p>
+	 * Limite de tiempo por defecto cuando se juega en red.
+	 */
+	final private static int DEFAULT_TIMEOUT = 2000;
+
+	/**
+	 * Default search tree depth when using a MinMax algorithm.
+	 * <p>
+	 * Profundidad por defecto del arbol de busqueda cuando se emplea un
+	 * algoritmo MinMax.
+	 */
+	final private static int DEFAULT_DEPTH = 3;
 
 	/**
 	 * This field includes a game factory that is constructed after parsing the
@@ -259,6 +326,35 @@ public class Main {
 	private static Integer obstacles;
 
 	/**
+	 * The way you want to start the game application . Take one of the
+	 * following values ​​: normal, client or server
+	 * <p>
+	 * El modo en el que se quiere iniciar la aplicación de juego. Toma uno de
+	 * los siguientes valores: normal, client o server.
+	 */
+	private static AppMode appMode;
+
+	/**
+	 * Number of port provided with the option -sp, or ({@code DEFAULT_PORT} if
+	 * not provided).
+	 * <p>
+	 * Numero de puerto proporcionado con la opcion -sp, o {@code DEFAULT_PORT}
+	 * si no se incluye la opcion -sp.
+	 * 
+	 */
+	private static Integer serverPort;
+
+	/**
+	 * Name of machine provided with the option -sh, or ({@code DEFAULT_HOST} if
+	 * not provided).
+	 * <p>
+	 * Nombre de la maquina proporcionado con la opcion -sh, o
+	 * {@code DEFAULT_HOST} si no se incluye la opcion -sh.
+	 * 
+	 */
+	private static String serverHost;
+
+	/**
 	 * Processes the command-line arguments and modify the fields of this class
 	 * with corresponding values. E.g., the factory, the pieces, etc.
 	 *
@@ -290,6 +386,11 @@ public class Main {
 		cmdLineOptions.addOption(constructDimensionOption()); // -d or --dim
 		cmdLineOptions.addOption(constructObstaclesOption()); // -o or
 																// --obstacles
+		cmdLineOptions.addOption(constructAppModeOption()); // -am or --app-mode
+		cmdLineOptions.addOption(constructServerPortOption()); // -sp or
+																// --server-port
+		cmdLineOptions.addOption(constructServerHostOption()); // -sh or
+																// --server-host
 		cmdLineOptions.addOption(constructAIAlgorithmOption()); // -aialg or
 																// --ai-algorithm
 		cmdLineOptions.addOption(constructMinMaxDepthOption()); // -md or
@@ -307,6 +408,7 @@ public class Main {
 			parseViewOption(line);
 			parseMultiViewOption(line);
 			parsePlayersOptions(line);
+			parseAppModeOption(line);
 			parseAIAlgOption(line);
 
 			// if there are some remaining arguments, then something wrong is
@@ -674,6 +776,142 @@ public class Main {
 	}
 
 	/**
+	 * Builds the app mode (-am or --app-mode) CLI option.
+	 * 
+	 * <p>
+	 * Construye la opcion CLI -am.
+	 * 
+	 * @return CLI {@link {@link Option} for the app mode.
+	 *         <p>
+	 *         Objeto {@link Option} de esta opcion.
+	 */
+	private static Option constructAppModeOption() {
+		return new Option("am", "app-mode", true, "The mode you want to start the game application. "
+				+ "Take one of the following values ​​: normal, client or server (normal by default).");
+	}
+
+	/**
+	 * Parses the app mode option (-am or --app-mode). It sets the value of
+	 * {@link #appMode} accordingly.
+	 * 
+	 * <p>
+	 * Extrae la opcion de modo de la aplicacion (-am). Asigna el valor de
+	 * {@link #appMode}.
+	 * 
+	 * @param line
+	 *            CLI {@link CommandLine} object.
+	 * @throws ParseException
+	 *             If an invalid value is provided.
+	 *             <p>
+	 *             Si se proporciona un valor invalido.
+	 */
+	private static void parseAppModeOption(CommandLine line) throws ParseException {
+		String appModeVal = line.getOptionValue("am", DEFAULT_APPMODE.getId());
+		// app mode type
+		for (AppMode m : AppMode.values()) {
+			if (appModeVal.equals(m.getId())) {
+				appMode = m;
+				break;
+			}
+		}
+		if (appMode == null) {
+			throw new ParseException("Uknown mode '" + appModeVal + "'");
+		} else if (appMode != AppMode.NORMAL) {
+			switch (appMode){
+			case CLIENT:
+				parseServerHostOption(line);
+			case SERVER:
+				parseServerPortOption(line);
+				break;
+			default:
+				throw new UnsupportedOperationException(
+						"Something went wrong! This program point should be unreachable!");
+			}
+		}
+	}
+
+	/**
+	 * Builds the server port (-sp or --server-port) CLI option.
+	 * 
+	 * <p>
+	 * Construye la opcion CLI -sp.
+	 * 
+	 * @return CLI {@link {@link Option} for the server port.
+	 *         <p>
+	 *         Objeto {@link Option} de esta opcion.
+	 */
+	private static Option constructServerPortOption() {
+		return new Option("sp", "server-port", true, "The port on which the server "
+				+ "must be started or on which the server is listening and should connect the client.");
+	}
+
+	/**
+	 * Parses the server port option (-sp or --server-port). It sets the value
+	 * of {@link #serverPort} accordingly.
+	 * 
+	 * <p>
+	 * Extrae la opcion puerto de servidor (-sp). Asigna el valor de
+	 * {@link #serverPort}.
+	 * 
+	 * @param line
+	 *            CLI {@link CommandLine} object.
+	 * @throws ParseException
+	 *             If an invalid value is provided.
+	 *             <p>
+	 *             Si se proporciona un valor invalido.
+	 */
+	private static void parseServerPortOption(CommandLine line) throws ParseException {
+		String serverPortVal = line.getOptionValue("sp");
+		if (serverPortVal != null) {
+			try {
+				serverPort = Integer.parseInt(serverPortVal);
+			} catch (NumberFormatException e) {
+				throw new ParseException("Invalid port: " + serverPortVal);
+			}
+		} else {
+			serverPort = DEFAULT_PORT;
+		}
+	}
+
+	/**
+	 * Builds the server host (-sh or --server-host) CLI option.
+	 * <p>
+	 * Construye la opcion CLI -sh.
+	 * 
+	 * @return CLI {@link {@link Option} for the server host.
+	 *         <p>
+	 *         Objeto {@link Option} de esta opcion.
+	 */
+	private static Option constructServerHostOption() {
+		return new Option("sh", "server-host", true,
+				"Name (or IP address) of " + "the machine that is running the server.");
+	}
+
+	/**
+	 * Parses the server host option (-sh or --server-host). It sets the value
+	 * of {@link #serverHost} accordingly.
+	 * 
+	 * <p>
+	 * Extrae la opcion server host (-sh). Asigna el valor de
+	 * {@link #serverHost}.
+	 * 
+	 * @param line
+	 *            CLI {@link CommandLine} object.
+	 * @throws ParseException
+	 *             If an invalid value is provided.
+	 *             <p>
+	 *             Si se proporciona un valor invalido.
+	 */
+	private static void parseServerHostOption(CommandLine line) throws ParseException {
+		String serverHostVal = line.getOptionValue("sp");
+		if (serverHostVal != null) {
+			serverHost = serverHostVal;
+		} else {
+			serverHost = DEFAULT_HOST;
+		}
+	}
+
+	/**
 	 * Builds the AIAlgorithm (-aialg or --ai-algorithm) CLI option.
 	 * <p>
 	 * Construye la opcion CLI -aialg.
@@ -684,7 +922,7 @@ public class Main {
 	 */
 	private static Option constructAIAlgorithmOption() {
 		return new Option("aialg", "ai-algorithm", true,
-				"The algorithm to use for automatic players. Can be minmax, minmaxab or none.");
+				"The algorithm to use for automatic players. " + "Can be minmax, minmaxab or none.");
 	}
 
 	/**
@@ -712,7 +950,7 @@ public class Main {
 				aiPlayerAlg = new MinMax(parseMinMaxDepthOption(line), false);
 				break;
 			case "minmaxab":
-				aiPlayerAlg = new MinMax(parseMinMaxDepthOption(line),true);
+				aiPlayerAlg = new MinMax(parseMinMaxDepthOption(line), true);
 				break;
 			default:
 				throw new ParseException("Invalid AI algorithm.");
@@ -743,9 +981,9 @@ public class Main {
 	 * 
 	 * @param line
 	 *            CLI {@link CommandLine} object.
-	 * @return The maximum depth of the search tree built. 3 by default.
+	 * @return The maximum depth of the search tree built.
 	 *         <p>
-	 *         La profundidad maxima del arbol de busqueda. 3 por defecto.
+	 *         La profundidad maxima del arbol de busqueda.
 	 * @throws ParseException
 	 *             If an invalid value is provided.
 	 *             <p>
@@ -764,7 +1002,7 @@ public class Main {
 				throw new ParseException("Invalid depth: " + depthVal);
 			}
 		} else
-			return 3;
+			return DEFAULT_DEPTH;
 	}
 
 	/**
@@ -862,12 +1100,12 @@ public class Main {
 	 * 
 	 */
 	public static void startGame() {
-		Game g = new Game(gameFactory.gameRules());
-		Controller c = null;
-		ArrayList<Player> players = new ArrayList<Player>();
+		switch (appMode) {
+		case NORMAL:
+			Game g = new Game(gameFactory.gameRules());
+			Controller c = null;
+			ArrayList<Player> players = new ArrayList<Player>();
 
-		switch (view) {
-		case CONSOLE:
 			for (int i = 0; i < pieces.size(); i++) {
 				switch (playerModes.get(i)) {
 				case AI:
@@ -884,44 +1122,44 @@ public class Main {
 							"Something went wrong! This program point should be unreachable!");
 				}
 			}
-			c = new ConsoleCtrlMVC(g, pieces, players, new Scanner(System.in));
-			gameFactory.createConsoleView(g, c);
-			break;
-		case WINDOW:
-			for (int i = 0; i < pieces.size(); i++) {
-				switch (playerModes.get(i)) {
-				case AI:
-					players.add(gameFactory.createAIPlayer(aiPlayerAlg));
-					break;
-				case MANUAL:
-					players.add(gameFactory.createConsolePlayer());
-					break;
-				case RANDOM:
-					players.add(gameFactory.createRandomPlayer());
-					break;
-				default:
-					throw new UnsupportedOperationException(
-							"Something went wrong! This program point should be unreachable!");
-				}
-			}
-			c = new Controller(g, pieces);
-			final Controller c2 = c;
-			if (multiviews) {
-				for (Piece p : pieces) {
-					gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
+			switch (view) {
+			case CONSOLE:
+				c = new ConsoleCtrlMVC(g, pieces, players, new Scanner(System.in));
+				gameFactory.createConsoleView(g, c);
+				break;
+			case WINDOW:
+				c = new Controller(g, pieces);
+				final Controller c2 = c;
+				if (multiviews) {
+					for (Piece p : pieces) {
+						gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
+								gameFactory.createAIPlayer(aiPlayerAlg));
+					}
+				} else {
+					gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
 							gameFactory.createAIPlayer(aiPlayerAlg));
 				}
-			} else {
-				gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
-						gameFactory.createAIPlayer(aiPlayerAlg));
-			}
+				break;
 
+			default:
+				throw new UnsupportedOperationException(
+						"Something went wrong! This program point should be unreachable!");
+			}
+			c.start();
+			break;
+		case SERVER:
+			Server server = new Server(serverPort,DEFAULT_TIMEOUT, gameFactory, pieces);
+			server.initializeServer();
+			server.start();
+			break;
+		case CLIENT:
+			ProxyController proxyCtrl = new ProxyController(serverHost, serverPort, DEFAULT_TIMEOUT, aiPlayerAlg);
+			proxyCtrl.startCtrl();
 			break;
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");
 		}
-		
-		c.start();
+
 	}
 
 	///

@@ -44,6 +44,10 @@ public class Server implements WindowListener {
 		initializeServer();
 	}
 
+	public Server(int port, GameFactory gameFactory, List<Piece> pieces) {
+		this(port, 2000, gameFactory, pieces);
+	}
+
 	public Server(GameFactory gameFactory, List<Piece> pieces) {
 		this(2020, 2000, gameFactory, pieces);
 	}
@@ -104,17 +108,6 @@ public class Server implements WindowListener {
 		return pieces.get(numConnections - 1);
 	}
 
-	public static void main(String... args) {
-		GameFactory gameFactory = new AtaxxFactoryExt();
-		List<Piece> pieces = new ArrayList<Piece>();
-		pieces.add(new Piece("X"));
-		pieces.add(new Piece("O"));
-		// pieces.add(new Piece("R"));
-		Server server = new Server(gameFactory, pieces);
-		server.initializeServer();
-		server.start();
-	}
-
 	@Override
 	public void stopPressed() {
 		game.stop();
@@ -129,6 +122,18 @@ public class Server implements WindowListener {
 				return null;
 			}
 		}.execute();
+	}
+
+	public static void main(String... args) {
+		GameFactory gameFactory = new AtaxxFactoryExt();
+		List<Piece> pieces = new ArrayList<Piece>();
+		pieces.add(new Piece("X"));
+		pieces.add(new Piece("O"));
+		// pieces.add(new Piece("R"));
+		///////
+		Server server = new Server(gameFactory, pieces);
+		server.initializeServer();
+		server.start();
 	}
 
 }

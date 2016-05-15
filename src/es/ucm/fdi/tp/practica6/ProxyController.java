@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
+import es.ucm.fdi.tp.basecode.bgame.model.AIAlgorithm;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
@@ -44,12 +45,13 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	private GameRules rules;
 	private Board gameBoard;
 	private boolean initialized;
+	private AIAlgorithm aiPlayerAlg;
 
 	public ProxyController() {
-		this("localhost", 2020, 2000);
+		this("localhost", 2020, 2000, null);
 	}
 
-	public ProxyController(String hostname, int port, int timeout) {
+	public ProxyController(String hostname, int port, int timeout, AIAlgorithm aiPlayerAlg) {
 		super(null, null);
 		this.hostname = hostname;
 		this.port = port;
@@ -57,6 +59,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		this.stopped = false;
 		this.initialized = false;
 		this.observers = new ArrayList<GameObserver>();
+		this.aiPlayerAlg = aiPlayerAlg;
 	}
 
 	public static abstract class ClientMessage implements Serializable {
@@ -112,8 +115,8 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
-	public void startConnection(Socket s, int timeout) throws IOException {
-		Socket socket = new Socket(hostname, port);
+	public void startConnection(Socket socket, int timeout) throws IOException {
+		// Socket socket = new Socket(hostname, port);
 		try {
 			socket.setSoTimeout(timeout);
 			oos = new ObjectOutputStream(socket.getOutputStream());
@@ -211,7 +214,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		this.game = new Game(gameFactory.gameRules());
 		this.rules = gameFactory.gameRules();
 		gameFactory.createSwingView(this, this, localPiece, gameFactory.createRandomPlayer(),
-				gameFactory.createAIPlayer(null));
+				gameFactory.createAIPlayer(aiPlayerAlg));
 		initialized = true;
 		log.log(Level.INFO, "The ProxyController has been initialized");
 	}
@@ -236,10 +239,20 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		System.exit(0);
 	}
 
+	public void startCtrl() {
+		try {
+			startConnection(new Socket(hostname, port), timeout);
+		} catch (IOException e) {
+			log.log(Level.WARNING, e.getMessage());
+		}
+	}
+
 	public static void main(String... args) {
 		ProxyController ctrl = new ProxyController();
 		try {
 			ctrl.startConnection(null, 2000);
+			/*Socket s = new Socket("hsdfghostname", 2000);
+			ctrl.startConnection(s, 2000);*/
 		} catch (IOException e) {
 			log.log(Level.WARNING, e.getMessage());
 		}
