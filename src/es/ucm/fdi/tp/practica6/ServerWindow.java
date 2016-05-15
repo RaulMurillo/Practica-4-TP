@@ -17,9 +17,10 @@ public class ServerWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -8202802850365314184L;
-	
-	JTextArea jtaInfo;
-	
+
+	private JTextArea jtaInfo;
+	private JButton jbStop;
+
 	/**
 	 * The listener interface for sending action events.
 	 * <p>
@@ -59,7 +60,7 @@ public class ServerWindow extends JFrame {
 	}
 
 	private void initStopButton(WindowListener listener) {
-		JButton jbStop = new JButton("STOP");
+		jbStop = new JButton("STOP");
 		jbStop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -84,5 +85,20 @@ public class ServerWindow extends JFrame {
 	 */
 	public void showMessage(String message) {
 		jtaInfo.append(message + "\n");
+	}
+
+	/**
+	 * Enable or disable the Stop button.
+	 * <p>
+	 * Habilita o desabilita el boton de Stop.
+	 * 
+	 * @param b
+	 *            {@code true} for enable button. {@code false} for disable.
+	 *            <p>
+	 *            {@code true} para habilitar el boton. {@code false} para
+	 *            deshabilitar.
+	 */
+	public void enableButton(boolean b) {
+		jbStop.setEnabled(b);
 	}
 }

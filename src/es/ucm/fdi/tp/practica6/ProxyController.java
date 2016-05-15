@@ -247,15 +247,4 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
-	public static void main(String... args) {
-		ProxyController ctrl = new ProxyController();
-		try {
-			ctrl.startConnection(null, 2000);
-			/*Socket s = new Socket("hsdfghostname", 2000);
-			ctrl.startConnection(s, 2000);*/
-		} catch (IOException e) {
-			log.log(Level.WARNING, e.getMessage());
-		}
-	}
-
 }

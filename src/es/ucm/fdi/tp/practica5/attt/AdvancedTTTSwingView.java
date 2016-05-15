@@ -53,7 +53,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	 * El contador the movimientos que controla cuando el juego debe cambiar de
 	 * modo simple a avanzado.
 	 */
-	private static int turnCount;
+	private int turnCount;
 
 	/**
 	 * Construct a swing view for playing advanced tic-tac-toe{@code game}, with
@@ -207,9 +207,10 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		if (success && turn.equals(viewPiece) || viewPiece == null) {
 			turnCount++;
 		}
-		if (turnCount > 5) {
+		if ((viewPiece == null && turnCount > 5) || turnCount > 2) {
 			advancedMode = true;
 		}
+		System.err.println("Turn count: "+ turnCount);
 	}
 
 	@Override

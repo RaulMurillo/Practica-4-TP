@@ -51,7 +51,7 @@ public class AtaxxRules implements GameRules {
 
 	private final int MAX_PLAYERS = 4;
 
-	private final double BLANK = 0.1;
+	private final double BLANK = 0.09;
 
 	public AtaxxRules(int dim, int obstacles) {
 		if (dim < 5 && dim % 2 == 0) {
@@ -259,39 +259,23 @@ public class AtaxxRules implements GameRules {
 				double s = 0;
 				for (int row = 0; row < board.getRows(); row++) {
 					for (int col = 0; col < board.getCols(); col++) {
-						if (board.getPosition(row, col) == p) {
-							s++;
-							// Different neighbors pieces are changed.
+						Piece c = board.getPosition(row, col);
+
+						
+						int sign = (c==null) ? 0 : (c.equals(p)) ? 1 : -1;
+
+						s += sign;
+						// blank neighbors are bad for us, good if neighboring
+						// enemies
+						if (sign != 0) {
 							int startRow = Math.max(0, row - 1);
 							int startCol = Math.max(0, col - 1);
 							int endRow = Math.min(board.getRows(), row + 2);
 							int endCol = Math.min(board.getCols(), col + 2);
-							// We explore the surroundings of the piece (p) and
-							// make the
-							// pertinent changes if necessary in the surrounding
-							// pieces
 							for (int i = startRow; i < endRow; i++) {
 								for (int j = startCol; j < endCol; j++) {
 									if (board.getPosition(i, j) == null) {
-										s -= BLANK;
-									}
-								}
-							}
-						} else if (board.getPosition(row, col) != null) {
-							s--;
-							// Different neighbors pieces are changed.
-							int startRow = Math.max(0, row - 1);
-							int startCol = Math.max(0, col - 1);
-							int endRow = Math.min(board.getRows(), row + 2);
-							int endCol = Math.min(board.getCols(), col + 2);
-							// We explore the surroundings of the piece (p) and
-							// make the
-							// pertinent changes if necessary in the surrounding
-							// pieces
-							for (int i = startRow; i < endRow; i++) {
-								for (int j = startCol; j < endCol; j++) {
-									if (board.getPosition(i, j) == null) {
-										s += BLANK;
+										s += BLANK * sign;
 									}
 								}
 							}
@@ -301,6 +285,7 @@ public class AtaxxRules implements GameRules {
 				return s / (board.getCols() * board.getRows() - numObstacles);
 			}
 		}
+
 		/*
 		 * if (board.getPieceCount(p) == 0) { return -1; } else { int losers =
 		 * 0; for (Piece it : pieces) { losers = (it != p &&

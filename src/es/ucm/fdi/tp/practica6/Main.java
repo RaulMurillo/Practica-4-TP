@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.*;
+import java.text.DecimalFormat;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -212,7 +214,7 @@ public class Main {
 	 * servidor cuando se juega en red.
 	 */
 	final private static String DEFAULT_HOST = "localhost";
-	
+
 	/**
 	 * Default timeout to use when playing on-line.
 	 * <p>
@@ -817,7 +819,7 @@ public class Main {
 		if (appMode == null) {
 			throw new ParseException("Uknown mode '" + appModeVal + "'");
 		} else if (appMode != AppMode.NORMAL) {
-			switch (appMode){
+			switch (appMode) {
 			case CLIENT:
 				parseServerHostOption(line);
 			case SERVER:
@@ -1148,7 +1150,7 @@ public class Main {
 			c.start();
 			break;
 		case SERVER:
-			Server server = new Server(serverPort,DEFAULT_TIMEOUT, gameFactory, pieces);
+			Server server = new Server(serverPort, DEFAULT_TIMEOUT, gameFactory, pieces);
 			server.initializeServer();
 			server.start();
 			break;
@@ -1180,8 +1182,34 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
+		setupLogging(Level.WARNING);
 		parseArgs(args);
 		startGame();
+	}
+
+	public static void setupLogging(Level level) {
+
+		// configuracion de logs
+		Logger log = Logger.getLogger("");
+		for (Handler h : log.getHandlers())
+			log.removeHandler(h);
+		ConsoleHandler ch = new ConsoleHandler();
+		ch.setFormatter(new SimpleFormatter() {
+			DecimalFormat fmt = new DecimalFormat("000");
+			long previousMillis = System.currentTimeMillis();
+			int stanza = 0;
+
+			@Override
+			public synchronized String format(LogRecord record) {
+				String s = (record.getMillis() - previousMillis > 500) ? "\n *** " + (++stanza) + " *** \n\n" : "";
+				previousMillis = record.getMillis();
+				return s + fmt.format(previousMillis % 1000) + " " + record.getLevel() + " -- " + record.getMessage()
+						+ "\n";
+			}
+		});
+		log.addHandler(ch);
+		log.setLevel(level);
+		ch.setLevel(level);
 	}
 
 }

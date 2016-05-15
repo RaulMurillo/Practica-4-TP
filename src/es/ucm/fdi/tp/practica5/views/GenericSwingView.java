@@ -353,7 +353,7 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onMoveEnd(Board board, Piece turn, boolean success) {
-		enablePanels();
+		//enablePanels();
 		boardUI.update();
 		settings.updateTablePieces();
 	}
@@ -473,6 +473,7 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void randomPressed() {
+		disablePanels();
 		resetMove();
 		final SwingWorker worker = new SwingWorker() {
 
@@ -487,6 +488,7 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void aiPressed() {
+		disablePanels();
 		resetMove();
 		final SwingWorker worker = new SwingWorker() {
 

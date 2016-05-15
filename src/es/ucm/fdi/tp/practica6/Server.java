@@ -110,6 +110,7 @@ public class Server implements WindowListener {
 
 	@Override
 	public void stopPressed() {
+		swInfo.enableButton(false);
 		game.stop();
 		swInfo.showMessage("The game has been stopped.");
 		swInfo.showMessage("Server will be closed in 3 seconds.");
@@ -123,17 +124,5 @@ public class Server implements WindowListener {
 			}
 		}.execute();
 	}
-
-	public static void main(String... args) {
-		GameFactory gameFactory = new AtaxxFactoryExt();
-		List<Piece> pieces = new ArrayList<Piece>();
-		pieces.add(new Piece("X"));
-		pieces.add(new Piece("O"));
-		// pieces.add(new Piece("R"));
-		///////
-		Server server = new Server(gameFactory, pieces);
-		server.initializeServer();
-		server.start();
-	}
-
+	
 }
