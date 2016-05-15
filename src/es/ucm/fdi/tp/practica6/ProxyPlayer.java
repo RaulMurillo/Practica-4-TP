@@ -362,8 +362,8 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	@Override
 	public void onError(String msg) {
+		///////////
 		sendData(new ErrorMessage(msg));
-
 	}
 
 	public void newConnection() {

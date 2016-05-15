@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -38,10 +43,13 @@ public abstract class GenericSwingView extends JFrame
 		implements PieceColors.PieceColorsListener, BoardGUI.BoardGUIListener, AutomaticMoves.AutoMovesListener,
 		QuitPanel.QuitPanelListener, PlayerModes.PlayerModesListener, GameObserver {
 
+	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5174399532851561136L;
+
 	/**
 	 * The list of pieces involved in the game. It is stored when the game
 	 * starts and used when the state is printed.
@@ -156,6 +164,8 @@ public abstract class GenericSwingView extends JFrame
 			add(Color.YELLOW);
 		}
 	};
+
+	final private int timeout = 2;
 
 	/**
 	 * Construct a generic view for playing {@code game}, with a {@code piece}
@@ -327,7 +337,7 @@ public abstract class GenericSwingView extends JFrame
 		for (Piece p : pieces) {
 			if (viewPiece == null || viewPiece.equals(p))
 				settings.updateTableMode(p, "Manual");
-		}		
+		}
 		if (viewPiece != null && !viewPiece.equals(turn)) {
 			disablePanels();
 		}
@@ -353,7 +363,7 @@ public abstract class GenericSwingView extends JFrame
 
 	@Override
 	public void onMoveEnd(Board board, Piece turn, boolean success) {
-		//enablePanels();
+		// enablePanels();
 		boardUI.update();
 		settings.updateTablePieces();
 	}
@@ -494,11 +504,27 @@ public abstract class GenericSwingView extends JFrame
 
 			@Override
 			protected Object doInBackground() throws Exception {
+				log.log(Level.INFO, "Hilo ejecutado");
 				controller.makeMove(aiPlayer);
+				log.log(Level.INFO, "Hilo terminado");
 				return null;
 			}
 		};
 		worker.execute();
+		try {
+			worker.get(timeout, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			worker.cancel(true);
+			/////////////////
+			log.log(Level.INFO, "Hilo cancelado");
+			changeModePressed(lastTurn, "Manual");
+			boardUI.update();
+			settings.updateUI();
+		}
 	}
 
 	@Override

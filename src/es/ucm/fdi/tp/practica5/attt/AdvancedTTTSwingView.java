@@ -33,7 +33,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	 * Un boolean que se pone a cierto cuando el juego a alcanzado el modo
 	 * avanzado
 	 */
-	private static boolean advancedMode;
+	private boolean advancedMode;
 	/**
 	 * Origin colum
 	 * <p>
@@ -210,7 +210,6 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		if ((viewPiece == null && turnCount > 5) || turnCount > 2) {
 			advancedMode = true;
 		}
-		System.err.println("Turn count: "+ turnCount);
 	}
 
 	@Override
