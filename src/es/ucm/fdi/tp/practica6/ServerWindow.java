@@ -26,15 +26,15 @@ public class ServerWindow extends JFrame {
 	 * <p>
 	 * Interfaz "listener" de la clase para enviar eventos.
 	 */
-	public interface WindowListener {
+	public interface WindowEventListener {
 		void stopPressed();
 	}
 
-	public ServerWindow(WindowListener listener) {
+	public ServerWindow(WindowEventListener listener) {
 		initialize(listener);
 	}
 
-	private void initialize(WindowListener listener) {
+	private void initialize(WindowEventListener listener) {
 		setSize(300, 200);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -59,7 +59,7 @@ public class ServerWindow extends JFrame {
 		add(jspScroll, BorderLayout.CENTER);
 	}
 
-	private void initStopButton(WindowListener listener) {
+	private void initStopButton(WindowEventListener listener) {
 		jbStop = new JButton("STOP");
 		jbStop.addActionListener(new ActionListener() {
 			@Override

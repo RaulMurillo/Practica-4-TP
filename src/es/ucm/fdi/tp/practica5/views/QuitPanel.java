@@ -1,7 +1,10 @@
 package es.ucm.fdi.tp.practica5.views;
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * A panel for quit or restart the game.

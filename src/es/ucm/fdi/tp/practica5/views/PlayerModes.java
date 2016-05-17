@@ -1,9 +1,12 @@
 package es.ucm.fdi.tp.practica5.views;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;

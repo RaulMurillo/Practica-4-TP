@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;

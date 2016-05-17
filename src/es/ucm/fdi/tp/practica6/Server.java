@@ -1,10 +1,10 @@
 package es.ucm.fdi.tp.practica6;
 
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,10 +16,9 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
-import es.ucm.fdi.tp.practica6.ServerWindow.WindowListener;
+import es.ucm.fdi.tp.practica6.ServerWindow.WindowEventListener;
 
-public class Server implements WindowListener {
+public class Server implements WindowEventListener {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 

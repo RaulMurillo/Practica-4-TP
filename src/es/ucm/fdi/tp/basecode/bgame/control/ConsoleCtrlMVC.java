@@ -6,9 +6,9 @@ import java.util.Scanner;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.Command;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.CommandSet;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
+import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 
 /**
  * A controller that uses MVC. The difference from {@link ConsoleCtrl} is that

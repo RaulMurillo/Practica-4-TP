@@ -1,8 +1,14 @@
 package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Component;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 

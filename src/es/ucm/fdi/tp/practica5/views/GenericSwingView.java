@@ -26,6 +26,7 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
+import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
@@ -114,8 +115,10 @@ public abstract class GenericSwingView extends JFrame
 	 * <p>
 	 * Representacion grafica del tablero de juego.
 	 */
+	
 	protected BoardGUI boardUI;
 
+	private JPanel jpBoard;
 	/**
 	 * A panel to be used for user's interactions with the game.
 	 * <p>
@@ -165,7 +168,7 @@ public abstract class GenericSwingView extends JFrame
 		}
 	};
 
-	final private int timeout = 2;
+	final private int timeout = 5;
 
 	/**
 	 * Construct a generic view for playing {@code game}, with a {@code piece}
@@ -238,6 +241,7 @@ public abstract class GenericSwingView extends JFrame
 		// Set GameStart comments
 		setStartingActions(board, gameDesc, turn);
 		boardUI.update();
+		settings.setPreferredSize(settings.getSize());
 		if (viewPiece != null && !turn.equals(viewPiece))
 			toBack();
 	}
@@ -284,7 +288,7 @@ public abstract class GenericSwingView extends JFrame
 			view = "(" + viewPiece + ")";
 		this.setTitle("Board Games: " + gameDesc + " " + view);
 
-		JPanel jpBoard = new JPanel(new GridBagLayout());
+		jpBoard = new JPanel(new GridBagLayout());
 		boardUI = new BoardGUI(board, colorMap, this);
 		jpBoard.add(boardUI);
 		add(jpBoard, BorderLayout.CENTER);
@@ -407,9 +411,10 @@ public abstract class GenericSwingView extends JFrame
 	@Override
 	public void onError(String msg) {
 		if (viewPiece == null || viewPiece.equals(lastTurn)) {
-			settings.setMessage(msg);
+			JOptionPane.showMessageDialog(this, msg, "GameError", JOptionPane.ERROR_MESSAGE);
 			resetMove();
 			boardUI.update();
+			settings.updateUI();
 		}
 	}
 
@@ -520,10 +525,16 @@ public abstract class GenericSwingView extends JFrame
 		} catch (TimeoutException e) {
 			worker.cancel(true);
 			/////////////////
-			log.log(Level.INFO, "Hilo cancelado");
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					boardUI.update();
+					settings.updateUI();
+				}
+			});
+			log.log(Level.INFO, "Hilo cancelado timeOutException");
 			changeModePressed(lastTurn, "Manual");
-			boardUI.update();
-			settings.updateUI();
+			log.log(Level.INFO, "Tabla y tablero actualizados");
 		}
 	}
 
