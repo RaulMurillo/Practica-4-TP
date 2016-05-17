@@ -171,7 +171,8 @@ public abstract class GenericSwingView extends JFrame
 	/**
 	 * Maximum time during which the AI algorithm can work (in milliseconds)
 	 * <p>
-	 * Tiempo maximo (en milisegundos) durante el que el algoritmo inteligente puede trabajar.
+	 * Tiempo maximo (en milisegundos) durante el que el algoritmo inteligente
+	 * puede trabajar.
 	 */
 	private int timeout;
 
@@ -521,6 +522,7 @@ public abstract class GenericSwingView extends JFrame
 			}
 		};
 		worker.execute();
+		// Con esto la aplicacion se bloquea.
 		try {
 			worker.get(timeout, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
@@ -530,20 +532,20 @@ public abstract class GenericSwingView extends JFrame
 		} catch (TimeoutException e) {
 			worker.cancel(true);
 			log.log(Level.INFO, "Thread cancelled by timeOutException");
-			//SwingUtilities.invokeLater(new Runnable() {
-			//	@Override
-			//	public void run() {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
 					boardUI.update();
 					changeModePressed(lastTurn, "Manual");
 					settings.updateUI();
 					log.log(Level.INFO, "Board and table updated");
-			//	}
-			//});
+				}
+			});
 		}
 	}
-	
+
 	@Override
-	public void setTimelimit(int timeout){
+	public void setTimelimit(int timeout) {
 		this.timeout = timeout;
 	}
 

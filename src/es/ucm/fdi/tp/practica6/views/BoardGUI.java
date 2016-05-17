@@ -81,14 +81,14 @@ public class BoardGUI extends JPanel {
 	 * <p>
 	 * Ruta de la imagen de los obstaculos.
 	 */
-	final public String OBS_PATH = "Block.png";
+	final public String OBS_PATH = "resources/Block.png";
 
 	/**
 	 * Path of the pieces image.
 	 * <p>
 	 * Ruta de la imagen de las piezas.
 	 */
-	final public String PIECE_PATH = "Piece.png";
+	final public String PIECE_PATH = "resources/Piece.png";
 
 	/**
 	 * Image for the obstacles.

@@ -910,7 +910,7 @@ public class Main {
 	 *             Si se proporciona un valor invalido.
 	 */
 	private static void parseServerHostOption(CommandLine line) throws ParseException {
-		String serverHostVal = line.getOptionValue("sp");
+		String serverHostVal = line.getOptionValue("sh");
 		if (serverHostVal != null) {
 			serverHost = serverHostVal;
 		} else {
