@@ -272,8 +272,10 @@ public class SettingsPanel extends JPanel {
 		} else {
 			if (rand)
 				autoMovPane.addRandomButton();
-			if (ai)
+			if (ai){				
 				autoMovPane.addIntelligentButton();
+				autoMovPane.addTimelimit();
+			}
 		}
 	}
 

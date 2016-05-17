@@ -168,7 +168,12 @@ public abstract class GenericSwingView extends JFrame
 		}
 	};
 
-	final private int timeout = 5;
+	/**
+	 * Maximum time during which the AI algorithm can work (in milliseconds)
+	 * <p>
+	 * Tiempo maximo (en milisegundos) durante el que el algoritmo inteligente puede trabajar.
+	 */
+	private int timeout;
 
 	/**
 	 * Construct a generic view for playing {@code game}, with a {@code piece}
@@ -214,6 +219,7 @@ public abstract class GenericSwingView extends JFrame
 		this.randomPlayer = randomPlayer;
 		this.aiPlayer = aiPlayer;
 		this.move = null;
+		this.timeout = 2000;
 		g.addObserver(this);
 	}
 
@@ -509,9 +515,8 @@ public abstract class GenericSwingView extends JFrame
 
 			@Override
 			protected Object doInBackground() throws Exception {
-				log.log(Level.INFO, "Hilo ejecutado");
 				controller.makeMove(aiPlayer);
-				log.log(Level.INFO, "Hilo terminado");
+				log.log(Level.INFO, "AI move done");
 				return null;
 			}
 		};
@@ -525,16 +530,21 @@ public abstract class GenericSwingView extends JFrame
 		} catch (TimeoutException e) {
 			worker.cancel(true);
 			log.log(Level.INFO, "Thread cancelled by timeOutException");
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
+			//SwingUtilities.invokeLater(new Runnable() {
+			//	@Override
+			//	public void run() {
 					boardUI.update();
 					changeModePressed(lastTurn, "Manual");
 					settings.updateUI();
 					log.log(Level.INFO, "Board and table updated");
-				}
-			});
+			//	}
+			//});
 		}
+	}
+	
+	@Override
+	public void setTimelimit(int timeout){
+		this.timeout = timeout;
 	}
 
 	@Override
