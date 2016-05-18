@@ -165,8 +165,9 @@ public class AutomaticMoves extends JPanel {
 	 */
 	public void addTimelimit() {
 		jpTimelimit.add(new JLabel("Timelimit (ms)"), BorderLayout.SOUTH);
-		JSpinner jsTime = new JSpinner(new SpinnerNumberModel(2000, 100, 10000, 100));
-		jsTime.setToolTipText("<html>Maximum number of milliseconds that the intelligent move can last");
+		JSpinner jsTime = new JSpinner(new SpinnerNumberModel(2000, 0, 10000, 100));
+		jsTime.setToolTipText(
+				"<html>Maximum number of milliseconds that the intelligent move can last" + "<p>Set 0 for no timelimit");
 		jpTimelimit.add(jsTime);
 		JButton jbSet = new JButton("Set");
 		jbSet.addActionListener(new ActionListener() {

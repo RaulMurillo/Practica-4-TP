@@ -523,24 +523,27 @@ public abstract class GenericSwingView extends JFrame
 		};
 		worker.execute();
 		// Con esto la aplicacion se bloquea.
-		try {
-			worker.get(timeout, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			worker.cancel(true);
-			log.log(Level.INFO, "Thread cancelled by timeOutException");
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					boardUI.update();
-					changeModePressed(lastTurn, "Manual");
-					settings.updateUI();
-					log.log(Level.INFO, "Board and table updated");
-				}
-			});
+		// Timeout = 0 means no time limit.
+		if (timeout > 0) {
+			try {
+				worker.get(timeout, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (TimeoutException e) {
+				worker.cancel(true);
+				log.log(Level.INFO, "Thread cancelled by timeOutException");
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						boardUI.update();
+						changeModePressed(lastTurn, "Manual");
+						settings.updateUI();
+						log.log(Level.INFO, "Board and table updated");
+					}
+				});
+			}
 		}
 	}
 

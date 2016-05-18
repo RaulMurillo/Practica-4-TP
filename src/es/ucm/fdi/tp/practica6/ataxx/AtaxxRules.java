@@ -261,12 +261,11 @@ public class AtaxxRules implements GameRules {
 					for (int col = 0; col < board.getCols(); col++) {
 						Piece c = board.getPosition(row, col);
 
-						
-						int sign = (c==null) ? 0 : (c.equals(p)) ? 1 : -1;
+						int sign = (c == null) ? 0 : (c.equals(p)) ? 1 :(c.equals(OBSTACLE)) ?0 : -1;
 
 						s += sign;
-						// blank neighbors are bad for us, good if neighboring
-						// enemies
+						// blank neighbors are bad for us,
+						// good if neighboring enemies
 						if (sign != 0) {
 							int startRow = Math.max(0, row - 1);
 							int startCol = Math.max(0, col - 1);
@@ -275,36 +274,19 @@ public class AtaxxRules implements GameRules {
 							for (int i = startRow; i < endRow; i++) {
 								for (int j = startCol; j < endCol; j++) {
 									if (board.getPosition(i, j) == null) {
-										s += BLANK * sign;
+										s -= BLANK * sign;
 									}
 								}
 							}
 						}
+
 					}
 				}
+
 				return s / (board.getCols() * board.getRows() - numObstacles);
 			}
 		}
 
-		/*
-		 * if (board.getPieceCount(p) == 0) { return -1; } else { int losers =
-		 * 0; for (Piece it : pieces) { losers = (it != p &&
-		 * board.getPieceCount(it) == 0) ? losers + 1 : losers; } if (losers ==
-		 * pieces.size() - 1) { return 1; } else { double s = 0; for (int row =
-		 * 0; row < board.getRows(); row++) { for (int col = 0; col <
-		 * board.getCols(); col++) { Piece c = board.getPosition(row, col);
-		 * 
-		 * int startRow = Math.max(0, row - 1); int startCol = Math.max(0, col -
-		 * 1); int endRow = Math.min(board.getRows(), row + 2); int endCol =
-		 * Math.min(board.getCols(), col + 2); int sign = (c == p) ? 1 : (c ==
-		 * null) ? 0 : -1;
-		 * 
-		 * s += sign; // blank neighbors are bad for us, good if neighboring
-		 * enemies for (int i = startRow; i < endRow; i++) { for (int j =
-		 * startCol; j < endCol; j++) { if (board.getPosition(i, j) == null) { s
-		 * += BLANK*sign; } } } } } return s / (board.getCols() *
-		 * board.getRows() - numObstacles); } }
-		 */
 	}
 
 	@Override
