@@ -112,7 +112,7 @@ public class Server implements WindowEventListener {
 		game.stop();
 		swInfo.showMessage("The game has been stopped.");
 		swInfo.showMessage("Server will be closed in 3 seconds.");
-		new SwingWorker() {
+		new SwingWorker<Object, Object>() {
 
 			@Override
 			protected Object doInBackground() throws Exception {

@@ -36,7 +36,7 @@ public class ServerWindow extends JFrame {
 
 	private void initialize(WindowEventListener listener) {
 		setSize(300, 200);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		this.setTitle("Server information");
 		// Information Text Area

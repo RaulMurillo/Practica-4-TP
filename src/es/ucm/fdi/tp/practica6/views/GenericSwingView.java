@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +28,11 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
-import es.ucm.fdi.tp.practica6.control.SwingPlayer;
-import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica6.control.SwingPlayer;
 
 /**
  * Abstract class implementing a game observer that outputs all the events in
@@ -288,7 +289,13 @@ public abstract class GenericSwingView extends JFrame
 	 */
 	private void initWindow(Board board, String gameDesc) {
 		setSize(680, 500);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter(){
+			@Override
+			public void windowClosing(WindowEvent e){
+				quitPressed();
+			}
+		});
 		setLocationRelativeTo(null);
 		String view = "";
 		if (viewPiece != null)
@@ -309,7 +316,7 @@ public abstract class GenericSwingView extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
-			}
+			}			
 		});
 		revalidate();
 		setVisible(true);
@@ -497,7 +504,7 @@ public abstract class GenericSwingView extends JFrame
 	public void randomPressed() {
 		disablePanels();
 		resetMove();
-		final SwingWorker worker = new SwingWorker() {
+		final SwingWorker<?, ?> worker = new SwingWorker<Object, Object>() {
 
 			@Override
 			protected Object doInBackground() throws Exception {
@@ -512,39 +519,47 @@ public abstract class GenericSwingView extends JFrame
 	public void aiPressed() {
 		disablePanels();
 		resetMove();
-		final SwingWorker worker = new SwingWorker() {
+		final SwingWorker<?, ?> worker = new SwingWorker<Object, Object>() {
 
 			@Override
-			protected Object doInBackground() throws Exception {
-				controller.makeMove(aiPlayer);
+			protected Object doInBackground() throws Exception {				controller.makeMove(aiPlayer);
 				log.log(Level.INFO, "AI move done");
 				return null;
 			}
 		};
+		if (timeout > 0) {
+			final SwingWorker<?, ?> timeWorker = new SwingWorker<Object, Object>() {
+
+				@Override
+				protected Object doInBackground() throws Exception {
+					try {
+						worker.get(timeout, TimeUnit.MILLISECONDS);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					} catch (TimeoutException e) {
+						worker.cancel(true);
+						log.log(Level.INFO, "Thread cancelled by timeOutException");
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								boardUI.update();
+								changeModePressed(lastTurn, "Manual");
+								settings.updateUI();
+								log.log(Level.INFO, "Board and table updated");
+							}
+						});
+					}
+					return null;
+				}
+			};
+			timeWorker.execute();
+		}
 		worker.execute();
 		// Con esto la aplicacion se bloquea.
 		// Timeout = 0 means no time limit.
-		if (timeout > 0) {
-			try {
-				worker.get(timeout, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			} catch (TimeoutException e) {
-				worker.cancel(true);
-				log.log(Level.INFO, "Thread cancelled by timeOutException");
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						boardUI.update();
-						changeModePressed(lastTurn, "Manual");
-						settings.updateUI();
-						log.log(Level.INFO, "Board and table updated");
-					}
-				});
-			}
-		}
+
 	}
 
 	@Override

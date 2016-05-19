@@ -1187,7 +1187,7 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
-		setupLogging(Level.OFF);
+		setupLogging(Level.INFO);
 		parseArgs(args);
 		startGame();
 	}
