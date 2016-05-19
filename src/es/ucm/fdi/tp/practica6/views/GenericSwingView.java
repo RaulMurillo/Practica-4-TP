@@ -177,14 +177,19 @@ public abstract class GenericSwingView extends JFrame
 	 * puede trabajar.
 	 */
 	private int timeout;
-	
-	public class SwingPlayer extends Player{
+
+	public class SwingPlayer extends Player {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8938149555238260841L;
 
 		@Override
 		public GameMove requestMove(Piece p, Board board, List<Piece> pieces, GameRules rules) {
 			return move;
 		}
-		
+
 	}
 
 	/**
@@ -249,10 +254,9 @@ public abstract class GenericSwingView extends JFrame
 	public void onGameStart(Board board, String gameDesc, List<Piece> pieces, Piece turn) {
 		initialize(pieces);
 		// Creates a new window
-		if (!this.isVisible())
+		if (!this.isVisible()) {
 			initWindow(board, gameDesc);
-		
-		else {
+		} else {
 			boardUI.setBoard(board);
 			settings.setBoard(board);
 		}
@@ -261,8 +265,9 @@ public abstract class GenericSwingView extends JFrame
 		setStartingActions(board, gameDesc, turn);
 		boardUI.update();
 		settings.setPreferredSize(settings.getSize());
-		if (viewPiece != null && !turn.equals(viewPiece))
+		if (viewPiece != null && !turn.equals(viewPiece)) {
 			toBack();
+		}
 	}
 
 	/**
@@ -281,8 +286,9 @@ public abstract class GenericSwingView extends JFrame
 		this.pieces = pieces;
 		// Generate a HashMap that associates pieces with players.
 		for (Piece p : pieces) {
-			if (viewPiece == null || viewPiece.equals(p))
+			if (viewPiece == null || viewPiece.equals(p)) {
 				setManualPlayer(p);
+			}
 		}
 		colorMap = new HashMap<Piece, Color>();
 		setColorMap(DEFAULT_COLORS);
@@ -301,16 +307,17 @@ public abstract class GenericSwingView extends JFrame
 	private void initWindow(Board board, String gameDesc) {
 		setSize(680, 500);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter(){
+		this.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e){
+			public void windowClosing(WindowEvent e) {
 				quitPressed();
 			}
 		});
 		setLocationRelativeTo(null);
 		String view = "";
-		if (viewPiece != null)
+		if (viewPiece != null) {
 			view = "(" + viewPiece + ")";
+		}
 		this.setTitle("Board Games: " + gameDesc + " " + view);
 
 		jpBoard = new JPanel(new GridBagLayout());
@@ -319,14 +326,14 @@ public abstract class GenericSwingView extends JFrame
 		add(jpBoard, BorderLayout.CENTER);
 
 		settings = new SettingsPanel(pieces, colorMap, board, this, viewPiece);
-		settings.configAutoMoves(randomPlayer != null, aiPlayer != null);
+		settings.configAutoMoves(randomPlayer != null, aiPlayer != null, viewPiece);
 		settings.configPlayerModes(randomPlayer != null, aiPlayer != null);
 		add(settings, BorderLayout.EAST);
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				resizePreview(boardUI, jpBoard);
-			}			
+			}
 		});
 		revalidate();
 		setVisible(true);
@@ -363,8 +370,9 @@ public abstract class GenericSwingView extends JFrame
 		}
 		setLastState(board, turn);
 		for (Piece p : pieces) {
-			if (viewPiece == null || viewPiece.equals(p))
+			if (viewPiece == null || viewPiece.equals(p)) {
 				settings.updateTableMode(p, "Manual");
+			}
 		}
 		if (viewPiece != null && !viewPiece.equals(turn)) {
 			disablePanels();
@@ -402,8 +410,9 @@ public abstract class GenericSwingView extends JFrame
 		settings.setBoard(board);
 		resetMove();
 		String pieceTurn = turn.toString();
-		if (turn.equals(viewPiece))
+		if (turn.equals(viewPiece)) {
 			pieceTurn += " (You)";
+		}
 		settings.setMessage("Turn for " + pieceTurn);
 		setLastState(board, turn);
 		// Bring window to the front
@@ -415,8 +424,9 @@ public abstract class GenericSwingView extends JFrame
 				&& !(players.get(lastTurn).equals(randomPlayer) || players.get(lastTurn).equals(aiPlayer))) {
 			enablePanels();
 			showHelp();
-		} else
+		} else {
 			disablePanels();
+		}
 		if (players.containsKey(turn)
 				&& (players.get(turn).equals(randomPlayer) || players.get(turn).equals(aiPlayer))) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -481,8 +491,11 @@ public abstract class GenericSwingView extends JFrame
 	 * Habilita todos los subpaneles que puedan ser deshabilitados.
 	 */
 	protected void enablePanels() {
-		if(viewPiece.equals(Server.observerPiece))settings.setEnabled(false, false, false);
-		settings.setEnabled(true, true, true);
+		if (viewPiece != null && viewPiece.equals(Server.observerPiece)) {
+			settings.setEnabled(false, false, false);
+		} else {
+			settings.setEnabled(true, true, true);
+		}
 	}
 
 	/**
@@ -492,8 +505,11 @@ public abstract class GenericSwingView extends JFrame
 	 * {@link QuitPanel}.
 	 */
 	private void disablePanels() {
-		if(viewPiece.equals(Server.observerPiece))settings.setEnabled(false, false, false);
-		settings.setEnabled(false, false, true);
+		if (viewPiece != null && viewPiece.equals(Server.observerPiece)) {
+			settings.setEnabled(false, false, false);
+		} else {
+			settings.setEnabled(false, false, true);
+		}
 	}
 
 	@Override
@@ -534,11 +550,14 @@ public abstract class GenericSwingView extends JFrame
 		final SwingWorker<?, ?> worker = new SwingWorker<Object, Object>() {
 
 			@Override
-			protected Object doInBackground() throws Exception {				controller.makeMove(aiPlayer);
+			protected Object doInBackground() throws Exception {
+				controller.makeMove(aiPlayer);
 				log.log(Level.INFO, "AI move done");
 				return null;
 			}
 		};
+
+		// Timeout = 0 means no time limit.
 		if (timeout > 0) {
 			final SwingWorker<?, ?> timeWorker = new SwingWorker<Object, Object>() {
 
@@ -569,9 +588,6 @@ public abstract class GenericSwingView extends JFrame
 			timeWorker.execute();
 		}
 		worker.execute();
-		// Con esto la aplicacion se bloquea.
-		// Timeout = 0 means no time limit.
-
 	}
 
 	@Override

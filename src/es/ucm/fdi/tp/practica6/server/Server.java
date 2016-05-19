@@ -75,6 +75,7 @@ public class Server implements WindowEventListener {
 					swInfo.showMessage("Server waiting for connections...");
 					log.info("Server waiting for connections");
 
+					// Add players-observers to the game.
 					while (!stopped && numConnections < pieces.size()) {
 						Socket s = null;
 						try {
@@ -84,7 +85,6 @@ public class Server implements WindowEventListener {
 							continue;
 						}
 						numConnections++;
-
 						swInfo.showMessage("Connection " + numConnections + " accepted by server.");
 						log.info("Connection " + numConnections + " accepted by server");
 						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
@@ -95,6 +95,9 @@ public class Server implements WindowEventListener {
 					log.info("All connections has just been accepted.\n The game is going to start.");
 					controller.start();
 					started = true;
+
+					// Add observers to the game - these ones only can watch and
+					// send messages, not play.
 					while (!stopped) {
 						Socket s = null;
 						try {
@@ -104,8 +107,10 @@ public class Server implements WindowEventListener {
 							continue;
 						}
 						numConnections++;
-						swInfo.showMessage("Connection " + numConnections + " accepted by server.");
-						log.info("Connection " + numConnections + " accepted by server");
+						swInfo.showMessage("Connection " + numConnections
+								+ " accepted by server.\n(This user can only observe the game)");
+						log.info("Connection " + numConnections
+								+ " accepted by server\n(This user can only observe the game)");
 						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
 						proxyPlayer.startConnection(s, timeout);
 						game.addObserver(proxyPlayer);
@@ -123,8 +128,10 @@ public class Server implements WindowEventListener {
 	}
 
 	public Piece getLocalPiece() {
-		if(!started)return pieces.get(numConnections - 1);
-		else  return observerPiece;
+		if (!started)
+			return pieces.get(numConnections - 1);
+		else
+			return observerPiece;
 	}
 
 	@Override
@@ -144,5 +151,5 @@ public class Server implements WindowEventListener {
 			}
 		}.execute();
 	}
-	
+
 }

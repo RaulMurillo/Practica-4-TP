@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica6.server.Server;
 
 /**
  * A panel with multiple {@link JPanel} that allows the user to make changes in
@@ -266,14 +267,17 @@ public class SettingsPanel extends JPanel {
 	 *            <p>
 	 *            Indica si el modo INTELLIGENT esta disponible.
 	 */
-	public void configAutoMoves(boolean rand, boolean ai) {
+	public void configAutoMoves(boolean rand, boolean ai, Piece viewPiece) {
 		if (!rand && !ai) {
 			autoMovPane.setVisible(false);
 		} else {
-			if (rand)
+			if (rand) {
 				autoMovPane.addRandomButton();
-			if (ai){				
+			}
+			if (ai) {
 				autoMovPane.addIntelligentButton();
+			}
+			if (viewPiece == null || !viewPiece.equals(Server.observerPiece)) {
 				autoMovPane.addTimelimit();
 			}
 		}

@@ -396,6 +396,5 @@ public class BoardGUI extends JPanel {
 	public void setMap(Map<Piece, Color> colorMap) {
 		this.colorMap = colorMap;
 	}
-	
 
 }

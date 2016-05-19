@@ -86,8 +86,9 @@ public class PlayerInformation extends JPanel {
 		initializeTable(pieces);
 		updateNumPieces(pieces, board);
 		for (int i = 0; i < pieces.size(); i++) {
-			if (viewPiece == null || viewPiece.equals(pieces.get(i)))
+			if (viewPiece == null || viewPiece.equals(pieces.get(i))) {
 				updateMode(i, "Manual");
+			}
 		}
 	}
 
@@ -210,8 +211,9 @@ public class PlayerInformation extends JPanel {
 	 */
 	public void updateNumPieces(List<Piece> pieces, Board board) {
 		for (int j = 0; j < pieces.size(); j++) {
-			if (board.getPieceCount(pieces.get(j)) != null)
+			if (board.getPieceCount(pieces.get(j)) != null) {
 				data[j][2] = board.getPieceCount(pieces.get(j));
+			}
 		}
 		repaint();
 	}
