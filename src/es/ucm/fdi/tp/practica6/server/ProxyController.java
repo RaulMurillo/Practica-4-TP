@@ -24,6 +24,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica6.lobby.demo.ClientLauncher;
 import es.ucm.fdi.tp.practica6.server.ProxyPlayer.InitializationMessage;
 import es.ucm.fdi.tp.practica6.server.ProxyPlayer.ObservableMessage;
 
@@ -119,6 +120,9 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		// Socket socket = new Socket(hostname, port);
 		try {
 			socket.setSoTimeout(timeout);
+			/////////
+			new ClientLauncher().launchInMessageWindow();
+			/////////
 			oos = new ObjectOutputStream(socket.getOutputStream());
 
 			Thread t = new Thread(new Runnable() {

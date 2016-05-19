@@ -30,9 +30,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 import es.ucm.fdi.tp.basecode.bgame.model.GameMove;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
+import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.control.SwingPlayer;
+import es.ucm.fdi.tp.practica6.server.Server;
 
 /**
  * Abstract class implementing a game observer that outputs all the events in
@@ -176,6 +177,15 @@ public abstract class GenericSwingView extends JFrame
 	 * puede trabajar.
 	 */
 	private int timeout;
+	
+	public class SwingPlayer extends Player{
+
+		@Override
+		public GameMove requestMove(Piece p, Board board, List<Piece> pieces, GameRules rules) {
+			return move;
+		}
+		
+	}
 
 	/**
 	 * Construct a generic view for playing {@code game}, with a {@code piece}
@@ -241,6 +251,7 @@ public abstract class GenericSwingView extends JFrame
 		// Creates a new window
 		if (!this.isVisible())
 			initWindow(board, gameDesc);
+		
 		else {
 			boardUI.setBoard(board);
 			settings.setBoard(board);
@@ -311,7 +322,6 @@ public abstract class GenericSwingView extends JFrame
 		settings.configAutoMoves(randomPlayer != null, aiPlayer != null);
 		settings.configPlayerModes(randomPlayer != null, aiPlayer != null);
 		add(settings, BorderLayout.EAST);
-
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -471,6 +481,7 @@ public abstract class GenericSwingView extends JFrame
 	 * Habilita todos los subpaneles que puedan ser deshabilitados.
 	 */
 	protected void enablePanels() {
+		if(viewPiece.equals(Server.observerPiece))settings.setEnabled(false, false, false);
 		settings.setEnabled(true, true, true);
 	}
 
@@ -481,6 +492,7 @@ public abstract class GenericSwingView extends JFrame
 	 * {@link QuitPanel}.
 	 */
 	private void disablePanels() {
+		if(viewPiece.equals(Server.observerPiece))settings.setEnabled(false, false, false);
 		settings.setEnabled(false, false, true);
 	}
 
@@ -608,7 +620,7 @@ public abstract class GenericSwingView extends JFrame
 	 *            Piece a establecer en modo {@code MANUAL}.
 	 */
 	public void setManualPlayer(Piece piece) {
-		players.put(piece, new SwingPlayer(this));
+		players.put(piece, new SwingPlayer());
 	}
 
 	@Override

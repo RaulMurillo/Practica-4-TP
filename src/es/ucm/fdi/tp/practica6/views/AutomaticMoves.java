@@ -44,7 +44,12 @@ public class AutomaticMoves extends JPanel {
 	 * Boton para movimientos aleatorios.
 	 */
 	private JButton jbRandom;
-
+	/**
+	 * A button to set the timelimit for intelligent movements.
+	 * <p>
+	 * Un boton para poner el tiempo limite en jugadas inteligentes.
+	 */
+	private JButton jbSet;
 	/**
 	 * A panel for aligning the buttons.
 	 * <p>
@@ -155,6 +160,7 @@ public class AutomaticMoves extends JPanel {
 		if (jbRandom != null) {
 			jbRandom.setEnabled(b);
 		}
+		jbSet.setEnabled(b);
 	}
 
 	/**
@@ -169,7 +175,7 @@ public class AutomaticMoves extends JPanel {
 		jsTime.setToolTipText(
 				"<html>Maximum number of milliseconds that the intelligent move can last" + "<p>Set 0 for no timelimit");
 		jpTimelimit.add(jsTime);
-		JButton jbSet = new JButton("Set");
+		jbSet = new JButton("Set");
 		jbSet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

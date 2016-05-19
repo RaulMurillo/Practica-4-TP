@@ -15,6 +15,7 @@ import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.GameFactory;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.practica6.lobby.demo.ServerLauncherExt;
 import es.ucm.fdi.tp.practica6.server.ServerWindow.WindowEventListener;
 
 public class Server implements WindowEventListener {
@@ -25,11 +26,14 @@ public class Server implements WindowEventListener {
 	private int timeout;
 	private volatile boolean stopped;
 	private int numConnections;
+	private ServerSocket server;
+	private boolean started;
 
 	private Game game;
 	private Controller controller;
 	private GameFactory gameFactory;
 	private List<Piece> pieces;
+	public final static Piece observerPiece = new Piece("Observer");
 	private ServerWindow swInfo;
 
 	public Server(int port, int timeout, GameFactory gameFactory, List<Piece> pieces) {
@@ -38,6 +42,7 @@ public class Server implements WindowEventListener {
 		this.gameFactory = gameFactory;
 		this.pieces = pieces;
 		this.numConnections = 0;
+		this.started = false;
 		this.swInfo = new ServerWindow(this);
 		initializeServer();
 	}
@@ -64,9 +69,9 @@ public class Server implements WindowEventListener {
 			@Override
 			public void run() {
 				try {
-					ServerSocket server = new ServerSocket(port);
+					server = new ServerSocket(port);
 					server.setSoTimeout(timeout);
-
+					new ServerLauncherExt().startChat();
 					swInfo.showMessage("Server waiting for connections...");
 					log.info("Server waiting for connections");
 
@@ -89,7 +94,22 @@ public class Server implements WindowEventListener {
 					swInfo.showMessage("All connections has just been accepted.\n" + "The game is going to start.");
 					log.info("All connections has just been accepted.\n The game is going to start.");
 					controller.start();
-					server.close();
+					started = true;
+					while (!stopped) {
+						Socket s = null;
+						try {
+							s = server.accept();
+						} catch (SocketTimeoutException ste) {
+							log.log(Level.FINE, "Timeout; checking stop flag and re-accepting");
+							continue;
+						}
+						numConnections++;
+						swInfo.showMessage("Connection " + numConnections + " accepted by server.");
+						log.info("Connection " + numConnections + " accepted by server");
+						ProxyPlayer proxyPlayer = createProxyPlayer("ServerCon-" + numConnections);
+						proxyPlayer.startConnection(s, timeout);
+						game.addObserver(proxyPlayer);
+					}
 				} catch (IOException e) {
 					log.log(Level.WARNING, "Error while receiving connections", e);
 				}
@@ -103,7 +123,8 @@ public class Server implements WindowEventListener {
 	}
 
 	public Piece getLocalPiece() {
-		return pieces.get(numConnections - 1);
+		if(!started)return pieces.get(numConnections - 1);
+		else  return observerPiece;
 	}
 
 	@Override
@@ -117,6 +138,7 @@ public class Server implements WindowEventListener {
 			@Override
 			protected Object doInBackground() throws Exception {
 				Utils.sleep(3000);
+				server.close();
 				System.exit(0);
 				return null;
 			}
