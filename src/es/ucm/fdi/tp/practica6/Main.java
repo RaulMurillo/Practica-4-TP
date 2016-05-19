@@ -234,7 +234,7 @@ public class Main {
 	 * algoritmo MinMax.
 	 */
 	final private static int DEFAULT_DEPTH = 3;
-
+	final private static int DEFAULT_MAXDEPTH = 11;
 	/**
 	 * This field includes a game factory that is constructed after parsing the
 	 * command-line arguments. Depending on the game selected with the -g option
@@ -959,6 +959,14 @@ public class Main {
 			case "minmaxab":
 				aiPlayerAlg = new MinMax(parseMinMaxDepthOption(line), true);
 				break;
+			case "minmaxext":
+				aiPlayerAlg = new MinMaxExt(parseMinMaxExtDepthOption(line), false);
+				break;
+			case "minmaxextab":
+				aiPlayerAlg = new MinMaxExt(parseMinMaxExtDepthOption(line), true);
+				break;
+
+
 			default:
 				throw new ParseException("Invalid AI algorithm.");
 			}
@@ -1010,6 +1018,38 @@ public class Main {
 			}
 		} else
 			return DEFAULT_DEPTH;
+	}
+	/**
+	 * Parses the MinMaxDepth option (-md or --minmax-depth). It sets the value
+	 * of {@link #aiPlayerAlg} accordingly.
+	 * <p>
+	 * Extrae la opcion MinMaxDepth (-md). Asigna el valor de
+	 * {@link #aiPlayerAlg}.
+	 * 
+	 * @param line
+	 *            CLI {@link CommandLine} object.
+	 * @return The maximum depth of the search tree built.
+	 *         <p>
+	 *         La profundidad maxima del arbol de busqueda.
+	 * @throws ParseException
+	 *             If an invalid value is provided.
+	 *             <p>
+	 *             Si se proporciona un valor invalido.
+	 */
+	private static int parseMinMaxExtDepthOption(CommandLine line) throws ParseException {
+		String depthVal = line.getOptionValue("md");
+		if (depthVal != null) {
+			try {
+				int depth = Integer.parseInt(depthVal);
+				if (depth < 1) {
+					throw new GameError("Invalid depth value.");
+				}
+				return depth;
+			} catch (NumberFormatException e) {
+				throw new ParseException("Invalid depth: " + depthVal);
+			}
+		} else
+			return DEFAULT_MAXDEPTH;
 	}
 
 	/**
