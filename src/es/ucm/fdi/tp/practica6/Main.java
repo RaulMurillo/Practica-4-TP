@@ -34,7 +34,7 @@ import es.ucm.fdi.tp.practica.connectn.ConnectNFactoryExt;
 import es.ucm.fdi.tp.practica6.ataxx.AtaxxFactoryExt;
 import es.ucm.fdi.tp.practica6.attt.AdvancedTTTFactoryExt;
 import es.ucm.fdi.tp.practica6.server.ProxyController;
-import es.ucm.fdi.tp.practica6.server.Server;
+import es.ucm.fdi.tp.practica6.server.GameServer;
 import es.ucm.fdi.tp.practica6.ttt.TicTacToeFactoryExt;
 
 /**
@@ -234,7 +234,6 @@ public class Main {
 	 * algoritmo MinMax.
 	 */
 	final private static int DEFAULT_DEPTH = 3;
-	final private static int DEFAULT_MAXDEPTH = 11;
 	/**
 	 * This field includes a game factory that is constructed after parsing the
 	 * command-line arguments. Depending on the game selected with the -g option
@@ -339,7 +338,7 @@ public class Main {
 	 * El modo en el que se quiere iniciar la aplicación de juego. Toma uno de
 	 * los siguientes valores: normal, client o server.
 	 */
-	private static AppMode appMode;
+	private static AppMode applicationMode;
 
 	/**
 	 * Number of port provided with the option -sp, or ({@code DEFAULT_PORT} if
@@ -799,11 +798,11 @@ public class Main {
 
 	/**
 	 * Parses the app mode option (-am or --app-mode). It sets the value of
-	 * {@link #appMode} accordingly.
+	 * {@link #applicationMode} accordingly.
 	 * 
 	 * <p>
 	 * Extrae la opcion de modo de la aplicacion (-am). Asigna el valor de
-	 * {@link #appMode}.
+	 * {@link #applicationMode}.
 	 * 
 	 * @param line
 	 *            CLI {@link CommandLine} object.
@@ -817,14 +816,14 @@ public class Main {
 		// app mode type
 		for (AppMode m : AppMode.values()) {
 			if (appModeVal.equals(m.getId())) {
-				appMode = m;
+				applicationMode = m;
 				break;
 			}
 		}
-		if (appMode == null) {
+		if (applicationMode == null) {
 			throw new ParseException("Uknown mode '" + appModeVal + "'");
-		} else if (appMode != AppMode.NORMAL) {
-			switch (appMode) {
+		} else if (applicationMode != AppMode.NORMAL) {
+			switch (applicationMode) {
 			case CLIENT:
 				parseServerHostOption(line);
 			case SERVER:
@@ -959,14 +958,6 @@ public class Main {
 			case "minmaxab":
 				aiPlayerAlg = new MinMax(parseMinMaxDepthOption(line), true);
 				break;
-			case "minmaxext":
-				aiPlayerAlg = new MinMaxExt(parseMinMaxExtDepthOption(line), false);
-				break;
-			case "minmaxextab":
-				aiPlayerAlg = new MinMaxExt(parseMinMaxExtDepthOption(line), true);
-				break;
-
-
 			default:
 				throw new ParseException("Invalid AI algorithm.");
 			}
@@ -1018,38 +1009,6 @@ public class Main {
 			}
 		} else
 			return DEFAULT_DEPTH;
-	}
-	/**
-	 * Parses the MinMaxDepth option (-md or --minmax-depth). It sets the value
-	 * of {@link #aiPlayerAlg} accordingly.
-	 * <p>
-	 * Extrae la opcion MinMaxDepth (-md). Asigna el valor de
-	 * {@link #aiPlayerAlg}.
-	 * 
-	 * @param line
-	 *            CLI {@link CommandLine} object.
-	 * @return The maximum depth of the search tree built.
-	 *         <p>
-	 *         La profundidad maxima del arbol de busqueda.
-	 * @throws ParseException
-	 *             If an invalid value is provided.
-	 *             <p>
-	 *             Si se proporciona un valor invalido.
-	 */
-	private static int parseMinMaxExtDepthOption(CommandLine line) throws ParseException {
-		String depthVal = line.getOptionValue("md");
-		if (depthVal != null) {
-			try {
-				int depth = Integer.parseInt(depthVal);
-				if (depth < 1) {
-					throw new GameError("Invalid depth value.");
-				}
-				return depth;
-			} catch (NumberFormatException e) {
-				throw new ParseException("Invalid depth: " + depthVal);
-			}
-		} else
-			return DEFAULT_MAXDEPTH;
 	}
 
 	/**
@@ -1147,91 +1106,90 @@ public class Main {
 	 * 
 	 */
 	public static void startGame() {
-		switch (appMode) {
-		case NORMAL:
-			Game g = new Game(gameFactory.gameRules());
-			Controller c = null;
-			ArrayList<Player> players = new ArrayList<Player>();
+		Game g = new Game(gameFactory.gameRules());
+		Controller c = null;
+		ArrayList<Player> players = new ArrayList<Player>();
 
-			for (int i = 0; i < pieces.size(); i++) {
-				switch (playerModes.get(i)) {
-				case AI:
-					players.add(gameFactory.createAIPlayer(aiPlayerAlg));
-					break;
-				case MANUAL:
-					players.add(gameFactory.createConsolePlayer());
-					break;
-				case RANDOM:
-					players.add(gameFactory.createRandomPlayer());
-					break;
-				default:
-					throw new UnsupportedOperationException(
-							"Something went wrong! This program point should be unreachable!");
-				}
-			}
-			switch (view) {
-			case CONSOLE:
-				c = new ConsoleCtrlMVC(g, pieces, players, new Scanner(System.in));
-				gameFactory.createConsoleView(g, c);
+		for (int i = 0; i < pieces.size(); i++) {
+			switch (playerModes.get(i)) {
+			case AI:
+				players.add(gameFactory.createAIPlayer(aiPlayerAlg));
 				break;
-			case WINDOW:
-				c = new Controller(g, pieces);
-				final Controller c2 = c;
-				if (multiviews) {
-					for (Piece p : pieces) {
-						gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
-								gameFactory.createAIPlayer(aiPlayerAlg));
-					}
-				} else {
-					gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
-							gameFactory.createAIPlayer(aiPlayerAlg));
-				}
+			case MANUAL:
+				players.add(gameFactory.createConsolePlayer());
 				break;
-
+			case RANDOM:
+				players.add(gameFactory.createRandomPlayer());
+				break;
 			default:
 				throw new UnsupportedOperationException(
 						"Something went wrong! This program point should be unreachable!");
 			}
-			c.start();
+		}
+		switch (view) {
+		case CONSOLE:
+			c = new ConsoleCtrlMVC(g, pieces, players, new Scanner(System.in));
+			gameFactory.createConsoleView(g, c);
 			break;
-		case SERVER:
-			Server server = new Server(serverPort, DEFAULT_TIMEOUT, gameFactory, pieces);
-			server.initializeServer();
-			server.start();
+		case WINDOW:
+			c = new Controller(g, pieces);
+			final Controller c2 = c;
+			if (multiviews) {
+				for (Piece p : pieces) {
+					gameFactory.createSwingView(g, c2, p, gameFactory.createRandomPlayer(),
+							gameFactory.createAIPlayer(aiPlayerAlg));
+				}
+			} else {
+				gameFactory.createSwingView(g, c2, null, gameFactory.createRandomPlayer(),
+						gameFactory.createAIPlayer(aiPlayerAlg));
+			}
 			break;
-		case CLIENT:
-			ProxyController proxyCtrl = new ProxyController(serverHost, serverPort, DEFAULT_TIMEOUT, aiPlayerAlg);
-			proxyCtrl.startCtrl();
-			break;
+
 		default:
 			throw new UnsupportedOperationException("Something went wrong! This program point should be unreachable!");
 		}
-
-	}
-
-	///
-	public static void logInfo(String text, Object... args) {
-		log.log(Level.INFO, text, args);
+		c.start();
 	}
 
 	/**
-	 * The main method. It calls {@link #parseArgs(String[])} and then
-	 * {@link #startGame()}.
+	 * Starts a client. Should be called after {@link #parseArgs(String[])} so
+	 * some fields are set to their appropriate values.
 	 * 
 	 * <p>
-	 * Metodo main. Llama a {@link #parseArgs(String[])} y a continuacion inicia
-	 * un juego con {@link #startGame()}.
-	 * 
-	 * @param args
-	 *            Command-line arguments.
+	 * Inicia un cliente. Debe llamarse despues de {@link #parseArgs(String[])}
+	 * para que los atributos tengan los valores correctos.
 	 * 
 	 */
-	public static void main(String[] args) {
-		setupLogging(Level.INFO);
-		parseArgs(args);
-		startGame();
+	public static void startClient() {
+		ProxyController proxyCtrl = new ProxyController(serverHost, serverPort, DEFAULT_TIMEOUT, aiPlayerAlg);
+		proxyCtrl.startCtrl();
 	}
 
+	/**
+	 * Starts a server. Should be called after {@link #parseArgs(String[])} so
+	 * some fields are set to their appropriate values.
+	 * 
+	 * <p>
+	 * Inicia un servidor. Debe llamarse despues de {@link #parseArgs(String[])}
+	 * para que los atributos tengan los valores correctos.
+	 * 
+	 */
+	public static void startServer() {
+		GameServer server = new GameServer(serverPort, DEFAULT_TIMEOUT, gameFactory, pieces);
+		server.initializeServer();
+		server.start();
+	}
+
+	/**
+	 * Configures the {@link Logger} messages.
+	 * <p>
+	 * Configura los mensages de {@link Logger}.
+	 * 
+	 * @param level
+	 *            Minimum level of the messages that want to show.
+	 *            <p>
+	 *            Nivel minimo de los mensajes que se quierren mostrar.
+	 */
 	public static void setupLogging(Level level) {
 
 		// configuracion de logs
@@ -1257,4 +1215,34 @@ public class Main {
 		ch.setLevel(level);
 	}
 
+	/**
+	 * The main method. It calls {@link #parseArgs(String[])} and then
+	 * {@link #startGame()}.
+	 * 
+	 * <p>
+	 * Metodo main. Llama a {@link #parseArgs(String[])} y a continuacion inicia
+	 * un juego con {@link #startGame()}.
+	 * 
+	 * @param args
+	 *            Command-line arguments.
+	 * 
+	 */
+	public static void main(String[] args) {
+		setupLogging(Level.INFO);
+		parseArgs(args);
+		switch (applicationMode) {
+		case NORMAL:
+			startGame();
+			break;
+		case CLIENT:
+			startClient();
+			break;
+		case SERVER:
+			startServer();
+			break;
+		default:
+			throw new UnsupportedOperationException(
+					"Something went wrong!" + "This program point should be unreachable!");
+		}
+	}
 }

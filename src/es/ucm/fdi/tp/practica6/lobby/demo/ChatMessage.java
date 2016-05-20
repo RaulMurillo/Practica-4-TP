@@ -2,7 +2,7 @@ package es.ucm.fdi.tp.practica6.lobby.demo;
 
 import java.io.Serializable;
 
-import es.ucm.fdi.tp.tp.practica6.lobby.demo.ui.GraphicalConsole;
+import es.ucm.fdi.tp.practica6.lobby.demo.ui.GraphicalConsole;
 
 /**
  * A generic, abstract ChatMessage

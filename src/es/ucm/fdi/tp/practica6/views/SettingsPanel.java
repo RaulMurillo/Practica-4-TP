@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.server.Server;
+import es.ucm.fdi.tp.practica6.server.GameServer;
 
 /**
  * A panel with multiple {@link JPanel} that allows the user to make changes in
@@ -277,7 +277,7 @@ public class SettingsPanel extends JPanel {
 			if (ai) {
 				autoMovPane.addIntelligentButton();
 			}
-			if (viewPiece == null || !viewPiece.equals(Server.observerPiece)) {
+			if (viewPiece == null || !viewPiece.equals(GameServer.observerPiece)) {
 				autoMovPane.addTimelimit();
 			}
 		}

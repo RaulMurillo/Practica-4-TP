@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.tp.practica6.lobby.demo.ui;
+package es.ucm.fdi.tp.practica6.lobby.demo.ui;
 
 import javax.swing.*;
 import java.awt.*;

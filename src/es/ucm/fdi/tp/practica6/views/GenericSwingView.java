@@ -33,7 +33,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.server.Server;
+import es.ucm.fdi.tp.practica6.server.GameServer;
 
 /**
  * Abstract class implementing a game observer that outputs all the events in
@@ -120,7 +120,13 @@ public abstract class GenericSwingView extends JFrame
 
 	protected BoardGUI boardUI;
 
+	/**
+	 * Panel that contains the graphical board.
+	 * <p>
+	 * Panel que contiene el tablero grafico.
+	 */
 	private JPanel jpBoard;
+	
 	/**
 	 * A panel to be used for user's interactions with the game.
 	 * <p>
@@ -491,7 +497,7 @@ public abstract class GenericSwingView extends JFrame
 	 * Habilita todos los subpaneles que puedan ser deshabilitados.
 	 */
 	protected void enablePanels() {
-		if (viewPiece != null && viewPiece.equals(Server.observerPiece)) {
+		if (viewPiece != null && viewPiece.equals(GameServer.observerPiece)) {
 			settings.setEnabled(false, false, false);
 		} else {
 			settings.setEnabled(true, true, true);
@@ -505,7 +511,7 @@ public abstract class GenericSwingView extends JFrame
 	 * {@link QuitPanel}.
 	 */
 	private void disablePanels() {
-		if (viewPiece != null && viewPiece.equals(Server.observerPiece)) {
+		if (viewPiece != null && viewPiece.equals(GameServer.observerPiece)) {
 			settings.setEnabled(false, false, false);
 		} else {
 			settings.setEnabled(false, false, true);

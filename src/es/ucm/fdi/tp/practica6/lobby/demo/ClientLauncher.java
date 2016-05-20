@@ -3,7 +3,7 @@ package es.ucm.fdi.tp.practica6.lobby.demo;
 import javax.swing.*;
 
 import es.ucm.fdi.tp.practica6.lobby.demo.net.ObjectClient;
-import es.ucm.fdi.tp.tp.practica6.lobby.demo.ui.GraphicalConsole;
+import es.ucm.fdi.tp.practica6.lobby.demo.ui.GraphicalConsole;
 
 import java.awt.*;
 import java.io.IOException;

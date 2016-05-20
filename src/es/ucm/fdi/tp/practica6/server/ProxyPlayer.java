@@ -398,7 +398,7 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 	}
 
 	public synchronized void ctrlStop() {
-		if (!endGame && !localPiece.equals(Server.observerPiece)) {
+		if (!endGame && !localPiece.equals(GameServer.observerPiece)) {
 			try {
 				controller.stop();
 			} catch (GameError e) {

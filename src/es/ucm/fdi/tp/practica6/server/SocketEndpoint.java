@@ -9,11 +9,15 @@ import java.net.Socket;
  * Interfaz simple para recibir y responder peticiones en sockets.
  */
 public interface SocketEndpoint {
+
 	/**
 	 * Call this to start listening on the socket. Any incoming data will result
-	 * in a call to dataReceived
+	 * in a call to {@link dataReceived}.
+	 * <p>
+	 * Inicia la escucha sobre el socket. Cualquier dato entrante desencadenara
+	 * una llamada a {@link dataReceived}.
 	 * 
-	 * @param socket
+	 * @param socket 
 	 * @param timeout
 	 */
 	void startConnection(Socket socket, int timeout) throws IOException;

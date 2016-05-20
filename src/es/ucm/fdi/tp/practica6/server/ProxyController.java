@@ -117,12 +117,9 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	}
 
 	public void startConnection(Socket socket, int timeout) throws IOException {
-		// Socket socket = new Socket(hostname, port);
 		try {
 			socket.setSoTimeout(timeout);
-			/////////
 			new ClientLauncher().launchInMessageWindow();
-			/////////
 			oos = new ObjectOutputStream(socket.getOutputStream());
 
 			Thread t = new Thread(new Runnable() {
