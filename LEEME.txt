@@ -19,3 +19,10 @@ CAMBIOS SOBRE LA PRACTICA 5:
 * Se ha cambiado la operacion de cierre predeterminada de la vista grafica. Ahora tiene el mismo manejador que el boton "Quit".
 * Se han sustituido los "==" del codigo por "equals()" para poder usar la aplicacion con servidor.
 * Corregido el reseteo del juego para el ATTT 
+* Se ha añadido además como parte opcional un lobby con un chat para cuya realización utilizamos el codigo del chat de prueba
+  del campus virtual y lo hemos integrado en nuestra aplicación.
+* También se permite que haya clientes conectados en modo observador a la partida
+* Finalmente se ha hecho una copia y posterior modificación de la clase MinMax (no se podia extender por tener ciertos metodos privados)
+  y ahora si en lugar de usar MinMax usamos MinMaxExt se calculan jugadas hasta el tiempo dado o la profundida máxima, para esto se van
+  guardando los mejores movimientos calculados hasta el momento y se devuelve este en lugar de null si el hilo del jugador es interrumpido
+* Esta clase no se usa, solo se creó para experimentar con ella

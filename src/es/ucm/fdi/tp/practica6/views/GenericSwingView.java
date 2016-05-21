@@ -183,7 +183,14 @@ public abstract class GenericSwingView extends JFrame
 	 * puede trabajar.
 	 */
 	private int timeout;
-
+	/**
+	 * A class that returns the move stored in the view in manual mode
+	 * <p>
+	 * Una clase que devuelve el movimiento guardado en la vista en modo manual
+	 * 
+	 * @author Antonio Valdivia de la Torre y Raul Murillo
+	 *
+	 */
 	public class SwingPlayer extends Player {
 
 		/**
