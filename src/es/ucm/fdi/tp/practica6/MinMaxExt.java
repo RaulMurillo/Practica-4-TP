@@ -11,13 +11,13 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Pair;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
-
 /**
- * A class copied from MinMax that returns the best move calculated in the given time
- * or calculated in MAX_DEPTH
+ * A class copied from MinMax that returns the best move calculated in the given
+ * time or calculated in MAX_DEPTH
  * <p>
- * Clase copiada de MinMax que calcula el mejor movimiento en el tiempo dado o en la 
- * profundidad maxima. 
+ * Clase copiada de MinMax que calcula el mejor movimiento en el tiempo dado o
+ * en la profundidad maxima.
+ * 
  * @author Antonio Valdivia y Raul Murillo (Copied from basecode)
  *
  */

@@ -36,10 +36,9 @@ public class AtaxxFactoryExt extends AtaxxFactory {
 	}
 
 	/**
-	 * The constructor with parameters of the class
+	 * The constructor with parameters of the class.
 	 * <p>
-	 * El constructor con parametros de la clase
-	 * <p>
+	 * El constructor con parametros de la clase.
 	 * 
 	 * @param dim
 	 * @param obstacles

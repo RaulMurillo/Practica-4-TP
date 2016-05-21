@@ -9,7 +9,12 @@ import es.ucm.fdi.tp.practica6.lobby.demo.ui.GraphicalConsole;
  */
 public abstract class ChatMessage implements Serializable {
 
-    public abstract void showOn(GraphicalConsole console);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3435533937818399404L;
+
+	public abstract void showOn(GraphicalConsole console);
 
     public static ChatMessage fromString(String text) {
         if (text.contains("*")) {
@@ -24,7 +29,11 @@ public abstract class ChatMessage implements Serializable {
     }
 
     public static class Mult extends ChatMessage {
-        private int a, b;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -6970614626532615908L;
+		private int a, b;
         public Mult(int a, int b) {
             this.a = a; this.b = b;
         }
@@ -36,14 +45,23 @@ public abstract class ChatMessage implements Serializable {
     }
 
     public static class Stop extends ChatMessage {
-        @Override
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -7111689461507566611L;
+
+		@Override
         public void showOn(GraphicalConsole console) {
             console.closeWindow();
         }
     }
 
     public static class Text extends ChatMessage {
-        private String text;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -8845112942926553422L;
+		private String text;
         public Text(String text) {
             this.text = text;
         }

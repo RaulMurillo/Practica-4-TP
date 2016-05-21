@@ -25,7 +25,7 @@ import es.ucm.fdi.tp.practica6.server.ServerWindow.WindowEventListener;
  * Un sencillo servidor multihilo. No hace suposiciones respecto a datos que se
  * intercambian entre servidores y clientes.
  * 
- * @author Raul Murillo & Antonio Valdivia
+ * @author Raul Murillo and Antonio Valdivia
  *
  */
 public class GameServer implements WindowEventListener {

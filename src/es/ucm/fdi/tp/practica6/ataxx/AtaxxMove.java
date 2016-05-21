@@ -55,15 +55,13 @@ public class AtaxxMove extends GameMove {
 	/**
 	 * This constructor should be used ONLY to get an instance of
 	 * {@link AtaxxMove} to generate game moves from strings by calling
-	 * {@link #fromString(String)}.
+	 * {@link fromString}{@code (String)}.
 	 * 
 	 * <p>
 	 * Solo se debe usar este constructor para obtener objetos de
 	 * {@link AtaxxMove} para generar movimientos a partir de strings usando el
-	 * metodo {@link #fromString(String)}.
-	 * 
+	 * metodo {@link fromString}{@code (String)}.
 	 */
-
 	public AtaxxMove() {
 	}
 
@@ -133,9 +131,9 @@ public class AtaxxMove extends GameMove {
 				}
 				// Different neighbors pieces are changed.
 				int startRow = Math.max(0, targetRow - 1);
-                int startCol = Math.max(0, targetCol - 1);
-                int endRow = Math.min(board.getRows(), targetRow+2);
-                int endCol = Math.min(board.getCols(), targetCol+2);
+				int startCol = Math.max(0, targetCol - 1);
+				int endRow = Math.min(board.getRows(), targetRow + 2);
+				int endCol = Math.min(board.getCols(), targetCol + 2);
 				// We explore the surroundings of the piece (p) and make the
 				// pertinent changes if necessary in the surrounding pieces
 				for (int i = startRow; i < endRow; i++) {

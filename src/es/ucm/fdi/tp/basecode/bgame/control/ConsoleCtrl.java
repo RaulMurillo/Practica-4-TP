@@ -12,9 +12,9 @@ import es.ucm.fdi.tp.basecode.bgame.control.commands.PlayCommand;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.QuitCommand;
 import es.ucm.fdi.tp.basecode.bgame.control.commands.RestartCommand;
 import es.ucm.fdi.tp.basecode.bgame.model.Game;
-import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
+import es.ucm.fdi.tp.basecode.bgame.model.Game.State;
 
 /**
  * A console controller that does not use MVC -- you can see this in the

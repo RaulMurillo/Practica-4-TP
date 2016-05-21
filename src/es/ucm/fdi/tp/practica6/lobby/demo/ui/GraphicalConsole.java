@@ -10,7 +10,12 @@ import java.awt.event.ActionListener;
  */
 public class GraphicalConsole extends JPanel {
 
-    protected String name;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 290434570786218277L;
+
+	protected String name;
 
     private JScrollPane jspOutput;
     private JTextField jtInput;

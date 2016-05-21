@@ -17,27 +17,46 @@ public interface SocketEndpoint {
 	 * Inicia la escucha sobre el socket. Cualquier dato entrante desencadenara
 	 * una llamada a {@link dataReceived}.
 	 * 
-	 * @param socket 
+	 * @param socket
+	 *            The socket on which they want to listen.
+	 *            <p>
+	 *            El socket sobre el que se quiere escuchar.
 	 * @param timeout
+	 *            Time limit for awaiting connection.
+	 *            <p>
+	 *            Plazo para la espera de conexion.
+	 * @throws IOException
 	 */
 	void startConnection(Socket socket, int timeout) throws IOException;
 
 	/**
-	 * call this to stop communication
+	 * Call this to stop communication.
+	 * <p>
+	 * Para la comunicacion por el socket.
 	 */
 	void stopConnection();
 
 	/**
-	 * will be called when data is received
+	 * Will be called when data is received.
+	 * <p>
+	 * Gestiona los datos recibidos.
 	 * 
 	 * @param data
+	 *            The receibed data.
+	 *            <p>
+	 *            Los datos recibidos.
 	 */
 	void dataReceived(Object data);
 
 	/**
-	 * call this to send data to the other side
+	 * Call this to send data to the other side.
+	 * <p>
+	 * Permite enviar datos al otro lado.
 	 * 
 	 * @param data
+	 *            The data to send.
+	 *            <p>
+	 *            Los datos a enviar.
 	 */
 	void sendData(Object data);
 }

@@ -14,9 +14,8 @@ import es.ucm.fdi.tp.practica6.views.GenericSwingView;
  * This class that extends GenericSwingView, adds to the abstract class the new
  * functionality that allow us to play Advanced Tic-Tac-Toe in swing.
  * <p>
- * Esta clase que extiende GenericSwingView a�ade a la clase abstracta la nueva
+ * Esta clase que extiende GenericSwingView añade a la clase abstracta la nueva
  * funcionalidad que permite jugar a Advanced Tic-Tac-Toe en swing.
- * <p>
  * 
  * @author Antonio Valdivia y Raul Murillo
  *
@@ -35,15 +34,15 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	 */
 	private boolean advancedMode;
 	/**
-	 * Origin colum
+	 * Origin column.
 	 * <p>
-	 * Columna de origen
+	 * Columna de origen.
 	 */
 	private int iniCol;
 	/**
-	 * Origin row
+	 * Origin row.
 	 * <p>
-	 * Fila de origen
+	 * Fila de origen.
 	 */
 	private int iniRow;
 	/**
@@ -207,7 +206,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 		if (success && turn.equals(viewPiece) || viewPiece == null) {
 			turnCount++;
 		}
-		if ((viewPiece == null && turnCount > 5) || turnCount > 2) {
+		if ((viewPiece == null && turnCount > 5) || (viewPiece != null && turnCount > 2)) {
 			advancedMode = true;
 		}
 	}
@@ -215,7 +214,7 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	@Override
 	protected void setStartingActions(Board board, String gameDesc, Piece turn) {
 		super.setStartingActions(board, gameDesc, turn);
-		turnCount = 0;
+		restartTurnCount();
 		resetMove();
 		advancedMode = false;
 	}
@@ -236,5 +235,14 @@ public class AdvancedTTTSwingView extends GenericSwingView {
 	@Override
 	protected void showStartingHelp() {
 		settings.setMessage("Click on an empty cell");
+	}
+
+	/**
+	 * Restarts the turn counter.
+	 * <p>
+	 * Reinicia el contador de turnos.
+	 */
+	private void restartTurnCount() {
+		turnCount = 0;
 	}
 }

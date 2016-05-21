@@ -22,29 +22,100 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.GameRules;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 
+/**
+ * A class to represent a {@link Player} from the client side. It works as an
+ * endpoint to send and receive data with the server.
+ * <p>
+ * Clase que representa un {@link Player} desde el lado del cliente. Funciona
+ * como un endpoint para enviar y recibir datos con el servidor.
+ * 
+ * @author Raul Murillo and Antonio Valdivia.
+ *
+ */
 public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
-	private volatile boolean stopped;
-
-	private String hostname;
-
-	private Controller controller;
-	private List<Piece> pieces;
-	private GameFactory gameFactory;
-	private Piece localPiece;
-	private boolean endGame;
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6734599552257109858L;
 
+	/**
+	 * Object with which data is sent.
+	 * <p>
+	 * Objeto con el que se envian datos.
+	 */
+	private ObjectOutputStream oos;
+
+	/**
+	 * Object with which data is received.
+	 * <p>
+	 * Objeto con el que se reciben datos.
+	 */
+	private ObjectInputStream ois;
+
+	/**
+	 * Indicates if the connection has been stopped.
+	 * <p>
+	 * Indica si la conexion ha sido parada.
+	 */
+	private volatile boolean stopped;
+
+	/**
+	 * Name of the object/endpoint.
+	 * <p>
+	 * Nombre del objeto/endpoint.
+	 */
+	private String hostname;
+
+	/**
+	 * Controller of the class.
+	 * <p>
+	 * Controlador de la clase.
+	 */
+	private Controller controller;
+
+	/**
+	 * List of pieces of the game.
+	 * <p>
+	 * Lista de piezas del juego.
+	 */
+	private List<Piece> pieces;
+
+	/**
+	 * Factory of the game.
+	 * <p>
+	 * Factoria del juego.
+	 */
+	private GameFactory gameFactory;
+
+	/**
+	 * The piece that handles this player.
+	 * <p>
+	 * La pieza que maneja este jugador.
+	 */
+	private Piece localPiece;
+
+	/**
+	 * Indicates if the game has finished.
+	 * <p>
+	 * Indica si el juego ha terminado.
+	 */
+	private boolean endGame;
+
+	/**
+	 * The last move made by this player.
+	 * <p>
+	 * El ultimo movimiento realizado por este jugador.
+	 */
 	private GameMove move;
 
+	/**
+	 * A generic, abstract message to send to the client.
+	 * <p>
+	 * Un mensaje generico y abstracto para enviar al cliente.
+	 */
 	public static abstract class ObservableMessage implements Serializable {
 
 		/**
@@ -52,13 +123,40 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		 */
 		private static final long serialVersionUID = 4393638228993967379L;
 
+		/**
+		 * Executes the content of the message.
+		 * <p>
+		 * Ejecuta el contenido del mensaje.
+		 * 
+		 * @param gameObserver
+		 *            The observer from the client side to which the message is
+		 *            sent.
+		 *            <p>
+		 *            El observador del lado del cliente al que se envia el
+		 *            mensaje.
+		 */
 		public void notifyMessage(GameObserver gameObserver) {
 		}
 
+		/**
+		 * Updates the necessary attributes of the client.
+		 * <p>
+		 * Actualiza los atributos del cliente necesarios.
+		 * 
+		 * @param proxyController
+		 *            The client to update.
+		 *            <p>
+		 *            El cliente a actualizar.
+		 */
 		public void updateProxy(ProxyController proxyController) {
 		}
 	}
 
+	/**
+	 * A message to start the game.
+	 * <p>
+	 * Un mensaje para iniciar el juego.
+	 */
 	public static class StartMessage extends ObservableMessage {
 		/**
 		 * 
@@ -88,6 +186,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	};
 
+	/**
+	 * A message to notify a move start.
+	 * <p>
+	 * Un mensaje para notificar el inicio de un movimiento.
+	 */
 	public static class MoveStartMessage extends ObservableMessage {
 
 		/**
@@ -113,6 +216,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	/**
+	 * A message to notify a move end.
+	 * <p>
+	 * Un mensaje para notificar el fin de un movimiento.
+	 */
 	public static class MoveEndMessage extends ObservableMessage {
 
 		/**
@@ -140,6 +248,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	/**
+	 * A message to notify a change of turn.
+	 * <p>
+	 * Un mensaje para notificar un cambio de turno.
+	 */
 	public static class ChangeTurnMessage extends ObservableMessage {
 
 		/**
@@ -166,6 +279,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	}
 
+	/**
+	 * A message to notify an error.
+	 * <p>
+	 * Un mensaje para notificar un error.
+	 */
 	public static class ErrorMessage extends ObservableMessage {
 
 		/**
@@ -184,6 +302,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	/**
+	 * A message to notify a fatal error.
+	 * <p>
+	 * Un mensaje para notificar un error fatal.
+	 */
 	public static class FatalErrorMessage extends ErrorMessage {
 
 		/**
@@ -209,6 +332,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	/**
+	 * A message to notify the game over.
+	 * <p>
+	 * Un mensaje para notificar el fin del juego.
+	 */
 	public static class GameOverMessage extends ObservableMessage {
 
 		/**
@@ -237,6 +365,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	}
 
+	/**
+	 * A message with the necessary information to initialize the game..
+	 * <p>
+	 * Un mensaje con la informacion necesaria para inicializar el juego.
+	 */
 	public static class InitializationMessage implements Serializable {
 
 		/**
@@ -266,10 +399,59 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	/**
+	 * Creates a {@code ProxyPlayer} with name {@code localserver}.
+	 * <p>
+	 * Crea un {@code ProxyPlayer} de nombre {@code localserver}.
+	 * 
+	 * @param controller
+	 *            Controller of the player.
+	 *            <p>
+	 *            Controlador del jugador.
+	 * @param gameFactory
+	 *            Factory of the game.
+	 *            <p>
+	 *            Factoria del juego.
+	 * @param pieces
+	 *            List of pieces of the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
+	 * @param localPiece
+	 *            The piece that handles this player.
+	 *            <p>
+	 *            La pieza que maneja este jugador.
+	 */
 	public ProxyPlayer(Controller controller, GameFactory gameFactory, List<Piece> pieces, Piece localPiece) {
 		this("localserver", controller, gameFactory, pieces, localPiece);
 	};
 
+	/**
+	 * Creates a {@code ProxyPlayer} with the specified data.
+	 * <p>
+	 * Crea un {@code ProxyPlayer} con los datos especificados.
+	 * 
+	 * @param hostname
+	 *            Name of the player.
+	 *            <p>
+	 *            Nobre del jugador.
+	 * 
+	 * @param controller
+	 *            Controller of the player.
+	 *            <p>
+	 *            Controlador del jugador.
+	 * @param gameFactory
+	 *            Factory of the game.
+	 *            <p>
+	 *            Factoria del juego.
+	 * @param pieces
+	 *            List of pieces of the game.
+	 *            <p>
+	 *            Lista de piezas del juego.
+	 * @param localPiece
+	 *            The piece that handles this player.
+	 *            <p>
+	 *            La pieza que maneja este jugador.
+	 */
 	public ProxyPlayer(String hostname, Controller controller, GameFactory gameFactory, List<Piece> pieces,
 			Piece localPiece) {
 		this.hostname = hostname;
@@ -280,6 +462,7 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		this.endGame = false;
 	}
 
+	@Override
 	public void startConnection(final Socket socket, int timeout) throws IOException {
 		try {
 			socket.setSoTimeout(timeout);
@@ -322,6 +505,16 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		return move;
 	}
 
+	/**
+	 * Sets the last move chosen by the player.
+	 * <p>
+	 * Establece el ultimo movimiento seleccionado por el jugador.
+	 * 
+	 * @param move
+	 *            The last move chosen.
+	 *            <p>
+	 *            El ultimo movimiento seleccionado.
+	 */
 	public void setMove(GameMove move) {
 		this.move = move;
 	}
@@ -362,16 +555,21 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	@Override
 	public void onError(String msg) {
-		///////////
 		sendData(new ErrorMessage(msg));
 	}
 
+	/**
+	 * Send to the client the initialization message.
+	 * <p>
+	 * Envia al cliente el mensaje de inicializacion.
+	 */
 	public void newConnection() {
 		InitializationMessage initializationMessage = new InitializationMessage(gameFactory, pieces, localPiece);
 		sendData(initializationMessage);
 
 	}
 
+	@Override
 	public void sendData(Object message) {
 		try {
 			oos.writeObject(message);
@@ -384,6 +582,7 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 		}
 	}
 
+	@Override
 	public void dataReceived(Object message) {
 		((ClientMessage) message).notifyMessage(this);
 	}
@@ -397,6 +596,11 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 
 	}
 
+	/**
+	 * Asks the controller to stop the game.
+	 * <p>
+	 * Solicita al controlador parar el juego.
+	 */
 	public synchronized void ctrlStop() {
 		if (!endGame && !localPiece.equals(GameServer.observerPiece)) {
 			try {
@@ -404,10 +608,16 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 			} catch (GameError e) {
 				log.log(Level.WARNING, "Error while stopping controller", e);
 			}
-		}else stopped = true;
+		} else
+			stopped = true;
 
 	}
 
+	/**
+	 * Asks the controller to restart the game.
+	 * <p>
+	 * Solicita al controlador reiniciar el juego.
+	 */
 	public synchronized void ctrlRestart() {
 		try {
 			controller.restart();

@@ -2,8 +2,6 @@ package es.ucm.fdi.tp.basecode.bgame.model;
 
 import java.util.List;
 
-import es.ucm.fdi.tp.basecode.bgame.control.ConsolePlayer;
-
 /**
  * An abstract class representing a game move.
  * 

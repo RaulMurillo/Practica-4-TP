@@ -28,57 +28,155 @@ import es.ucm.fdi.tp.practica6.lobby.demo.ClientLauncher;
 import es.ucm.fdi.tp.practica6.server.ProxyPlayer.InitializationMessage;
 import es.ucm.fdi.tp.practica6.server.ProxyPlayer.ObservableMessage;
 
+/**
+ * A class to represent a {@link Controller} from the client side. It works as
+ * an endpoint to send and receive data with the server.
+ * <p>
+ * Clase que representa un {@link Controller} desde el lado del cliente.
+ * Funciona como un endpoint para enviar y recibir datos con el servidor.
+ * 
+ * @author Raul Murillo and Antonio Valdivia.
+ *
+ */
 public class ProxyController extends Controller implements Observable<GameObserver>, SocketEndpoint {
 
 	private static final Logger log = Logger.getLogger(Controller.class.getSimpleName());
 
+	/**
+	 * Object with which data is sent.
+	 * <p>
+	 * Objeto con el que se envian datos.
+	 */
 	private ObjectOutputStream oos;
+
+	/**
+	 * Object with which data is received.
+	 * <p>
+	 * Objeto con el que se reciben datos.
+	 */
 	private ObjectInputStream ois;
+
+	/**
+	 * Indicates if the server has been stopped.
+	 * <p>
+	 * Indica si el servidor ha sido parado.
+	 */
 	private volatile boolean stopped;
 
+	/**
+	 * Name of the object/endpoint.
+	 * <p>
+	 * Nombre del objeto/endpoint.
+	 */
 	private String hostname;
+
+	/**
+	 * Port on which the client will be listening.
+	 * <p>
+	 * Puerto en el que el cliente estara escuchando.
+	 */
 	private int port;
+
+	/**
+	 * Time limit for awaiting connection, in milliseconds.
+	 * <p>
+	 * Plazo para la espera de conexion, en milisegundos.
+	 */
 	private int timeout;
 
+	/**
+	 * List of observers.
+	 * <p>
+	 * Lista de observadores.
+	 */
 	private List<GameObserver> observers;
+
+	/**
+	 * The piece that handles this client.
+	 * <p>
+	 * La pieza que maneja este cliente.
+	 */
 	private Piece localPiece;
+
+	/**
+	 * Factory of the game.
+	 * <p>
+	 * Factoria del juego.
+	 */
 	private GameFactory gameFactory;
+
+	/**
+	 * Rules of the game.
+	 * <p>
+	 * Reglas del juego.
+	 */
 	private GameRules rules;
+
+	/**
+	 * Board of the game.
+	 * <p>
+	 * Tablero del juego.
+	 */
 	private Board gameBoard;
+
+	/**
+	 * Indicates if the server accepted this client.
+	 * <p>
+	 * Indica si el servidor acepto a este cleinte.
+	 */
 	private boolean initialized;
+
+	/**
+	 * Algorithm for the AI Player.
+	 * <p>
+	 * Algoritmo para le jugador inteligente.
+	 */
 	private AIAlgorithm aiPlayerAlg;
 
-	public ProxyController() {
-		this("localhost", 2020, 2000, null);
-	}
-
-	public ProxyController(String hostname, int port, int timeout, AIAlgorithm aiPlayerAlg) {
-		super(null, null);
-		this.hostname = hostname;
-		this.port = port;
-		this.timeout = timeout;
-		this.stopped = false;
-		this.initialized = false;
-		this.observers = new ArrayList<GameObserver>();
-		this.aiPlayerAlg = aiPlayerAlg;
-	}
-
+	/**
+	 * A generic, abstract message to send to the server.
+	 * <p>
+	 * Un mensaje generico y abstracto para enviar al servidor.
+	 */
 	public static abstract class ClientMessage implements Serializable {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 6602000723654830197L;
 
-		public void notifyMessage(ProxyPlayer p) {
+		/**
+		 * Executes the content of the message.
+		 * <p>
+		 * Ejecuta el contenido del mensaje.
+		 * 
+		 * @param player
+		 *            The player from the server side to which the message is
+		 *            sent.
+		 *            <p>
+		 *            El jugador del lado del servidor al que se envia el
+		 *            mensaje.
+		 */
+		public void notifyMessage(ProxyPlayer player) {
 		}
 	}
 
+	/**
+	 * A message to notify a game move.
+	 * <p>
+	 * Un mensaje para notificar un movimiento del juego.
+	 */
 	public static class MakeMoveMessage extends ClientMessage {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -3336919685539615536L;
-		GameMove move;
+		
+		/**
+		 * Move to send.
+		 * <p>
+		 * Movimiento a enviar. 
+		 */
+		private GameMove move;
 
 		public MakeMoveMessage(GameMove move) {
 			this.move = move;
@@ -91,6 +189,11 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
+	/**
+	 * A message to stop the game.
+	 * <p>
+	 * Un mensaje para parar el juego.
+	 */
 	public static class StopMessage extends ClientMessage {
 
 		/**
@@ -104,6 +207,11 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
+	/**
+	 * A message to restart the game.
+	 * <p>
+	 * Un mensaje para reiniciar el juego.
+	 */
 	public static class RestartMessage extends ClientMessage {
 		/**
 		 * 
@@ -116,6 +224,51 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
+	/**
+	 * Creates a Client/Controller with name {@code localhost}, in port 2020,
+	 * timelimit 2000 and no algorithm for teh AI Player.
+	 * <p>
+	 * Crea un Cliente/Controlador con nombre {@code localhost}, en el puerto
+	 * 2020, tiempo limite de 2000 y sin agoritmo de AI.
+	 */
+	public ProxyController() {
+		this("localhost", 2020, 2000, null);
+	}
+
+	/**
+	 * Creates a Client/Controller with the specified data.
+	 * <p>
+	 * Crea un Cliente/Controlador con los datos especificados.
+	 * 
+	 * @param hostname
+	 *            Name of the client.
+	 *            <p>
+	 *            Nombre del cliente.
+	 * @param port
+	 *            Port on which connect.
+	 *            <p>
+	 *            Puerto al que conectarse.
+	 * @param timeout
+	 *            Time limit for connection awaiting.
+	 *            <p>
+	 *            Tiempo limite de espera de conexion.
+	 * @param aiPlayerAlg
+	 *            Algorithm for the AI Player.
+	 *            <p>
+	 *            Algoritmo para el jugador inteligente.
+	 */
+	public ProxyController(String hostname, int port, int timeout, AIAlgorithm aiPlayerAlg) {
+		super(null, null);
+		this.hostname = hostname;
+		this.port = port;
+		this.timeout = timeout;
+		this.stopped = false;
+		this.initialized = false;
+		this.observers = new ArrayList<GameObserver>();
+		this.aiPlayerAlg = aiPlayerAlg;
+	}
+
+	@Override
 	public void startConnection(Socket socket, int timeout) throws IOException {
 		try {
 			socket.setSoTimeout(timeout);
@@ -131,10 +284,11 @@ public class ProxyController extends Controller implements Observable<GameObserv
 					}
 					while (!stopped) {
 						try {
-							if (!initialized)
+							if (!initialized) {
 								connectionEstablished(ois.readObject());
-							else
+							} else {
 								dataReceived(ois.readObject());
+							}
 						} catch (SocketTimeoutException ste) {
 							log.log(Level.FINE, "Failed to read; will retry");
 						} catch (IOException | ClassNotFoundException se) {
@@ -173,6 +327,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		sendData(new RestartMessage());
 	}
 
+	@Override
 	public void sendData(Object message) {
 		try {
 			oos.writeObject(message);
@@ -185,6 +340,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
+	@Override
 	public void dataReceived(Object message) {
 		log.log(Level.INFO, "Message received");
 		ObservableMessage controlMessage = (ObservableMessage) message;
@@ -198,11 +354,26 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		}
 	}
 
+	@Override
 	public void stopConnection() {
 		this.stopped = true;
 	}
 
-	public void connectionEstablished(Object message) throws ClassNotFoundException, IOException {
+	/**
+	 * Sets the class's attributes when the connection with the server is
+	 * established.
+	 * <p>
+	 * Establece los atributos de la clase cuando la conexion con el servidor se
+	 * ha establecido.
+	 * 
+	 * @param message
+	 *            Initialization message.
+	 *            <p>
+	 *            Mensaje de inicializacion.
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private void connectionEstablished(Object message) throws ClassNotFoundException, IOException {
 		log.log(Level.INFO, "Connection established");
 		InitializationMessage iniMessage = (InitializationMessage) message;
 		this.gameFactory = iniMessage.getGameFactory();
@@ -211,7 +382,12 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		initialize();
 	}
 
-	public void initialize() {
+	/**
+	 * Initializes the game.
+	 * <p>
+	 * Inicializa el juego.
+	 */
+	private void initialize() {
 		this.game = new Game(gameFactory.gameRules());
 		this.rules = gameFactory.gameRules();
 		gameFactory.createSwingView(this, this, localPiece, gameFactory.createRandomPlayer(),
@@ -220,6 +396,16 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		log.log(Level.INFO, "The ProxyController has been initialized");
 	}
 
+	/**
+	 * Updates the board of the game.
+	 * <p>
+	 * Actualiza el tablero de juego.
+	 * 
+	 * @param board
+	 *            The new game board.
+	 *            <p>
+	 *            EL nuevo tablero de juego.
+	 */
 	public void updateBoard(Board board) {
 		this.gameBoard = board;
 	}
@@ -235,11 +421,26 @@ public class ProxyController extends Controller implements Observable<GameObserv
 		observers.remove(o);
 	}
 
+	/**
+	 * Shows a dialog with a fatal error that causes the game end.
+	 * <p>
+	 * Muestra un mensaje de error fatal que causa el cierre del juego.
+	 * 
+	 * @param msg
+	 *            The error message.
+	 *            <p>
+	 *            El mensaje de error.
+	 */
 	public void showFatalError(String msg) {
 		JOptionPane.showMessageDialog(null, msg, "Game error", JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
 	}
 
+	/**
+	 * Starts the controller from the client side.
+	 * <p>
+	 * Inicia el controlador del lado del cliente.
+	 */
 	public void startCtrl() {
 		try {
 			startConnection(new Socket(hostname, port), timeout);

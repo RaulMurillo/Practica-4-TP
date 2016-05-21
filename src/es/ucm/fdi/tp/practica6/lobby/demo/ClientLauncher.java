@@ -47,7 +47,12 @@ public class ClientLauncher {
 
     public void launchInWindow() throws IOException {
         final GraphicalConsole gc = new GraphicalConsole("Test") {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -4540136416006432469L;
+
+			@Override
             protected void handleTextEntry(String text) {
                 oc.sendData(text);
             }
@@ -70,7 +75,12 @@ public class ClientLauncher {
 
     public void launchInMessageWindow() throws IOException {
         final GraphicalConsole gc = new GraphicalConsole("Test") {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1729517987433350838L;
+
+			@Override
             protected void handleTextEntry(String text) {
                 oc.sendData(ChatMessage.fromString(text));
             }
