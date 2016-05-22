@@ -21,7 +21,6 @@ import javax.swing.text.DefaultCaret;
  */
 public class StatusMessages extends JPanel {
 
-
 	/**
 	 * 
 	 */
@@ -57,7 +56,7 @@ public class StatusMessages extends JPanel {
 		// Set AutoScroll
 		DefaultCaret caret = (DefaultCaret) jtaScreen.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
+
 		JScrollPane jspScroll = new JScrollPane(jtaScreen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(jspScroll);

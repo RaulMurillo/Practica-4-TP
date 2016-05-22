@@ -126,7 +126,7 @@ public abstract class GenericSwingView extends JFrame
 	 * Panel que contiene el tablero grafico.
 	 */
 	private JPanel jpBoard;
-	
+
 	/**
 	 * A panel to be used for user's interactions with the game.
 	 * <p>
@@ -183,6 +183,7 @@ public abstract class GenericSwingView extends JFrame
 	 * puede trabajar.
 	 */
 	private int timeout;
+
 	/**
 	 * A class that returns the move stored in the view in manual mode
 	 * <p>

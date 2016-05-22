@@ -18,7 +18,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class PlayerModes extends JPanel {
 
-
 	/**
 	 * 
 	 */

@@ -16,13 +16,12 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  * A class that extends AdvancedTTTFactory and that adds the new functionality
  * needed to create a swingview.
  * <p>
- * Una clase que extiende AdvancedTTTFactory y que a�ade la nueva funcionalidad
+ * Una clase que extiende AdvancedTTTFactory y que añade la nueva funcionalidad
  * necesaria para crear una vista de ventana.
  *
  * @author Antonio Valdivia y Raul Murillo
  */
 public class AdvancedTTTFactoryExt extends AdvancedTTTFactory {
-
 
 	/**
 	 * 

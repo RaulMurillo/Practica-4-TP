@@ -13,7 +13,6 @@ import javax.swing.JPanel;
  */
 public class QuitPanel extends JPanel {
 
-
 	/**
 	 * 
 	 */

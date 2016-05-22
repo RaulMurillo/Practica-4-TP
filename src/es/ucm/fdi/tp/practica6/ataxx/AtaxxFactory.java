@@ -106,7 +106,7 @@ public class AtaxxFactory implements GameFactory {
 
 	@Override
 	public Player createAIPlayer(AIAlgorithm alg) {
-		if ( alg != null ) {
+		if (alg != null) {
 			return new AIPlayer(alg);
 		} else {
 			return new DummyAIPlayer(createRandomPlayer(), 1000);

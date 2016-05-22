@@ -21,11 +21,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class PieceColors extends JPanel {
 
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8420278724071234010L;
 	/**
 	 * A {@link JComboBox} with the pieces of the game.
 	 * <p>

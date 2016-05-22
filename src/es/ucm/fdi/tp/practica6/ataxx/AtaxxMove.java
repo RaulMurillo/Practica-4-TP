@@ -15,7 +15,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AtaxxMove extends GameMove {
 
-
 	/**
 	 * 
 	 */

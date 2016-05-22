@@ -19,7 +19,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AtaxxRandomPlayer extends Player {
 
-
 	/**
 	 * 
 	 */

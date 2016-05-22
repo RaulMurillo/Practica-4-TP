@@ -84,7 +84,7 @@ public class AtaxxSwingView extends GenericSwingView {
 	@Override
 	public void leftButtonPressed(int row, int col) {
 		// If it is your turn
-		if (lastTurn!=null && (viewPiece == null || viewPiece.equals(lastTurn))) {
+		if (lastTurn != null && (viewPiece == null || viewPiece.equals(lastTurn))) {
 			// We have not selected a piece to move yet
 			if (iniCol == -1) {
 				if (lastTurn.equals(lastBoard.getPosition(row, col))) {

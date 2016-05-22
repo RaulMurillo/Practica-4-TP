@@ -261,7 +261,7 @@ public class AtaxxRules implements GameRules {
 					for (int col = 0; col < board.getCols(); col++) {
 						Piece c = board.getPosition(row, col);
 
-						int sign = (c == null) ? 0 : (c.equals(p)) ? 1 :(c.equals(OBSTACLE)) ?0 : -1;
+						int sign = (c == null) ? 0 : (c.equals(p)) ? 1 : (c.equals(OBSTACLE)) ? 0 : -1;
 
 						s += sign;
 						// blank neighbors are bad for us,

@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -26,7 +25,6 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  * Esta clase implenta un tablero grafico del juego.
  */
 public class BoardGUI extends JPanel {
-
 
 	/**
 	 * 
@@ -82,14 +80,14 @@ public class BoardGUI extends JPanel {
 	 * <p>
 	 * Ruta de la imagen de los obstaculos.
 	 */
-	final public String OBS_PATH = "resources/Block.png";
+	final public String OBS_PATH = "/es/ucm/fdi/tp/practica6/views/Block.png";
 
 	/**
 	 * Path of the pieces image.
 	 * <p>
 	 * Ruta de la imagen de las piezas.
 	 */
-	final public String PIECE_PATH = "resources/Piece.png";
+	final public String PIECE_PATH = "/es/ucm/fdi/tp/practica6/views/Piece.png";
 
 	/**
 	 * Image for the obstacles.
@@ -245,8 +243,8 @@ public class BoardGUI extends JPanel {
 		this.controlsListener = controlsListener;
 		this.colorMap = colorMap;
 		try {
-			pieceImage = ImageIO.read(new File(PIECE_PATH));
-			obsImage = ImageIO.read(new File(OBS_PATH));
+			pieceImage = ImageIO.read(getClass().getResourceAsStream(PIECE_PATH));
+			obsImage = ImageIO.read(getClass().getResourceAsStream(OBS_PATH));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

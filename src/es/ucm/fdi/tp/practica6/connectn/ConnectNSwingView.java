@@ -13,7 +13,7 @@ import es.ucm.fdi.tp.practica6.views.GenericSwingView;
  * This class that extends GenericSwingView, adds to the abstract class the new
  * functionality that allow us to play Connect N in swing.
  * <p>
- * Esta clase que extiende GenericSwingView a�ade a la clase abstracta la nueva
+ * Esta clase que extiende GenericSwingView añade a la clase abstracta la nueva
  * funcionalidad que permite jugar a Connect N en swing.
  * <p>
  * 

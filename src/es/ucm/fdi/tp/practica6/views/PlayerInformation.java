@@ -78,7 +78,7 @@ public class PlayerInformation extends JPanel {
 	 *            La ficha a la que pertenece la vista ({@code null} si la vista
 	 *            pertenece a todos los jugadores).
 	 */
-	public PlayerInformation(Board board, List<Piece> pieces, Map<Piece, Color> colorMap, Piece viewPiece) {
+	public PlayerInformation(Board board, final List<Piece> pieces, Map<Piece, Color> colorMap, Piece viewPiece) {
 		setBorder(new TitledBorder(null, "Player Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

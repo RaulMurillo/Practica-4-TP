@@ -21,6 +21,7 @@ import es.ucm.fdi.tp.practica6.views.GenericSwingView;
  *
  */
 public class AdvancedTTTSwingView extends GenericSwingView {
+
 	/**
 	 * 
 	 */
