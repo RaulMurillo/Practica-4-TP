@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica.connectn;
+package es.ucm.fdi.tp.practica6.connectn;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,7 +26,7 @@ public class ConnectNFactoryExt extends ConnectNFactory {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5844143618137029963L;
 
 	/**
 	 * Default constructor of the class

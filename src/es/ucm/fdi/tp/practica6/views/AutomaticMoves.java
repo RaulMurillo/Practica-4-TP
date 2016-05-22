@@ -22,7 +22,7 @@ public class AutomaticMoves extends JPanel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3546011399285203302L;
 
 	/**
 	 * Listener of the class.

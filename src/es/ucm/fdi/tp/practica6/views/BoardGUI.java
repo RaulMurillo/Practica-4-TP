@@ -27,10 +27,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class BoardGUI extends JPanel {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1754142387018807577L;
 
 	/**
 	 * Matrix of squares ({@link JLabel}s) that represents the cells of the

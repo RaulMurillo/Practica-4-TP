@@ -28,7 +28,10 @@ import es.ucm.fdi.tp.basecode.bgame.views.GenericConsoleView;
  */
 public class AtaxxFactory implements GameFactory {
 
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6107386896988476429L;
 	private int dim;
 	private int obstacles;
 	private static final int MIN_DIM = 5;

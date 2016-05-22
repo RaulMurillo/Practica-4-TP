@@ -15,10 +15,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AtaxxMove extends GameMove {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -270071020146322709L;
 
 	/**
 	 * Row in which initially is the piece before movement.

@@ -23,10 +23,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AdvancedTTTFactoryExt extends AdvancedTTTFactory {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5511698340576135376L;
 
 	/**
 	 * Constructor of the class

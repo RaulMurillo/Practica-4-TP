@@ -10,7 +10,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica6.connectn.ConnectNFactoryExt;
 
 /**
  * A class that extends Tic-Tac-Toe and that adds the new functionality needed
@@ -22,10 +22,11 @@ import es.ucm.fdi.tp.practica.connectn.ConnectNFactoryExt;
  * @author Antonio Valdivia y Raul Murillo
  */
 public class TicTacToeFactoryExt extends ConnectNFactoryExt {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 9143583576335526013L;
 
 	/**
 	 * Constructor of the class

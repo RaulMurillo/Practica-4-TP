@@ -25,7 +25,7 @@ public class PlayerInformation extends JPanel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3287961108657319461L;
 
 	/**
 	 * Table where the information is shown.

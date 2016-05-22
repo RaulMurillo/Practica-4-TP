@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica.connectn;
+package es.ucm.fdi.tp.practica6.connectn;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
@@ -25,7 +25,7 @@ public class ConnectNSwingView extends GenericSwingView {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4954287624460137224L;
 
 	/**
 	 * Construct a swing view for playing connect N{@code game}, with a

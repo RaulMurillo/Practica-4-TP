@@ -22,6 +22,10 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  *
  */
 public class MinMaxExt implements AIAlgorithm {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1678144742530140520L;
 	private GameMove bestMove = null;
 	private static final int MAX_DEPTH = 11;
 	private int depth;

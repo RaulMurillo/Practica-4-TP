@@ -21,11 +21,11 @@ import javax.swing.text.DefaultCaret;
  */
 public class StatusMessages extends JPanel {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -7754166442554125979L;
 	/**
 	 * Area where messages are shown.
 	 * <p>

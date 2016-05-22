@@ -22,7 +22,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AtaxxFactoryExt extends AtaxxFactory {
 
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7883943985725547424L;
 
 	/**
 	 * The empty constructor of the class. It uses default dimension and

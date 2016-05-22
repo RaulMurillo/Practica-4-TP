@@ -19,10 +19,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class AtaxxRandomPlayer extends Player {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7249760460504882300L;
 
 	@Override
 	public GameMove requestMove(Piece p, Board board, List<Piece> pieces, GameRules rules) {

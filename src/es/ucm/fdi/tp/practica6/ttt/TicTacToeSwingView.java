@@ -8,7 +8,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica.connectn.ConnectNSwingView;
+import es.ucm.fdi.tp.practica6.connectn.ConnectNSwingView;
 
 /**
  * 
@@ -27,7 +27,7 @@ public class TicTacToeSwingView extends ConnectNSwingView {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2841630962737971508L;
 
 	/**
 	 * Construct a swing view for playing advanced tic-tac-toe{@code game}, with

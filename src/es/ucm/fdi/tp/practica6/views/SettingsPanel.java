@@ -19,10 +19,11 @@ import es.ucm.fdi.tp.practica6.server.GameServer;
  * juego.
  */
 public class SettingsPanel extends JPanel {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4854540140726252536L;
 
 	/**
 	 * Panel to show information about the game state.

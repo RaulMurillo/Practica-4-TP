@@ -15,6 +15,7 @@ CAMBIOS SOBRE LA PRACTICA 4:
 CAMBIOS SOBRE LA PRACTICA 5:
 * Se han realizado los 3 apartados opcionales del enunciado de la practica 6.
   Ademas se ha añadido a la vista grafica un selector de tiempo para la ejecucion de los movimientos inteligentes.
+* Se han eliminado los serialVersion 1L por los generados en todas las clases que nos corresponden
 * La clase SwingPlayer ha desaparecido. Ahora existe como clase interna de GenericSwingView y tiene menos responsabilidades.
 * Se ha cambiado la operacion de cierre predeterminada de la vista grafica. Ahora tiene el mismo manejador que el boton "Quit".
 * Se han sustituido los "==" del codigo por "equals()" para poder usar la aplicacion con servidor.

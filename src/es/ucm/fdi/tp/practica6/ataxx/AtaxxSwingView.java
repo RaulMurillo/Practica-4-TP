@@ -20,11 +20,11 @@ import es.ucm.fdi.tp.practica6.views.GenericSwingView;
  *
  */
 public class AtaxxSwingView extends GenericSwingView {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -4094760789226107211L;
 	/**
 	 * Origin colum
 	 * <p>

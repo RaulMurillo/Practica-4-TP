@@ -13,10 +13,11 @@ import javax.swing.JPanel;
  */
 public class QuitPanel extends JPanel {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7557239787399722655L;
 
 	/**
 	 * Button for quit the game.

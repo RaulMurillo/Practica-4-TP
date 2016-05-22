@@ -18,10 +18,11 @@ import es.ucm.fdi.tp.basecode.bgame.model.Piece;
  */
 public class PlayerModes extends JPanel {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5007833920557187677L;
 
 	/**
 	 * Listener of the class.

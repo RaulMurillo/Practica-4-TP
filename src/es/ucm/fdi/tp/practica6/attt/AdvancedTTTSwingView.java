@@ -21,11 +21,10 @@ import es.ucm.fdi.tp.practica6.views.GenericSwingView;
  *
  */
 public class AdvancedTTTSwingView extends GenericSwingView {
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 776482896837969824L;
 	/**
 	 * A boolean that its only true when the game has reached the advanced mode
 	 * <p>
