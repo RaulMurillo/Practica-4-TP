@@ -163,10 +163,11 @@ public abstract class GenericSwingView extends JFrame
 	 * Lista de coloreado de piezas por defecto.
 	 */
 	final private static List<Color> DEFAULT_COLORS = new ArrayList<Color>() {
+
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1967725627540381218L;
 
 		{
 			add(Color.RED);
@@ -419,7 +420,7 @@ public abstract class GenericSwingView extends JFrame
 	}
 
 	@Override
-	public void onChangeTurn(Board board, Piece turn) {
+	public void onChangeTurn(Board board, final Piece turn) {
 		boardUI.setBoard(board);
 		settings.setBoard(board);
 		resetMove();

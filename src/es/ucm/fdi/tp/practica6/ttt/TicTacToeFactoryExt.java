@@ -39,7 +39,7 @@ public class TicTacToeFactoryExt extends ConnectNFactoryExt {
 
 	@Override
 	public void createSwingView(final Observable<GameObserver> game, final Controller ctrl, final Piece viewPiece,
-			Player randPlayer, Player aiPlayer) {
+			final Player randPlayer, final Player aiPlayer) {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override

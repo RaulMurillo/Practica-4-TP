@@ -269,7 +269,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 	}
 
 	@Override
-	public void startConnection(Socket socket, int timeout) throws IOException {
+	public void startConnection(final Socket socket, int timeout) throws IOException {
 		try {
 			socket.setSoTimeout(timeout);
 			new ClientLauncher().launchInMessageWindow();
@@ -306,7 +306,7 @@ public class ProxyController extends Controller implements Observable<GameObserv
 				log.log(Level.WARNING, "Error while waiting the thread", e);
 			}
 		} catch (IOException e) {
-			log.log(Level.WARNING, "Error while handling client connection", e);
+			log.log(Level.SEVERE, "Error while handling client connection", e);
 		}
 		socket.close();
 	}

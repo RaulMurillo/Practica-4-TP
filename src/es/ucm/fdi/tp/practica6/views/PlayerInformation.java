@@ -102,15 +102,16 @@ public class PlayerInformation extends JPanel {
 	 *            <p>
 	 *            Lista de piezas del juego.
 	 */
-	private void initializeTable(List<Piece> pieces) {
+	private void initializeTable(final List<Piece> pieces) {
 		data = new Object[pieces.size()][3];
 		setPieces(pieces);
 		String[] columnNames = { "Player", "Mode", "#Pieces" };
 		jtTable = new JTable(data, columnNames) {
+
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1602675277419715950L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -123,10 +124,11 @@ public class PlayerInformation extends JPanel {
 												// white
 		// Paint table rows
 		jtTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = -1449285473075425421L;
 
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,

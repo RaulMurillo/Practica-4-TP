@@ -156,10 +156,11 @@ public class BoardGUI extends JPanel {
 	 * Clase que representa una celda del tablero.
 	 */
 	public class Square extends JLabel {
+
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -5250178045509194926L;
 
 		/**
 		 * Vertical position of the square.

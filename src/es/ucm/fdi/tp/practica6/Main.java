@@ -1228,7 +1228,7 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
-		setupLogging(Level.INFO);
+		setupLogging(Level.SEVERE);
 		parseArgs(args);
 		switch (applicationMode) {
 		case NORMAL:

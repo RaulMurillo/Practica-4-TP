@@ -104,7 +104,7 @@ public class PieceColors extends JPanel {
 	 *            <p>
 	 *            "Listener" de la clase.
 	 */
-	private void initChangeButton(PieceColorsListener controlsListener) {
+	private void initChangeButton(final PieceColorsListener controlsListener) {
 		JButton jbChange = new JButton("Change Color");
 		jbChange.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {

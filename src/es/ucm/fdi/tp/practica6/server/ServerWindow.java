@@ -116,7 +116,7 @@ public class ServerWindow extends JFrame {
 	 * <p>
 	 * Inicializa el {@link jbStop}.
 	 */
-	private void initStopButton(WindowEventListener listener) {
+	private void initStopButton(final WindowEventListener listener) {
 		jbStop = new JButton("STOP");
 		jbStop.addActionListener(new ActionListener() {
 			@Override

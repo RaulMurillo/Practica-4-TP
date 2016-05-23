@@ -496,7 +496,7 @@ public class ProxyPlayer extends Player implements GameObserver, SocketEndpoint 
 			}, hostname + "Listener").start();
 			newConnection();
 		} catch (IOException e) {
-			log.log(Level.WARNING, "Error while handling client connection", e);
+			log.log(Level.SEVERE, "Error while handling client connection", e);
 		}
 	}
 

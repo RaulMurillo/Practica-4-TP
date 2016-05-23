@@ -85,7 +85,7 @@ public class PlayerModes extends JPanel {
 	 */
 	private void initialize(List<Piece> pieces) {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		JComboBox<Piece> jcbPlayer = new JComboBox(pieces.toArray());
+		final JComboBox<Piece> jcbPlayer = new JComboBox(pieces.toArray());
 		add(jcbPlayer);
 		jbSet = new JButton("Set");
 		jbSet.addActionListener(new ActionListener() {
@@ -94,7 +94,6 @@ public class PlayerModes extends JPanel {
 				int playerIndex = jcbPlayer.getSelectedIndex();
 				int modeIndex = jcbMode.getSelectedIndex();
 				controlsListener.changeModePressed(jcbPlayer.getItemAt(playerIndex), jcbMode.getItemAt(modeIndex));
-				;
 			}
 		});
 		jbSet.setToolTipText("<html>Change the player game mode as selected");

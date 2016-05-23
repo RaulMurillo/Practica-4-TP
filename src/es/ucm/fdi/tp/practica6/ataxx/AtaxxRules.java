@@ -51,6 +51,7 @@ public class AtaxxRules implements GameRules {
 
 	private final int MAX_PLAYERS = 4;
 
+	//This is an experimental value
 	private final double BLANK = 0.09;
 
 	public AtaxxRules(int dim, int obstacles) {

@@ -1,7 +1,7 @@
 Raul Murillo Montero
 Antonio Valdivia de la Torre
 ----------------------------
-2ºDG Ingenieria Informatica - Matematicas
+2ï¿½DG Ingenieria Informatica - Matematicas
 
 CAMBIOS SOBRE LA PRACTICA 4:
 * Las constantes e instancias de enum ahora estan todas en mayusculas.
@@ -18,16 +18,18 @@ CAMBIOS SOBRE LA PRACTICA 5:
 * Se ha cambiado la operacion de cierre predeterminada de la vista grafica. Ahora tiene el mismo manejador que el boton "Quit".
 * Se han sustituido los "==" del codigo por "equals()" para poder usar la aplicacion con servidor.
 * Corregido el reseteo del juego para el ATTT.
-* Las imágenes se cargan desde el src, por lo que ahora se veran incluso cuando la aplicacion se ejecute desde un .JAR.
-* Se han añadido llaves {} en todas las clausulas if... else...
+* Las imagenes se cargan desde el src, por lo que ahora se veran incluso cuando la aplicacion se ejecute desde un .JAR.
+* Se han aï¿½adido llaves {} en todas las clausulas if... else...
+* Las clases internas anonimas no dan fallo de compilacion con JDK 1.7, las variables de contexto ahora son final.
+* Se utiliza Logging.
 
 EXTRAS SOBRE EL ENUNCIADO DE LA PRACTICA 6:
 * Se han realizado los 3 apartados opcionales del enunciado de la practica 6.
 * Ademas en la vista grafica existe un selector de tiempo para la ejecucion de los movimientos inteligentes (cuando estan disponibles).
-* Se ha incluido además como parte opcional un lobby con un chat para cuya realización utilizamos el codigo del chat de prueba
-  del campus virtual y lo hemos integrado en nuestra aplicación.
-* También se permite que haya clientes conectados en modo observador a la partida.
-* Finalmente se ha hecho una copia y posterior modificación de la clase MinMax (no se podia extender por tener ciertos metodos privados)
-  y ahora si en lugar de usar MinMax usamos MinMaxExt se calculan jugadas hasta el tiempo dado o la profundida máxima, para esto se van
+* Se ha incluido ademas como parte opcional un lobby con un chat para cuya realizacion utilizamos el codigo del chat de prueba
+  del campus virtual y lo hemos integrado en nuestra aplicacion.
+* Tambien se permite que haya clientes conectados en modo observador a la partida.
+* Finalmente se ha hecho una copia y posterior modificacion de la clase MinMax (no se podia extender por tener ciertos metodos privados)
+  y ahora si en lugar de usar MinMax usamos MinMaxExt se calculan jugadas hasta el tiempo dado o la profundida maxima, para esto se van
   guardando los mejores movimientos calculados hasta el momento y se devuelve este en lugar de null si el hilo del jugador es interrumpido
-  (Esta clase no se usa, solo se creó para experimentar con ella)
+  (Esta clase no se usa, solo se creo para experimentar con ella)
