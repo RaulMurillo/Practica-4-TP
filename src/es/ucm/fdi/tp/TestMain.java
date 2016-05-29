@@ -10,7 +10,7 @@ package es.ucm.fdi.tp;
  */
 public class TestMain {
 	public static void main(String[] args) {
-		String[] as = { "-am", "normal", "-g", "ataxx", "-d", "7x7", "-p", "X,O", "-o", "0", "-aialg", "minmaxab" };
+		String[] as = { "-am", "normal", "-g", "ataxx", "-d", "7x7", "-p", "X,O", "-aialg", "minmaxab" };
 		Main.main(as);
 	}
 }
