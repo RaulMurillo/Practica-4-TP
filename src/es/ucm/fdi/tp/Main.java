@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6;
+package es.ucm.fdi.tp;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -30,12 +30,12 @@ import es.ucm.fdi.tp.basecode.bgame.model.Game;
 import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.minmax.MinMax;
-import es.ucm.fdi.tp.practica6.ataxx.AtaxxFactoryExt;
-import es.ucm.fdi.tp.practica6.attt.AdvancedTTTFactoryExt;
-import es.ucm.fdi.tp.practica6.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica5.ataxx.AtaxxFactoryExt;
+import es.ucm.fdi.tp.practica5.attt.AdvancedTTTFactoryExt;
+import es.ucm.fdi.tp.practica5.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica5.ttt.TicTacToeFactoryExt;
 import es.ucm.fdi.tp.practica6.server.ProxyController;
 import es.ucm.fdi.tp.practica6.server.GameServer;
-import es.ucm.fdi.tp.practica6.ttt.TicTacToeFactoryExt;
 
 /**
  * This is the class with the main method for the board games application.

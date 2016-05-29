@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.views;
+package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -562,6 +562,7 @@ public abstract class GenericSwingView extends JFrame
 	public void aiPressed() {
 		disablePanels();
 		resetMove();
+		//Practica6
 		final SwingWorker<?, ?> worker = new SwingWorker<Object, Object>() {
 
 			@Override

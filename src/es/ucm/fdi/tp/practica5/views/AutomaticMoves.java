@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.views;
+package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -169,6 +169,7 @@ public class AutomaticMoves extends JPanel {
 	 * tiempo en los movimientos inteligentes.
 	 */
 	public void addTimelimit() {
+		//Practica6
 		jpTimelimit.add(new JLabel("Timelimit (ms)"), BorderLayout.SOUTH);
 		final JSpinner jsTime = new JSpinner(new SpinnerNumberModel(2000, 0, 10000, 100));
 		jsTime.setToolTipText("<html>Maximum number of milliseconds that the intelligent move can last"

@@ -1,5 +1,7 @@
 package es.ucm.fdi.tp.practica6;
 
+import es.ucm.fdi.tp.Main;
+
 /**
  * A class to launch the program in normal mode.
  * <p>

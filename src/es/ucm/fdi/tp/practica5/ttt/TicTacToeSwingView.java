@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.ttt;
+package es.ucm.fdi.tp.practica5.ttt;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.Board;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.connectn.ConnectNSwingView;
+import es.ucm.fdi.tp.practica5.connectn.ConnectNSwingView;
 
 /**
  * 

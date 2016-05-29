@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.ttt;
+package es.ucm.fdi.tp.practica5.ttt;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -10,7 +10,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameError;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.connectn.ConnectNFactoryExt;
+import es.ucm.fdi.tp.practica5.connectn.ConnectNFactoryExt;
 
 /**
  * A class that extends Tic-Tac-Toe and that adds the new functionality needed

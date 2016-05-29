@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.connectn;
+package es.ucm.fdi.tp.practica5.connectn;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
@@ -6,7 +6,7 @@ import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
 import es.ucm.fdi.tp.basecode.connectn.ConnectNMove;
-import es.ucm.fdi.tp.practica6.views.GenericSwingView;
+import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 /**
  * 

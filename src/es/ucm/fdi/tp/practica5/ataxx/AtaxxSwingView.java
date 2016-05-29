@@ -1,11 +1,12 @@
-package es.ucm.fdi.tp.practica6.ataxx;
+package es.ucm.fdi.tp.practica5.ataxx;
 
 import es.ucm.fdi.tp.basecode.bgame.control.Controller;
 import es.ucm.fdi.tp.basecode.bgame.control.Player;
 import es.ucm.fdi.tp.basecode.bgame.model.GameObserver;
 import es.ucm.fdi.tp.basecode.bgame.model.Observable;
 import es.ucm.fdi.tp.basecode.bgame.model.Piece;
-import es.ucm.fdi.tp.practica6.views.GenericSwingView;
+import es.ucm.fdi.tp.practica4.AtaxxMove;
+import es.ucm.fdi.tp.practica5.views.GenericSwingView;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.attt;
+package es.ucm.fdi.tp.practica5.attt;
 
 import java.lang.reflect.InvocationTargetException;
 

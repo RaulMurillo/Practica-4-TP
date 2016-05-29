@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.connectn;
+package es.ucm.fdi.tp.practica5.connectn;
 
 import java.lang.reflect.InvocationTargetException;
 

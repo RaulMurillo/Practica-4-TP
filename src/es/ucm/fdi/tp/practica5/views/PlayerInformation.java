@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.practica6.views;
+package es.ucm.fdi.tp.practica5.views;
 
 import java.awt.Color;
 import java.awt.Component;
