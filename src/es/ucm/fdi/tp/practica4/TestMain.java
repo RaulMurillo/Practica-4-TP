@@ -1,4 +1,5 @@
-package es.ucm.fdi.tp;
+package es.ucm.fdi.tp.practica4;
+
 
 /**
  * A class to launch the program in normal mode.
@@ -10,7 +11,7 @@ package es.ucm.fdi.tp;
  */
 public class TestMain {
 	public static void main(String[] args) {
-		String[] as = { "-am", "normal", "-g", "ataxx", "-d", "7x7", "-p", "X,O", "-aialg", "minmaxab" };
+		String[] as = {"-g", "ataxx", "-o", "8","-p", "X,O"};
 		Main.main(as);
 	}
 }
